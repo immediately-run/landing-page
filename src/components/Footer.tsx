@@ -11,7 +11,7 @@ function Footer() {
         <br />
         built by the commons, 2024–2026
         <br />
-        set in Bricolage Grotesque &amp; Space Mono
+        set in Gabarito &amp; Space Mono
       </div>
     </footer>
   );

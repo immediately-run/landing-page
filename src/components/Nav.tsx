@@ -1,10 +1,11 @@
 import ThemeSwitch from './ThemeSwitch';
+import logoMark from '../assets/logo-mark.png';
 
 function Nav() {
   return (
     <nav className="top">
       <a className="logo" href="#">
-        <span className="sq" />
+        <img className="logo-mark" src={logoMark} alt="" />
         immediately.run
       </a>
       <div className="links">

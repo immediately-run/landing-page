@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root{
   --bg:#0a0b11;                        /* cool near-black page */
@@ -14,7 +14,7 @@
   --accent-3: oklch(0.82 0.12 340);    /* soft pink highlight */
   --grad: linear-gradient(96deg,#f6f1fb 0%,#f49ad4 46%,#b285f2 100%);
   --glow: 0 0 0 1px rgba(150,110,240,.5), 0 0 34px rgba(150,110,240,.32);
-  --disp:"Bricolage Grotesque",system-ui,sans-serif;
+  --disp:"Gabarito",system-ui,sans-serif;
   --sans:"Public Sans",system-ui,sans-serif;
   --mono:"Space Mono",monospace;
 }
