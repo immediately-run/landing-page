@@ -4,7 +4,7 @@ import { SHOWCASE } from '../data/showcase';
 function Showcase() {
   return (
     <>
-      <SectionHead id="showcase" tag="/showcase" title="Built with Tinker" link="All 142 →" />
+      <SectionHead id="showcase" tag="/showcase" title="Built with immediately.run" link="All 142 →" />
       <section className="show">
         {SHOWCASE.map((tile) => {
           const className = ['tile', tile.size, tile.variant].filter(Boolean).join(' ');

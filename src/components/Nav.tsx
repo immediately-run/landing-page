@@ -5,7 +5,7 @@ function Nav() {
     <nav className="top">
       <a className="logo" href="#">
         <span className="sq" />
-        TINKER
+        immediately.run
       </a>
       <div className="links">
         <a href="#showcase">Showcase</a>

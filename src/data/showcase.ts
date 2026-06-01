@@ -1,4 +1,4 @@
-// Content for the "Built with Tinker" showcase grid.
+// Content for the "Built with immediately.run" showcase grid.
 // Pure data — no React here, so component files stay HMR-friendly.
 
 export interface ShowcaseTile {

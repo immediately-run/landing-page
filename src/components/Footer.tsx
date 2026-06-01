@@ -4,10 +4,10 @@ function Footer() {
       <div className="big">
         Go
         <br />
-        tinker.
+        build.
       </div>
       <div className="meta">
-        TINKER v2.4.0 — MIT licensed
+        immediately.run v2.4.0 — MIT licensed
         <br />
         built by the commons, 2024–2026
         <br />

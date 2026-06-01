@@ -29,7 +29,7 @@ export const NEWS: NewsItem[] = [
     version: '—',
     badge: 'note',
     badgeLabel: 'Note',
-    message: 'Tinker Day meetup — June 20, online',
+    message: 'immediately.run meetup — June 20, online',
     date: 'May 4',
   },
   {

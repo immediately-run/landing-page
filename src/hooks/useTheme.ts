@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type Theme = 'dark' | 'light';
 
-const STORAGE_KEY = 'tinker-theme';
+const STORAGE_KEY = 'immediately-run-theme';
 
 function readInitialTheme(): Theme {
   return localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark';

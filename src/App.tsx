@@ -1,5 +1,5 @@
-// Root component — Tinkerable.site renders the default export of this file.
-// Global CSS is imported HERE (not in main.tsx) because Tinkerable's runtime
+// Root component — immediately.run renders the default export of this file.
+// Global CSS is imported HERE (not in main.tsx) because immediately.run's runtime
 // never loads main.tsx; anything the rendered tree needs must be reachable
 // from App.tsx.
 import './index.css';

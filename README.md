@@ -1,19 +1,19 @@
-# TINKER — landing page
+# immediately.run — landing page
 
-The TINKER marketing landing page, built as a React + TypeScript + Vite app and
-runnable directly on [tinkerable.site](https://tinkerable.site).
+The immediately.run marketing landing page, built as a React + TypeScript + Vite app and
+runnable directly on [immediately.run](https://immediately.run).
 
 ## Try it instantly
 
-Try this app on [tinkerable.site](https://tinkerable.site/present/github/neumark/landing-page/main/files/src/App.tsx)
+Try this app on [immediately.run](https://immediately.run/present/github/immediately-run/landing-page/main/files/src/App.tsx)
 
 ## How it's organized
 
-This started as a single `index.html` design mockup and was converted to a
-Tinkerable-compatible app following
-[`tinkerable-docs/specs/DESIGN_TO_TINKERABLE.md`](../tinkerable-docs/specs/DESIGN_TO_TINKERABLE.md):
+This started as a single `index.html` design mockup and was converted to an
+immediately.run-compatible app following the design-to-app conversion spec in
+the docs repo:
 
-- `src/App.tsx` — root component (Tinkerable's entry); imports the global CSS.
+- `src/App.tsx` — root component (immediately.run's entry); imports the global CSS.
 - `src/index.css` — fonts, theme variables, resets. `src/App.css` — layout/components.
 - `src/components/` — one default-exported component per section.
 - `src/data/` — showcase / docs / news content as typed arrays.
