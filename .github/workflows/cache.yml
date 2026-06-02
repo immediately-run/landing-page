@@ -40,7 +40,7 @@ jobs:
 
       - name: Build cache zip
         run: |
-          npx -y @immediately-run/cli@latest cache-zip \
+          npx -y @immediately-run/cli cache-zip \
             --owner "${{ github.repository_owner }}" \
             --repo "${{ github.event.repository.name }}" \
             --ref "${{ github.ref_name }}" \
