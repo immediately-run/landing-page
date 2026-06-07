@@ -4,8 +4,28 @@ export type Theme = 'dark' | 'light';
 
 const STORAGE_KEY = 'immediately-run-theme';
 
+// Accessing window.localStorage throws a SecurityError inside a sandboxed
+// iframe without the `allow-same-origin` flag (e.g. when the site is rendered
+// by the /present Sandpack preview), so every touch must be guarded.
+function safeStorageGet(key: string): string | null {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeStorageSet(key: string, value: string): void {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Storage unavailable (sandboxed iframe / privacy mode) — theme just
+    // won't persist across reloads.
+  }
+}
+
 function readInitialTheme(): Theme {
-  return localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark';
+  return safeStorageGet(STORAGE_KEY) === 'light' ? 'light' : 'dark';
 }
 
 // Persists the colour theme to localStorage and reflects it on <html> as a
@@ -18,7 +38,7 @@ export function useTheme() {
     const root = document.documentElement;
     if (theme === 'light') root.setAttribute('data-theme', 'light');
     else root.removeAttribute('data-theme');
-    localStorage.setItem(STORAGE_KEY, theme);
+    safeStorageSet(STORAGE_KEY, theme);
   }, [theme]);
 
   const toggle = useCallback(() => {
