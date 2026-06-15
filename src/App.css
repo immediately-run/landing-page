@@ -11,6 +11,21 @@
 .site-main{display:block;padding-bottom:80px;min-height:60vh}
 .home-fade{animation:ir-fade .2s ease}
 
+/* Route-level section-failed card (SectionErrorBoundary) */
+.section-error{margin:60px auto;max-width:560px;text-align:center;
+  border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--panel);padding:48px 40px;
+  animation:ir-fade .2s ease}
+.section-error__title{font:800 26px var(--disp);letter-spacing:-.02em;color:var(--ink)}
+.section-error__body{margin:10px 0 22px;font:400 15px/1.5 var(--sans);color:var(--ink-2)}
+.section-error__actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.section-error__btn{display:inline-flex;align-items:center;justify-content:center;
+  font:600 14px var(--sans);padding:10px 20px;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;
+  border:1px solid var(--line-2);background:var(--panel);color:var(--ink);
+  transition:border-color .14s,box-shadow .14s}
+.section-error__btn:hover{border-color:var(--accent-2)}
+.section-error__btn--primary{border-color:transparent;background:var(--grad-btn);color:#fff}
+.section-error__btn--primary:hover{box-shadow:var(--glow)}
+
 /* shared pills ------------------------------------------------------------- */
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--grad-btn);color:#fff;
   font:600 16px var(--sans);padding:14px 24px;border-radius:var(--r-pill);
