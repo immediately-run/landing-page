@@ -1,4 +1,4 @@
-import type { Provenance } from '../data/showcase';
+import type { Provenance } from '../data/apps';
 
 interface ProvenanceChipProps {
   provenance: Provenance;

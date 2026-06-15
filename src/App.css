@@ -8,7 +8,8 @@
 .desk-only{display:inline-flex}
 .mob-only{display:none}
 
-main.home{display:block;padding-bottom:80px;animation:ir-fade .2s ease}
+.site-main{display:block;padding-bottom:80px;min-height:60vh}
+.home-fade{animation:ir-fade .2s ease}
 
 /* shared pills ------------------------------------------------------------- */
 .btn{display:inline-flex;align-items:center;gap:8px;background:var(--grad-btn);color:#fff;
@@ -35,6 +36,7 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
 .nav-link{font:600 14.5px var(--sans);padding:8px 13px;border-radius:var(--r-pill);
   color:var(--ink-2);transition:color .14s,background .14s}
 .nav-link:hover{color:var(--ink);background:var(--panel-2)}
+.nav-link--active{color:var(--ink);background:color-mix(in srgb,var(--accent-2) 14%,transparent)}
 .nav-right{margin-left:auto;display:flex;gap:9px;align-items:center}
 .icon-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);
   background:var(--panel);color:var(--ink-2);border-radius:var(--r-pill);cursor:pointer;

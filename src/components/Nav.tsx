@@ -1,22 +1,23 @@
 import { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
+import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
 
-// Section links. The shell binds these routes to their section apps; from the
-// landing page they're plain same-origin links into the rest of the site.
-const NAV_ITEMS = [
-  { label: 'Showcase', href: '/showcase' },
-  { label: 'Apps', href: '/apps' },
-  { label: 'Docs', href: '/docs' },
-  { label: 'Tutorials', href: '/tutorials' },
-  { label: "What's new", href: '/changelog' },
+// Section links. The whole site lives in this one app, routed by hash.
+const NAV_ITEMS: { label: string; href: string; section: Section }[] = [
+  { label: 'Showcase', href: '#/showcase', section: 'showcase' },
+  { label: 'Apps', href: '#/apps', section: 'apps' },
+  { label: 'Docs', href: '#/docs', section: 'docs' },
+  { label: 'Tutorials', href: '#/tutorials', section: 'tutorials' },
+  { label: "What's new", href: '#/changelog', section: 'changelog' },
 ];
 
 interface NavProps {
+  active: Section;
   onOpenSearch: () => void;
 }
 
-function Nav({ onOpenSearch }: NavProps) {
+function Nav({ active, onOpenSearch }: NavProps) {
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLight = theme === 'light';
@@ -25,13 +26,18 @@ function Nav({ onOpenSearch }: NavProps) {
     <>
       <nav className="nav" aria-label="Primary">
         <div className="nav-inner">
-          <a className="logo" href="/">
+          <a className="logo" href="#/">
             <img className="logo-mark" src={logoMark} alt="" width={27} height={27} />
             immediately.run
           </a>
           <div className="nav-links">
             {NAV_ITEMS.map((item) => (
-              <a key={item.href} className="nav-link" href={item.href}>
+              <a
+                key={item.href}
+                className={`nav-link${active === item.section ? ' nav-link--active' : ''}`}
+                href={item.href}
+                aria-current={active === item.section ? 'page' : undefined}
+              >
                 {item.label}
               </a>
             ))}

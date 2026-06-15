@@ -10,7 +10,7 @@ function BuildersAgents() {
             describe the change. It rewrites the running app for you. Editing source by hand is the
             exception, not the rule.
           </p>
-          <a className="link" href="/tutorials/local-claude-code">
+          <a className="link" href="#/tutorials/local-claude-code">
             See how it works →
           </a>
         </div>
@@ -21,7 +21,7 @@ function BuildersAgents() {
             Plain files, conventional React. An MCP bridge and a machine-readable reference at{' '}
             <span className="mono-inline">/llms.txt</span>.
           </p>
-          <a className="link" href="/docs/agents/llms">
+          <a className="link" href="#/docs/agents/llms">
             See the agent surface →
           </a>
         </div>

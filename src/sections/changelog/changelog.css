@@ -1,0 +1,252 @@
+/* Changelog section — narrow, scannable timeline. Tokens come from index.css. */
+
+.cl-section {
+  animation: ir-fade 0.2s ease;
+  padding-top: 46px;
+  max-width: 880px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-section { animation: none; }
+}
+
+.cl-tag {
+  font: 400 13px var(--mono);
+  letter-spacing: 0.04em;
+  background: color-mix(in srgb, var(--accent-2) 16%, transparent);
+  color: var(--accent-3);
+  border: 1px solid var(--line-2);
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  display: inline-block;
+}
+
+.cl-title {
+  font: 800 clamp(40px, 7vw, 84px) / 0.9 var(--disp);
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin: 18px 0 0;
+}
+
+.cl-deck {
+  font: 500 clamp(17px, 1.9vw, 22px) var(--sans);
+  color: var(--ink-2);
+  margin: 14px 0 0;
+  max-width: 42ch;
+}
+
+/* ---- filter chips ---- */
+.cl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 26px 0 30px;
+}
+
+.cl-chip {
+  font: 600 13px var(--sans);
+  padding: 8px 15px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  transition: color 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+
+.cl-chip:hover {
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+
+.cl-chip[aria-pressed='true'] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent-2) 14%, transparent);
+  border-color: var(--line-2);
+}
+
+.cl-chip:focus-visible {
+  outline: none;
+  box-shadow: var(--glow);
+}
+
+/* ---- empty state ---- */
+.cl-empty {
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-lg);
+  background: var(--panel);
+  padding: 54px;
+  text-align: center;
+}
+
+.cl-empty-title {
+  font: 800 24px var(--disp);
+  color: var(--ink);
+}
+
+.cl-empty-sub {
+  font: 400 15px var(--sans);
+  color: var(--ink-2);
+  margin-top: 8px;
+}
+
+/* ---- timeline ---- */
+.cl-timeline {
+  position: relative;
+  padding-left: 26px;
+  border-left: 1px solid var(--line);
+  list-style: none;
+}
+
+.cl-entry {
+  position: relative;
+  padding: 0 0 26px;
+  scroll-margin-top: 90px;
+}
+
+.cl-entry::before {
+  content: '';
+  position: absolute;
+  left: -32px;
+  top: 5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+}
+
+.cl-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cl-date {
+  font: 400 12.5px var(--mono);
+  color: var(--ink-2);
+  min-width: 54px;
+}
+
+.cl-version {
+  font: 700 13px var(--mono);
+  color: var(--ink);
+}
+
+/* ---- badges (kind by label + shape + color, never color alone) ---- */
+.cl-badge {
+  font: 700 11px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: var(--r-pill);
+  padding: 3px 11px;
+  border: 1px solid transparent;
+}
+
+.cl-badge--feat {
+  color: #fff;
+  background: var(--grad-btn);
+  border-color: transparent;
+}
+
+.cl-badge--rel {
+  color: var(--accent-3);
+  background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  border-color: var(--line-2);
+}
+
+.cl-badge--note {
+  color: var(--ink-2);
+  background: transparent;
+  border-color: var(--line-2);
+}
+
+.cl-msg {
+  font: 500 17px var(--sans);
+  color: var(--ink);
+  margin-top: 8px;
+}
+
+.cl-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+
+.cl-toggle {
+  font: 600 12.5px var(--sans);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--accent-3);
+  padding: 0;
+  transition: color 0.14s ease;
+}
+
+.cl-toggle:hover {
+  color: var(--ink);
+}
+
+.cl-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--glow);
+  border-radius: var(--r-xs);
+}
+
+.cl-doc {
+  font: 400 12px var(--mono);
+  color: var(--ink-3);
+  transition: color 0.14s ease;
+}
+
+.cl-doc:hover {
+  color: var(--accent-3);
+}
+
+.cl-detail {
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--panel);
+  padding: 16px 18px;
+}
+
+.cl-detail-p {
+  font: 400 14.5px / 1.6 var(--sans);
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+
+.cl-detail-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.cl-detail-list li {
+  font: 400 14px / 1.6 var(--sans);
+  color: var(--ink-2);
+}
+
+.cl-feed {
+  margin-top: 18px;
+  font: 400 12px var(--mono);
+  color: var(--ink-3);
+}
+
+.cl-feed a {
+  color: var(--accent-3);
+  transition: color 0.14s ease;
+}
+
+.cl-feed a:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 560px) {
+  .cl-section { padding-top: 32px; }
+  .cl-timeline { padding-left: 20px; }
+  .cl-entry::before { left: -26px; }
+}

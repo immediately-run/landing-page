@@ -13,32 +13,32 @@ function Footer() {
           <div className="foot-col">
             <div className="h">Product</div>
             <div className="links">
-              <a href="/showcase">Showcase</a>
-              <a href="/apps">Apps</a>
-              <a href="/docs">Docs</a>
-              <a href="/tutorials">Tutorials</a>
-              <a href="/changelog">Changelog</a>
+              <a href="#/showcase">Showcase</a>
+              <a href="#/apps">Apps</a>
+              <a href="#/docs">Docs</a>
+              <a href="#/tutorials">Tutorials</a>
+              <a href="#/changelog">Changelog</a>
             </div>
           </div>
           <div className="foot-col">
             <div className="h">Platform</div>
             <div className="links">
               <a href="/edit/new">Open the editor</a>
-              <a href="/docs/sdk/entry">SDK</a>
+              <a href="#/docs/sdk/entry">SDK</a>
               <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
                 GitHub org
               </a>
-              <a href="/changelog">Status</a>
+              <a href="#/changelog">Status</a>
             </div>
           </div>
           <div className="foot-col">
             <div className="h">Community</div>
             <div className="links">
-              <a href="/changelog">Meetup</a>
+              <a href="#/changelog">Meetup</a>
               <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
                 Discussions
               </a>
-              <a href="/docs/agents/llms">For agents</a>
+              <a href="#/docs/agents/llms">For agents</a>
             </div>
           </div>
         </div>

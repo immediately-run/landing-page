@@ -1,25 +1,26 @@
 import ProvenanceChip from './ProvenanceChip';
-import { SHOWCASE } from '../data/showcase';
+import { APPS } from '../data/apps';
 import { presentRoute, editRoute } from '../lib/routes';
 
 // A trimmed slice of the full showcase grid. The same app record renders here,
-// in the directory, and in the machine surface (full grid lives at /showcase).
+// in the showcase, in the directory, and in search (full grid lives at #/showcase).
+const TEASER = APPS.slice(0, 4);
+
 function ShowcaseTeaser() {
   return (
     <section className="section" aria-labelledby="teaser">
       <div className="sec-head">
         <span className="tag">/SHOWCASE</span>
         <h2 id="teaser">Built with immediately.run.</h2>
-        <a className="more" href="/showcase">
+        <a className="more" href="#/showcase">
           See all apps →
         </a>
       </div>
       <div className="show-grid">
-        {SHOWCASE.map((app) => (
+        {TEASER.map((app) => (
           <article className="app-card" key={app.repo}>
             <div className="app-pic">
-              {app.stars && <span className="stars">★ {app.stars}</span>}
-              <span className="cat">{app.category}</span>
+              <span className="cat">{app.categoryLabel}</span>
             </div>
             <div className="app-foot">
               <h3>{app.name}</h3>

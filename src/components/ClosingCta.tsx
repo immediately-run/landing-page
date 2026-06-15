@@ -12,7 +12,7 @@ function ClosingCta() {
         <a className="btn" href={presentRoute('whiteboard')}>
           Run an app →
         </a>
-        <a className="btn-ghost" href="/tutorials">
+        <a className="btn-ghost" href="#/tutorials">
           Build your own →
         </a>
       </div>
