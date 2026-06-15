@@ -1,61 +1,56 @@
-// Content for the "Built with immediately.run" showcase grid.
-// Pure data — no React here, so component files stay HMR-friendly.
+// One typed record per app — the single source that feeds the showcase teaser
+// (and, in the full site, the directory and the machine-readable index). Pure
+// data, no React, so component files stay HMR-friendly.
 
-export interface ShowcaseTile {
+// Provenance is a trust signal, not decoration:
+//   official              → first-party, immediately-run org
+//   { github: 'owner' }   → community app from a verified GitHub identity
+export type Provenance = 'official' | { github: string };
+
+export interface AppRecord {
+  /** Display name. */
   name: string;
-  slug: string;
+  /** Repo name under the immediately-run org; also the Open/Fork route key. */
+  repo: string;
+  /** One-line, sentence-case, no period needed. */
   blurb: string;
-  tag: string;
-  /** Star count shown as a "★ {stars}" badge. Omit to hide the badge. */
+  /** Category label shown on the tile corner and as a chip. */
+  category: string;
+  provenance: Provenance;
+  /** Star count rendered as "★ {stars}". Omit to hide the badge. */
   stars?: string;
-  /** Grid footprint: `big` spans 4 columns, `sm` spans 2. */
-  size: 'big' | 'sm';
-  /** Optional colour treatment. */
-  variant?: 'accent' | 'blue';
-  /** Adds a " · featured" suffix to the corner label. */
-  featured?: boolean;
 }
 
-export const SHOWCASE: ShowcaseTile[] = [
+export const SHOWCASE: AppRecord[] = [
   {
-    name: 'Synth Pad',
-    slug: 'synth-pad',
-    blurb:
-      'A fully playable synthesizer in one 14 kb file. Drag any knob and the oscillator rewires live.',
-    tag: '#creative',
+    name: 'Whiteboard',
+    repo: 'whiteboard',
+    blurb: 'An infinite canvas for notes and sketches. Open the source while it runs.',
+    category: 'Creative',
+    provenance: 'official',
     stars: '2.1k',
-    size: 'big',
-    featured: true,
   },
   {
-    name: 'CSV Lens',
-    slug: 'csv-lens',
-    blurb: 'Drop a CSV, get charts. Nothing uploads.',
-    tag: '#data',
+    name: 'Markdown Notebook',
+    repo: 'markdown-notebook',
+    blurb: 'Write and run notebooks in Markdown. Nothing leaves your browser.',
+    category: 'Writing',
+    provenance: 'official',
     stars: '1.8k',
-    size: 'sm',
-    variant: 'accent',
   },
   {
-    name: 'Pomodoro Garden',
-    slug: 'pomodoro-garden',
-    blurb: 'A timer that grows plants.',
-    tag: '#productivity',
-    size: 'sm',
+    name: 'File Commander',
+    repo: 'file-commander',
+    blurb: 'A two-pane file manager over the folders you mount — and nothing else.',
+    category: 'Tools',
+    provenance: 'official',
+    stars: '1.3k',
   },
   {
-    name: 'Pixel Pad',
-    slug: 'pixel-pad',
-    blurb: 'Tiny sprite editor, PNG export.',
-    tag: '#creative',
-    size: 'sm',
-    variant: 'blue',
-  },
-  {
-    name: 'Habit Dots',
-    slug: 'habit-dots',
-    blurb: 'A year of habits on one screen.',
-    tag: '#tracking',
-    size: 'sm',
+    name: 'Spaces Panel',
+    repo: 'spaces-panel',
+    blurb: 'Browse and share your spaces. Forkable, like everything else here.',
+    category: 'Tools',
+    provenance: 'official',
   },
 ];
