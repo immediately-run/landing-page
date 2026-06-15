@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { SHOWCASE } from '../data/showcase';
+import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
 
 interface SearchProps {
@@ -17,19 +17,19 @@ interface Entry {
 // the shell in the full site; a self-contained version here so the ⌘K button is
 // never dead. Section search is intentionally lightweight.
 const SECTIONS: Entry[] = [
-  { name: 'Showcase', sub: 'Curated apps built with immediately.run', slug: '/SHOWCASE', href: '/showcase' },
-  { name: 'Apps', sub: 'The full, filterable app directory', slug: '/APPS', href: '/apps' },
-  { name: 'Docs', sub: 'API and reference', slug: '/DOCS', href: '/docs' },
-  { name: 'Tutorials', sub: 'Step-by-step workflows', slug: '/TUTORIALS', href: '/tutorials' },
-  { name: "What's new", sub: 'Latest releases and notes', slug: '/NEWS', href: '/changelog' },
+  { name: 'Showcase', sub: 'Curated apps built with immediately.run', slug: '/SHOWCASE', href: '#/showcase' },
+  { name: 'Apps', sub: 'The full, filterable app directory', slug: '/APPS', href: '#/apps' },
+  { name: 'Docs', sub: 'API and reference', slug: '/DOCS', href: '#/docs' },
+  { name: 'Tutorials', sub: 'Step-by-step workflows', slug: '/TUTORIALS', href: '#/tutorials' },
+  { name: "What's new", sub: 'Latest releases and notes', slug: '/NEWS', href: '#/changelog' },
 ];
 
 const TUTORIALS: Entry[] = [
-  { name: 'Your first app', sub: 'Push a repo, no deploy step', slug: '/TUTORIALS', href: '/tutorials' },
-  { name: 'Change an app by asking', sub: 'Drive a coding agent over a running app', slug: '/TUTORIALS', href: '/tutorials/local-claude-code' },
+  { name: 'Your first app', sub: 'Push a repo, no deploy step', slug: '/TUTORIALS', href: '#/tutorials' },
+  { name: 'Change an app by asking', sub: 'Drive a coding agent over a running app', slug: '/TUTORIALS', href: '#/tutorials/local-claude-code' },
 ];
 
-const APPS: Entry[] = SHOWCASE.map((a) => ({
+const APP_ENTRIES: Entry[] = APPS.map((a) => ({
   name: a.name,
   sub: a.blurb,
   slug: '/SHOWCASE',
@@ -37,7 +37,7 @@ const APPS: Entry[] = SHOWCASE.map((a) => ({
 }));
 
 const GROUPS: { heading: string; entries: Entry[] }[] = [
-  { heading: 'Apps', entries: APPS },
+  { heading: 'Apps', entries: APP_ENTRIES },
   { heading: 'Sections', entries: SECTIONS },
   { heading: 'Tutorials', entries: TUTORIALS },
 ];
@@ -96,7 +96,7 @@ function Search({ onClose }: SearchProps) {
               <div className="search-group" key={g.heading}>
                 <div className="gh">{g.heading}</div>
                 {g.entries.map((e) => (
-                  <a className="search-item" href={e.href} key={e.name + e.href}>
+                  <a className="search-item" href={e.href} key={e.name + e.href} onClick={onClose}>
                     <span>
                       <span className="si-name">{e.name}</span>
                       <br />

@@ -1,4 +1,4 @@
-import { SHOWCASE } from '../data/showcase';
+import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
 
 // The hero "Run an app" CTA opens the strongest, mobile-friendly showcase app.
@@ -6,13 +6,7 @@ const HERO_APP = 'whiteboard';
 
 // App names that scroll in the marquee strip. Module-local (not exported) so
 // this file still only *exports* a component, keeping Fast Refresh happy.
-const MARQUEE = [
-  ...SHOWCASE.map((a) => a.name.toUpperCase()),
-  'POMODORO GARDEN',
-  'PIXEL PAD',
-  'HABIT DOTS',
-  'CSV LENS',
-];
+const MARQUEE = APPS.map((a) => a.name.toUpperCase());
 
 function Hero() {
   return (
@@ -30,7 +24,7 @@ function Hero() {
             <a className="btn" href={presentRoute(HERO_APP)}>
               Run an app →
             </a>
-            <a className="btn-ghost" href="/tutorials">
+            <a className="btn-ghost" href="#/tutorials">
               Build your own →
             </a>
           </div>

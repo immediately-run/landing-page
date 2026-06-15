@@ -1,0 +1,434 @@
+import './docs.css';
+import { useCallback, useState } from 'react';
+import type { ReactNode } from 'react';
+import {
+  DOC_GROUPS,
+  DOC_PAGES,
+  CAP_INDEX,
+  llmsGroups,
+  pageHref,
+  tocFor,
+  findPage,
+  neighbors,
+} from './data';
+import type { DocBlock, DocGroup, DocPage, TocItem } from './data';
+
+// The /docs section: the technical reference, served to two audiences from one
+// source. The same typed records in data.ts render both the human article view
+// and the machine surface (llms.txt preview + structured capability index), so
+// the two can never drift.
+//
+// Routing is by the `rest` segments after `docs`:
+//   []                  → docs landing (group index)
+//   ['agents','llms']   → machine surface
+//   [group, slug]       → an article, when it resolves
+//   anything else       → an inline 404
+//
+// One default export per file (lint enforces the Fast Refresh rule); the small
+// child components below export nothing.
+export default function Docs({ rest }: { rest: string[] }) {
+  const [copied, setCopied] = useState<string>('');
+
+  const copy = useCallback((text: string, key: string) => {
+    navigator.clipboard?.writeText(text).then(
+      () => {
+        setCopied(key);
+        window.setTimeout(() => setCopied((c) => (c === key ? '' : c)), 1600);
+      },
+      () => undefined,
+    );
+  }, []);
+
+  const goAnchor = useCallback((id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
+  // Resolve the current view before any branching in JSX (hooks already ran).
+  const isLlms = rest[0] === 'agents' && rest[1] === 'llms';
+  const page = rest.length >= 2 ? findPage(rest[0], rest[1]) : undefined;
+  const active = isLlms ? 'agents/llms' : page ? `${page.group}/${page.slug}` : '';
+
+  let main: ReactNode;
+  let toc: TocItem[] = [];
+  if (isLlms) {
+    main = <MachineSurface copied={copied} copy={copy} />;
+  } else if (rest.length === 0) {
+    main = <DocsIndex />;
+  } else if (page) {
+    toc = tocFor(page);
+    main = <Article page={page} copied={copied} copy={copy} />;
+  } else {
+    main = <NotFound />;
+  }
+
+  return (
+    <div className="docs-layout">
+      <Sidebar active={active} />
+      <article className="docs-article">{main}</article>
+      <aside className="docs-toc" aria-label="On this page">
+        {toc.length > 0 && <Toc items={toc} go={goAnchor} />}
+      </aside>
+    </div>
+  );
+}
+
+function Sidebar({ active }: { active: string }) {
+  return (
+    <aside className="docs-aside" aria-label="Documentation navigation">
+      <span className="docs-tag">/DOCS</span>
+      {DOC_GROUPS.map((g: DocGroup) => {
+        const pages = DOC_PAGES.filter((p) => p.group === g.key);
+        const items =
+          g.key === 'agents'
+            ? [...pages, { group: 'agents', slug: 'llms', title: 'Reference, for agents.', lead: '', blocks: [] } as DocPage]
+            : pages;
+        if (items.length === 0) return null;
+        return (
+          <div key={g.key}>
+            <div className="docs-navgroup-label">{g.group}</div>
+            <nav className="docs-navlinks">
+              {items.map((p) => {
+                const href = pageHref(p);
+                const isActive = active === `${p.group}/${p.slug}`;
+                return (
+                  <a
+                    key={p.slug}
+                    href={href}
+                    className={`docs-navlink${isActive ? ' docs-navlink--active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {p.title.replace(/\.$/, '')}
+                  </a>
+                );
+              })}
+            </nav>
+          </div>
+        );
+      })}
+    </aside>
+  );
+}
+
+function Toc({ items, go }: { items: TocItem[]; go: (id: string) => void }) {
+  return (
+    <>
+      <div className="docs-toc-label">On this page</div>
+      <div className="docs-toc-links">
+        {items.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            className="docs-toc-link"
+            onClick={() => go(t.id)}
+          >
+            {t.label.replace(/\.$/, '')}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function DocsIndex() {
+  return (
+    <div>
+      <span className="docs-machine-tag">/DOCS</span>
+      <h1 className="docs-machine-h1">Reference, for humans and agents.</h1>
+      <p className="docs-machine-lead">
+        The SDK, the capability model, providers, spaces, and agents — one source, two views.
+      </p>
+      <div className="docs-index-grid">
+        {DOC_GROUPS.map((g) => {
+          const pages = DOC_PAGES.filter((p) => p.group === g.key);
+          const first = g.key === 'agents' ? undefined : pages[0];
+          const href = first ? pageHref(first) : '#/docs/agents/llms';
+          const lead = first ? first.lead : 'The machine surface — llms.txt, raw markdown, and a structured capability index.';
+          const name = first ? first.title : 'Reference, for agents.';
+          return (
+            <a key={g.key} className="docs-index-card" href={href}>
+              <div className="docs-navgroup-label">{g.group}</div>
+              <div className="docs-index-name">{name.replace(/\.$/, '')}</div>
+              <p className="docs-index-lead">{lead}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function NotFound() {
+  return (
+    <div className="docs-404">
+      <div className="docs-404-title">This page didn't load.</div>
+      <p className="docs-404-body">Try another topic from the sidebar, or head back to the docs index.</p>
+      <a className="docs-btn docs-btn--open" href="#/docs">
+        All docs →
+      </a>
+    </div>
+  );
+}
+
+function MachineSurface({
+  copied,
+  copy,
+}: {
+  copied: string;
+  copy: (text: string, key: string) => void;
+}) {
+  const groups = llmsGroups();
+  // Build the raw llms.txt text so it can also be copied verbatim.
+  const raw =
+    `# immediately.run\n` +
+    `> Apps you can take apart. Run any React/TS app from its source, in the browser. Fork and contribute back from the page itself.\n\n` +
+    groups
+      .map(
+        (g) =>
+          `## ${g.tag}\n` + g.items.map((it) => `- [${it.title}](${it.path}): ${it.desc}`).join('\n'),
+      )
+      .join('\n\n') +
+    '\n';
+
+  return (
+    <div>
+      <span className="docs-machine-tag">/DOCS · MACHINE SURFACE</span>
+      <h1 className="docs-machine-h1">Reference, for agents.</h1>
+      <p className="docs-machine-lead">
+        A curated, link-rich index in the llms.txt convention — the platform definition, every
+        reference page with a stable URL, and pointers to per-page raw markdown.
+      </p>
+      <div className="docs-pills">
+        <a className="docs-pill docs-pill--primary" href="/llms.txt">
+          /llms.txt
+        </a>
+        <a className="docs-pill docs-pill--ghost" href="/docs/llms.txt">
+          /docs/llms.txt
+        </a>
+      </div>
+
+      <div className="docs-llms">
+        <div className="docs-llms-bar">
+          <span className="docs-llms-name">llms.txt</span>
+          <button
+            type="button"
+            className="docs-copy"
+            onClick={() => copy(raw, 'llms')}
+            aria-label="Copy llms.txt"
+          >
+            {copied === 'llms' ? 'Copied' : 'Copy'}
+          </button>
+          <span className="docs-llms-mime">text/plain</span>
+        </div>
+        <div className="docs-llms-body">
+          <div className="docs-llms-h1"># immediately.run</div>
+          <div>
+            &gt; Apps you can take apart. Run any React/TS app from its source, in the browser. Fork
+            and contribute back from the page itself.
+          </div>
+          <div className="docs-llms-spacer" />
+          {groups.map((g) => (
+            <div key={g.tag}>
+              <div className="docs-llms-tag">## {g.tag}</div>
+              {g.items.map((it) => (
+                <div key={it.path}>
+                  - [{it.title}]({it.path}): {it.desc}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <h2 className="docs-h2" id="capability-index">
+        Structured capability index
+      </h2>
+      <p className="docs-p">
+        The capability surface as machine data — so an agent can discover what it can ask for, and
+        how, without scraping HTML.
+      </p>
+      <div className="docs-capwrap" role="table" aria-label="Capability index">
+        <div className="docs-caprow docs-caprow--head" role="row">
+          <span role="columnheader">name</span>
+          <span role="columnheader">description</span>
+          <span role="columnheader">consent</span>
+          <span role="columnheader">rejections</span>
+        </div>
+        {CAP_INDEX.map((c) => (
+          <div className="docs-caprow" role="row" key={c.name}>
+            <span className="docs-cap-name" role="cell">
+              {c.name}
+            </span>
+            <span className="docs-cap-desc" role="cell">
+              {c.desc}
+            </span>
+            <span className="docs-cap-mono" role="cell">
+              {c.consent}
+            </span>
+            <span className="docs-cap-mono" role="cell">
+              {c.rejects}
+            </span>
+          </div>
+        ))}
+      </div>
+      <p className="docs-md-note">
+        Every page is also available as raw markdown at its path with a{' '}
+        <span className="docs-md-suffix">.md</span> suffix — free of site chrome.
+      </p>
+    </div>
+  );
+}
+
+function Article({
+  page,
+  copied,
+  copy,
+}: {
+  page: DocPage;
+  copied: string;
+  copy: (text: string, key: string) => void;
+}) {
+  const { prev, next } = neighbors(page);
+  const mdPath = `/docs/${page.group}/${page.slug}.md`;
+
+  return (
+    <>
+      <h1 className="docs-h1">{page.title}</h1>
+      <p className="docs-lead">{page.lead}</p>
+      {page.blocks.map((b, i) => (
+        <Block key={i} block={b} index={i} copied={copied} copy={copy} />
+      ))}
+
+      <nav className="docs-nav" aria-label="Pagination">
+        {prev ? (
+          <a className="docs-navcard" href={pageHref(prev)}>
+            <div className="docs-navcard-dir">← Previous</div>
+            <div className="docs-navcard-label">{prev.title.replace(/\.$/, '')}</div>
+          </a>
+        ) : (
+          <span className="docs-navcard docs-navcard--ghost" aria-hidden="true" />
+        )}
+        {next ? (
+          <a className="docs-navcard docs-navcard--next" href={pageHref(next)}>
+            <div className="docs-navcard-dir">Next →</div>
+            <div className="docs-navcard-label">{next.title.replace(/\.$/, '')}</div>
+          </a>
+        ) : (
+          <span className="docs-navcard docs-navcard--ghost" aria-hidden="true" />
+        )}
+      </nav>
+
+      <div className="docs-footnote">
+        Reading this as an agent? Start at{' '}
+        <a href="#/docs/agents/llms">/llms.txt</a> · raw: <a href={mdPath}>{mdPath}</a>
+      </div>
+    </>
+  );
+}
+
+function Block({
+  block,
+  index,
+  copied,
+  copy,
+}: {
+  block: DocBlock;
+  index: number;
+  copied: string;
+  copy: (text: string, key: string) => void;
+}) {
+  switch (block.kind) {
+    case 'h2':
+      return (
+        <h2 className="docs-h2" id={block.id}>
+          {block.text}
+        </h2>
+      );
+    case 'p':
+      return <p className="docs-p">{block.text}</p>;
+    case 'code': {
+      const key = `code:${index}`;
+      return (
+        <div className="docs-codeblock">
+          <div className="docs-codebar">
+            <span className="docs-codebar-route">{block.route}</span>
+            <button
+              type="button"
+              className="docs-copy"
+              aria-label="Copy code"
+              onClick={() => copy(block.code, key)}
+            >
+              {copied === key ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+          <pre className="docs-pre">
+            <code>{block.code}</code>
+          </pre>
+        </div>
+      );
+    }
+    case 'callout':
+      return (
+        <div className={`docs-callout docs-callout--${block.tone}`}>
+          <div className="docs-callout-title">{block.title}</div>
+          <div className="docs-callout-body">{block.text}</div>
+        </div>
+      );
+    case 'example':
+      return (
+        <div className="docs-example">
+          <div className="docs-example-meta">
+            <div className="docs-example-name">{block.name}</div>
+            <div className="docs-example-desc">{block.desc}</div>
+          </div>
+          <div className="docs-example-actions">
+            <a className="docs-btn docs-btn--open" href={block.presentHref}>
+              Open
+            </a>
+            <a className="docs-btn docs-btn--fork" href={block.editHref}>
+              Fork
+            </a>
+          </div>
+        </div>
+      );
+    case 'api':
+      return (
+        <div className="docs-api" id={block.id}>
+          <div className="docs-api-head">
+            <code className="docs-api-sig">{block.sig}</code>
+            <div>
+              <a className="docs-cap-chip" href={block.capHref}>
+                Requires the {block.cap} capability
+              </a>
+            </div>
+          </div>
+          <div className="docs-api-body">
+            {block.params.length > 0 && (
+              <>
+                <div className="docs-api-label">Parameters</div>
+                {block.params.map((p) => (
+                  <div className="docs-param" key={p.name}>
+                    <div>
+                      <code className="docs-param-name">{p.name}</code>
+                      <div className="docs-param-type">{p.type}</div>
+                    </div>
+                    <div className="docs-param-desc">{p.desc}</div>
+                  </div>
+                ))}
+              </>
+            )}
+            <div className="docs-api-label docs-api-label--mt">Returns</div>
+            <div className="docs-returns">{block.returns}</div>
+            <div className="docs-api-label docs-api-label--mt">Rejection codes</div>
+            {block.rejections.map((r) => (
+              <div className="docs-reject" key={r.code}>
+                <code className="docs-reject-code">{r.code}</code>
+                <span className="docs-reject-meaning">{r.meaning}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
+}

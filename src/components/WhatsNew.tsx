@@ -7,7 +7,7 @@ function WhatsNew() {
 
   return (
     <section className="section" aria-label="What's new">
-      <a className="news-row" href="/changelog">
+      <a className="news-row" href="#/changelog">
         <span className="ntag">/NEWS</span>
         <span className={`badge ${latest.badge}`}>{latest.badgeLabel}</span>
         <span className="news-msg">{latest.message}</span>
