@@ -60,10 +60,10 @@ export default function Changelog() {
               />
             ))}
           </ol>
-          <div className="cl-feed">
-            Polling for changes?{' '}
-            <a href="/changelog.xml">RSS / Atom feed →</a>
-          </div>
+          {/* The RSS/Atom link is gone rather than repointed: no feed is generated in either
+              environment, so it 404'd everywhere, and a dead link on a "polling for changes"
+              affordance is worse than no affordance. Bring it back WITH a generated feed —
+              `check-corpora.mjs` is where that would be emitted, next to `public/llms.txt`. */}
         </>
       )}
     </section>

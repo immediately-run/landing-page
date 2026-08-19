@@ -19,7 +19,7 @@
 // what was checked. `npm run verify` runs it and then `git diff --exit-code`s the output, the
 // same shape site-main uses for its generated config schema.
 
-import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // The SAME id function `remarkHeadingAnchors` uses, from the same package. A TOC built with
@@ -275,7 +275,66 @@ export function corpusEntries(dir: string): CorpusEntry[] {
   );
 }
 `;
-writeFileSync(join(root, 'src/data/corpusIndex.ts'), generated);
+// ---------------------------------------------------------------------------
+// The machine surface (`public/llms.txt`), emitted from the SAME validated index.
+//
+// The site advertises an llms.txt and, until now, linked to a URL that existed in
+// neither environment — and the index it rendered pointed at per-page `.md` files
+// that were never generated either. An agent surface that 404s is worse than none:
+// it reads as a promise. Value 5 says agents are first-class users, so the promise
+// gets kept rather than removed.
+//
+// Emitted HERE, next to the checker, for the reason the corpus index is: one
+// authored source, one generator, and the generator is the validator. It is also
+// exported as `LLMS_TXT` above, so the page's Copy button hands over the exact
+// bytes the file contains — the UI and the artifact cannot drift.
+//
+// `public/` rather than the repo root so `vite dev`/`vite build` serve it at
+// `/llms.txt`; on the platform it is `files/public/llms.txt`. Both real.
+// Links are ROUTES (which the app owns) plus the repo-relative SOURCE path, so a
+// reader off-platform can find the bytes without guessing a URL space.
+// Declared `order`, the same sort `corpusEntries()` applies — the machine surface must
+// list pages in the order the site does, not in readdir order.
+const docEntries = index
+  .filter((e) => e.path.startsWith('docs/'))
+  .sort((a, b) => Number(a.frontmatter.order ?? 0) - Number(b.frontmatter.order ?? 0));
+const groupsInOrder = [];
+for (const e of docEntries) {
+  const key = String(e.frontmatter.group);
+  if (!groupsInOrder.some((g) => g.key === key)) {
+    groupsInOrder.push({ key, label: String(e.frontmatter.groupLabel ?? key), items: [] });
+  }
+  groupsInOrder.find((g) => g.key === key).items.push(e);
+}
+const llmsTxt =
+  `# immediately.run\n` +
+  `> Apps you can take apart. Run any React/TS app from its source, in the browser. ` +
+  `Fork and contribute back from the page itself.\n\n` +
+  groupsInOrder
+    .map(
+      (g) =>
+        `## ${g.label}\n` +
+        g.items
+          .map((e) => {
+            const [group, slug] = e.slug.split('--');
+            const title = String(e.frontmatter.title).replace(/\.$/, '');
+            return `- [${title}](/docs/${group}/${slug}): ${e.frontmatter.lead} (source: ${e.path})`;
+          })
+          .join('\n'),
+    )
+    .join('\n\n') +
+  '\n';
+writeFileSync(
+  join(root, 'src/data/corpusIndex.ts'),
+  generated +
+    `
+/** The machine surface, byte-identical to \`public/llms.txt\`. Exported so the page's
+ *  Copy button hands over exactly what the file contains. */
+export const LLMS_TXT = ${JSON.stringify(llmsTxt)};
+`,
+);
+mkdirSync(join(root, 'public'), { recursive: true });
+writeFileSync(join(root, 'public/llms.txt'), llmsTxt);
 
 const byCorpus = {};
 for (const e of index) {

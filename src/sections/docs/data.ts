@@ -80,6 +80,13 @@ export interface TocItem {
 
 /* -------------------------------------------------------------- helpers -- */
 
+/** The repo-relative source of a page — the bytes behind it, in the platform's files space.
+ *  The corpus is `.mdx`; the site used to advertise a per-page `.md` that was never generated
+ *  in either environment, so every "raw" link 404'd. */
+export function pageSourcePath(p: { group: string; slug: string }): string {
+  return `docs/${p.group}--${p.slug}.mdx`;
+}
+
 export function pageHref(p: { group: string; slug: string }): string {
   return `/docs/${p.group}/${p.slug}`;
 }
@@ -193,7 +200,7 @@ export function llmsGroups(): LlmsGroup[] {
     tag: g.group,
     items: DOC_PAGES.filter((p) => p.group === g.key).map((p) => ({
       title: p.title.replace(/\.$/, ''),
-      path: `/docs/${g.key}/${p.slug}.md`,
+      path: `/docs/${g.key}/${p.slug}`,
       desc: p.lead,
     })),
   })).filter((g) => g.items.length > 0);

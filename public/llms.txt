@@ -1,0 +1,12 @@
+# immediately.run
+> Apps you can take apart. Run any React/TS app from its source, in the browser. Fork and contribute back from the page itself.
+
+## Getting started
+- [Run any app from its source](/docs/start/overview): immediately.run loads a React + TypeScript app straight from a GitHub repo and transpiles it in the browser — no server, no deploy step. Open it, use it, then pop the hood. (source: docs/start--overview.mdx)
+
+## SDK
+- [The SDK entry point](/docs/sdk/entry): All platform interaction goes through @immediately-run/sdk — the only channel between your sandboxed app and the host. Pin it, import it, and call protocol methods reactively. (source: docs/sdk--entry.mdx)
+
+## Capabilities
+- [The consent model](/docs/capabilities/model): Access to data is asked for, not taken. The filesystem you see is the filesystem you got. Every privileged call replies with a typed result, and forbidden means policy — not a bug to retry around. (source: docs/capabilities--model.mdx)
+- [Identity and sign-in](/docs/capabilities/identity): Identity is a capability like any other. You get a stable, opaque handle for the signed-in user — never a token, never an email, never a secret. (source: docs/capabilities--identity.mdx)
