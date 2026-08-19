@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@immediately-run/mdx-plugins": "^0.3.0",
-    "@immediately-run/sdk": "^0.45.0",
+    "@immediately-run/sdk": "0.45.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
