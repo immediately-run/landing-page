@@ -6,6 +6,8 @@
 // into paragraphs would be the mistake the conversion is meant to avoid, in the other
 // direction. MDX is for the prose around them.
 
+import SiteLink from '../components/SiteLink';
+
 export interface ApiParam {
   name: string;
   type: string;
@@ -40,9 +42,9 @@ export default function ApiSignature({
       <div className="docs-api-head">
         <code className="docs-api-sig">{sig}</code>
         <div>
-          <a className="docs-cap-chip" href={capHref}>
+          <SiteLink className="docs-cap-chip" to={(capHref ?? '').replace(/^#/, '')}>
             Requires the {cap} capability
-          </a>
+          </SiteLink>
         </div>
       </div>
       <div className="docs-api-body">

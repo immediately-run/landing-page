@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
+import { usePlatformHref } from '../hooks/useRoute';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
 import SiteLink from './SiteLink';
@@ -19,6 +20,7 @@ interface NavProps {
 }
 
 function Nav({ active, onOpenSearch }: NavProps) {
+  const platform = usePlatformHref();
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLight = theme === 'light';
@@ -70,7 +72,7 @@ function Nav({ active, onOpenSearch }: NavProps) {
             >
               ★ GitHub
             </a>
-            <a className="btn nav-cta desk-only" href="/edit/new">
+            <a className="btn nav-cta desk-only" href={platform('/edit/new')}>
               Start building →
             </a>
             <button
@@ -110,7 +112,7 @@ function Nav({ active, onOpenSearch }: NavProps) {
               </SiteLink>
             ))}
           </div>
-          <a className="btn" href="/edit/new">
+          <a className="btn" href={platform('/edit/new')}>
             Start building →
           </a>
         </div>

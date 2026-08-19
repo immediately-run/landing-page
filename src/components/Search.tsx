@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
+import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
 
 interface SearchProps {
@@ -55,6 +56,7 @@ const GROUPS: { heading: string; entries: Entry[] }[] = [
 ];
 
 function Search({ onClose }: SearchProps) {
+  const platform = usePlatformHref();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -124,7 +126,7 @@ function Search({ onClose }: SearchProps) {
                       {body}
                     </SiteLink>
                   ) : (
-                    <a className="search-item" href={e.href} key={key} onClick={onClose}>
+                    <a className="search-item" href={e.href ? platform(e.href) : undefined} key={key} onClick={onClose}>
                       {body}
                     </a>
                   );

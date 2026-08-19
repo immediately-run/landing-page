@@ -1,7 +1,9 @@
 import { editRoute } from '../lib/routes';
+import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
 
 function Footer() {
+  const platform = usePlatformHref();
   return (
     <footer className="foot">
       <div className="foot-inner">
@@ -24,7 +26,7 @@ function Footer() {
           <div className="foot-col">
             <div className="h">Platform</div>
             <div className="links">
-              <a href="/edit/new">Open the editor</a>
+              <a href={platform('/edit/new')}>Open the editor</a>
               <SiteLink to="/docs/sdk/entry">SDK</SiteLink>
               <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
                 GitHub org
@@ -50,7 +52,7 @@ function Footer() {
             set in Gabarito &amp; Space Mono
           </div>
           {/* Quiet forkability: this very page is itself a forkable app. */}
-          <a className="foot-fork" href={editRoute('landing-page')}>
+          <a className="foot-fork" href={platform(editRoute('landing-page'))}>
             view source · fork this page →
           </a>
         </div>

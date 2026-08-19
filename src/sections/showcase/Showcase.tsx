@@ -2,12 +2,14 @@ import './showcase.css';
 import { useMemo, useState } from 'react';
 import { APPS, CATEGORIES } from '../../data/apps';
 import { presentRoute, editRoute } from '../../lib/routes';
+import { usePlatformHref } from '../../hooks/useRoute';
 import ProvenanceChip from '../../components/ProvenanceChip';
 import SiteLink from '../../components/SiteLink';
 
 // The curated storefront, bound to #/showcase. Section hero, a one-row category
 // filter, an asymmetric 6-col grid of real apps, and a route into the directory.
 function Showcase() {
+  const platform = usePlatformHref();
   const [active, setActive] = useState('all');
   const chips = [{ slug: 'all', label: 'All' }, ...CATEGORIES];
 
@@ -65,10 +67,10 @@ function Showcase() {
                   </span>
                   <p className="sc-blurb">{app.blurb}</p>
                   <div className="sc-actions">
-                    <a className="sc-btn sc-btn--open" href={presentRoute(app.repo, app.entry)}>
+                    <a className="sc-btn sc-btn--open" href={platform(presentRoute(app.repo, app.entry))}>
                       Open
                     </a>
-                    <a className="sc-btn sc-btn--fork" href={editRoute(app.repo, app.entry)}>
+                    <a className="sc-btn sc-btn--fork" href={platform(editRoute(app.repo, app.entry))}>
                       Fork
                     </a>
                   </div>
