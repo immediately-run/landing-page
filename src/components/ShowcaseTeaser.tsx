@@ -1,6 +1,7 @@
 import ProvenanceChip from './ProvenanceChip';
 import { APPS } from '../data/apps';
 import { presentRoute, editRoute } from '../lib/routes';
+import SiteLink from './SiteLink';
 
 // A trimmed slice of the full showcase grid. The same app record renders here,
 // in the showcase, in the directory, and in search (full grid lives at #/showcase).
@@ -12,9 +13,9 @@ function ShowcaseTeaser() {
       <div className="sec-head">
         <span className="tag">/SHOWCASE</span>
         <h2 id="teaser">Built with immediately.run.</h2>
-        <a className="more" href="#/showcase">
+        <SiteLink className="more" to="/showcase">
           See all apps →
-        </a>
+        </SiteLink>
       </div>
       <div className="show-grid">
         {TEASER.map((app) => (

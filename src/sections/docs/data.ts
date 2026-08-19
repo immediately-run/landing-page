@@ -62,7 +62,7 @@ export interface DocPage {
 export interface DocGroup {
   /** Mono uppercase label shown in the sidebar. */
   group: string;
-  /** URL segment, e.g. "sdk" → #/docs/sdk/<slug>. */
+  /** URL segment, e.g. "sdk" → /docs/sdk/<slug>. */
   key: string;
 }
 
@@ -81,7 +81,7 @@ export interface TocItem {
 /* -------------------------------------------------------------- helpers -- */
 
 export function pageHref(p: { group: string; slug: string }): string {
-  return `#/docs/${p.group}/${p.slug}`;
+  return `/docs/${p.group}/${p.slug}`;
 }
 
 /** The article's H2s, in document order, as TOC anchors. The ids come from the checker,
@@ -109,7 +109,7 @@ export function neighbors(page: DocPage): {
 
 /* ----------------------------------------------------------------- pages -- */
 // Derived from the `docs/` corpus. The file name carries the route:
-// `<group>--<slug>.mdx` → `#/docs/<group>/<slug>`. Reading order is the frontmatter
+// `<group>--<slug>.mdx` → `/docs/<group>/<slug>`. Reading order is the frontmatter
 // `order`, which the checker requires, so the sidebar cannot silently reorder itself when
 // a file is renamed.
 

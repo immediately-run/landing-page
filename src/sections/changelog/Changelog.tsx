@@ -7,6 +7,7 @@ import {
   type FilterKind,
   type ChangelogEntry,
 } from './data';
+import SiteLink from '../../components/SiteLink';
 
 export default function Changelog() {
   const [filter, setFilter] = useState<FilterKind>('all');
@@ -107,9 +108,9 @@ function Entry({
             </button>
           )}
           {entry.docHref && (
-            <a className="cl-doc" href={entry.docHref}>
+            <SiteLink className="cl-doc" to={entry.docHref}>
               documented in →
-            </a>
+            </SiteLink>
           )}
         </div>
       )}

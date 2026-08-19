@@ -3,13 +3,21 @@
 // never loads main.tsx; anything the rendered tree needs must be reachable
 // from App.tsx.
 //
-// The whole public site lives in this one app, routed by hash (see hooks/useRoute):
-// home · showcase · apps · docs · tutorials · changelog. The shell (nav + footer)
-// is persistent; the active section fills the content region.
+// The whole public site lives in this one app, routed by PATH (see hooks/useRoute):
+// `/` · `/showcase` · `/apps` · `/docs/…` · `/tutorials/…` · `/changelog`. The shell (nav +
+// footer) is persistent; the active section fills the content region.
+//
+// The routes used to be hash-based, on the premise that "immediately.run serves a single
+// entry with no server to resolve sub-paths". That was already false: SANDBOX_ROUTING_SPEC
+// splits an outer URL into a platform-owned prefix and an APP-owned `sandboxPath`, and the
+// host mirrors the browser location into the sandbox on every navigation. The hash was
+// costing a real thing — a URL has exactly one fragment, the router had taken it, and so a
+// heading permalink had nowhere to point.
 import './index.css';
 import './App.css';
 import { useEffect, useState } from 'react';
-import { useRoute } from './hooks/useRoute';
+import { useFragment, useRoute } from './hooks/useRoute';
+import { useFragmentScroll } from './hooks/useFragmentScroll';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Search from './components/Search';
@@ -23,6 +31,10 @@ import Changelog from './sections/changelog/Changelog';
 
 function App() {
   const route = useRoute();
+  // A deep link with a fragment has to land on its heading, and the browser's own scroll
+  // fires before the section renders. See the hook for what that looked like.
+  const fragment = useFragment();
+  useFragmentScroll(fragment, `${route.section}/${route.rest.join('/')}`);
   const [searchOpen, setSearchOpen] = useState(false);
 
   // Global ⌘K / Ctrl+K opens the search palette.

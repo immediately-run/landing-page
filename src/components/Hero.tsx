@@ -1,5 +1,6 @@
 import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
+import SiteLink from './SiteLink';
 
 // The hero "Run an app" CTA opens the strongest, mobile-friendly showcase app.
 const HERO_APP = 'whiteboard';
@@ -24,9 +25,9 @@ function Hero() {
             <a className="btn" href={presentRoute(HERO_APP)}>
               Run an app →
             </a>
-            <a className="btn-ghost" href="#/tutorials">
+            <SiteLink className="btn-ghost" to="/tutorials">
               Build your own →
-            </a>
+            </SiteLink>
           </div>
           <div className="proof">
             <span>0 deploys</span>

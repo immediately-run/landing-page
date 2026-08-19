@@ -56,13 +56,31 @@ Try this app on [immediately.run](https://immediately.run/present/github/immedia
 ## How it's organized
 
 A persistent shell (nav, footer, theme, ⌘K search) wraps a content region; a tiny
-hash router swaps the active section. No server is involved — `#/…` routes resolve
-entirely in the browser, which is what immediately.run's single-entry runtime needs.
+router swaps the active section on **real path routes** — `/showcase`, `/docs/sdk/entry`,
+`/tutorials/your-first-app`.
+
+**Not hash routes.** `SANDBOX_ROUTING_SPEC` splits an outer URL into a platform-owned prefix
+(`/{mode}/{provider}/{namespace}/{repository}/{ref}`) and an app-owned `sandboxPath`, and the
+host mirrors the browser location into the sandbox on every navigation. The old `#/…` router
+rested on "no server to resolve sub-paths", which had stopped being true — and it cost a real
+thing: a URL has exactly one fragment, the router had taken it, so a heading permalink had
+nowhere to point. Now `#the-run-edit-contribute-loop` is free for what fragments are for.
+
+Legacy `#/…` URLs still work: they redirect once, on boot, to the path spelling.
 
 - `src/App.tsx` — root component (immediately.run's entry); imports the global CSS
   and renders the shell + the active section.
-- `src/hooks/useRoute.ts` — the hash router: `#/` · `#/showcase` · `#/apps` ·
-  `#/docs` · `#/tutorials` · `#/changelog`.
+- `src/lib/routeSpace.ts` — the pure route space: parse, serialise, the legacy-hash
+  translation, and the `sandboxPath` → app-path normalisation. Unit-tested; the rest of the
+  router is glue.
+- `src/lib/navigation.ts` — the only place that knows whether a host is present. On the
+  platform an href is built with the SDK's `constructOuterUrl` and a click calls the SDK's
+  `navigate()` (an app may not touch history or postMessage its own channel); locally it is
+  `pushState`.
+- `src/hooks/useRoute.ts` — the router: `sandboxPath` from the host context, or
+  `location.pathname` in `vite dev`.
+- `src/components/SiteLink.tsx` — every in-site link. Renders a real href so copy-link and
+  open-in-new-tab work, intercepts the plain click so navigation stays in place.
 - `src/index.css` — fonts, theme variables, resets. `src/App.css` — shell + home layout.
 - `src/components/` — the shell (Nav, Footer, Search) and the home-page sections;
   one default-exported component per file.

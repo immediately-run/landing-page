@@ -14,6 +14,7 @@ import {
 } from './data';
 import type { DocGroup, DocPage, TocItem } from './data';
 import { CORPUS_COMPONENTS } from '../../corpus/components';
+import SiteLink from '../../components/SiteLink';
 
 // The /docs section: the technical reference, served to two audiences from one
 // source. The same typed records in data.ts render both the human article view
@@ -141,7 +142,7 @@ function DocsIndex() {
         {DOC_GROUPS.map((g) => {
           const pages = DOC_PAGES.filter((p) => p.group === g.key);
           const first = g.key === 'agents' ? undefined : pages[0];
-          const href = first ? pageHref(first) : '#/docs/agents/llms';
+          const href = first ? pageHref(first) : '/docs/agents/llms';
           const lead = first ? first.lead : 'The machine surface — llms.txt, raw markdown, and a structured capability index.';
           const name = first ? first.title : 'Reference, for agents.';
           return (
@@ -162,9 +163,9 @@ function NotFound() {
     <div className="docs-404">
       <div className="docs-404-title">This page didn't load.</div>
       <p className="docs-404-body">Try another topic from the sidebar, or head back to the docs index.</p>
-      <a className="docs-btn docs-btn--open" href="#/docs">
+      <SiteLink className="docs-btn docs-btn--open" to="/docs">
         All docs →
-      </a>
+      </SiteLink>
     </div>
   );
 }
@@ -309,7 +310,7 @@ function Article({ page }: { page: DocPage }) {
 
       <div className="docs-footnote">
         Reading this as an agent? Start at{' '}
-        <a href="#/docs/agents/llms">/llms.txt</a> · raw: <a href={mdPath}>{mdPath}</a>
+        <SiteLink to="/docs/agents/llms">/llms.txt</SiteLink> · raw: <a href={mdPath}>{mdPath}</a>
       </div>
     </>
   );

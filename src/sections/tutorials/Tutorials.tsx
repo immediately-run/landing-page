@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { TUTORIALS, findTutorial } from './data';
 import { CORPUS_COMPONENTS } from '../../corpus/components';
 import type { Tutorial } from './data';
+import SiteLink from '../../components/SiteLink';
 
 // The tutorials section, bound to #/tutorials (index) and #/tutorials/:slug (a page).
 // Static prose plus deep links that open the live platform pre-loaded to the right
@@ -40,7 +41,7 @@ function TutorialIndex() {
 
       <div className="tut-grid">
         {TUTORIALS.map((t) => (
-          <a key={t.slug} className="tut-card" href={`#/tutorials/${t.slug}`}>
+          <SiteLink key={t.slug} className="tut-card" to={`/tutorials/${t.slug}`}>
             <span className="tut-card-num grad-text">{t.num}</span>
             <div className="tut-card-pillar">{t.pillar}</div>
             <h2 className="tut-card-title">{t.title}</h2>
@@ -54,7 +55,7 @@ function TutorialIndex() {
               ))}
               <span className="tut-card-time">{t.time}</span>
             </div>
-          </a>
+          </SiteLink>
         ))}
       </div>
     </div>
@@ -67,9 +68,9 @@ function NotFound() {
       <div className="tut-404">
         <div className="tut-404-title">No such tutorial.</div>
         <p className="tut-404-text">It may have moved. Head back to the index.</p>
-        <a className="tut-404-cta" href="#/tutorials">
+        <SiteLink className="tut-404-cta" to="/tutorials">
           All tutorials →
-        </a>
+        </SiteLink>
       </div>
     </div>
   );
@@ -80,9 +81,9 @@ function TutorialPage({ tut, goStep }: { tut: Tutorial; goStep: (id: string) => 
     <div className="tut tut-fade">
       <div className="tut-layout">
         <article className="tut-article">
-          <a className="tut-back" href="#/tutorials">
+          <SiteLink className="tut-back" to="/tutorials">
             ← All tutorials
-          </a>
+          </SiteLink>
           <h1 className="tut-page-title">{tut.title}</h1>
 
           <div className="tut-meta-card">
@@ -111,10 +112,10 @@ function TutorialPage({ tut, goStep }: { tut: Tutorial; goStep: (id: string) => 
 
           <div className="tut-next">
             <div className="tut-next-label">Learn next</div>
-            <a className="tut-next-card" href={`#/tutorials/${tut.next.slug}`}>
+            <SiteLink className="tut-next-card" to={`/tutorials/${tut.next.slug}`}>
               <span className="tut-next-title">{tut.next.label}</span>
               <span className="tut-next-arrow">→</span>
-            </a>
+            </SiteLink>
           </div>
         </article>
 
