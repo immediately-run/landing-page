@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import SiteLink from './SiteLink';
 
 interface Props {
   children: ReactNode;
@@ -40,12 +41,12 @@ class SectionErrorBoundary extends Component<Props, State> {
           >
             Reload
           </button>
-          <a className="section-error__btn" href="#/showcase">
+          <SiteLink className="section-error__btn" to="/showcase">
             Go to showcase
-          </a>
-          <a className="section-error__btn" href="#/">
+          </SiteLink>
+          <SiteLink className="section-error__btn" to="/">
             Back home
-          </a>
+          </SiteLink>
         </div>
       </div>
     );

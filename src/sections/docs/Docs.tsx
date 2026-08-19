@@ -6,12 +6,15 @@ import {
   DOC_PAGES,
   CAP_INDEX,
   llmsGroups,
+  LLMS_NAV_ITEM,
   pageHref,
   tocFor,
   findPage,
   neighbors,
 } from './data';
-import type { DocBlock, DocGroup, DocPage, TocItem } from './data';
+import type { DocGroup, DocPage, TocItem } from './data';
+import { CORPUS_COMPONENTS } from '../../corpus/components';
+import SiteLink from '../../components/SiteLink';
 
 // The /docs section: the technical reference, served to two audiences from one
 // source. The same typed records in data.ts render both the human article view
@@ -56,7 +59,7 @@ export default function Docs({ rest }: { rest: string[] }) {
     main = <DocsIndex />;
   } else if (page) {
     toc = tocFor(page);
-    main = <Article page={page} copied={copied} copy={copy} />;
+    main = <Article page={page} />;
   } else {
     main = <NotFound />;
   }
@@ -78,10 +81,8 @@ function Sidebar({ active }: { active: string }) {
       <span className="docs-tag">/DOCS</span>
       {DOC_GROUPS.map((g: DocGroup) => {
         const pages = DOC_PAGES.filter((p) => p.group === g.key);
-        const items =
-          g.key === 'agents'
-            ? [...pages, { group: 'agents', slug: 'llms', title: 'Reference, for agents.', lead: '', blocks: [] } as DocPage]
-            : pages;
+        const items: Pick<DocPage, 'group' | 'slug' | 'title'>[] =
+          g.key === 'agents' ? [...pages, LLMS_NAV_ITEM] : pages;
         if (items.length === 0) return null;
         return (
           <div key={g.key}>
@@ -141,7 +142,7 @@ function DocsIndex() {
         {DOC_GROUPS.map((g) => {
           const pages = DOC_PAGES.filter((p) => p.group === g.key);
           const first = g.key === 'agents' ? undefined : pages[0];
-          const href = first ? pageHref(first) : '#/docs/agents/llms';
+          const href = first ? pageHref(first) : '/docs/agents/llms';
           const lead = first ? first.lead : 'The machine surface — llms.txt, raw markdown, and a structured capability index.';
           const name = first ? first.title : 'Reference, for agents.';
           return (
@@ -162,9 +163,9 @@ function NotFound() {
     <div className="docs-404">
       <div className="docs-404-title">This page didn't load.</div>
       <p className="docs-404-body">Try another topic from the sidebar, or head back to the docs index.</p>
-      <a className="docs-btn docs-btn--open" href="#/docs">
+      <SiteLink className="docs-btn docs-btn--open" to="/docs">
         All docs →
-      </a>
+      </SiteLink>
     </div>
   );
 }
@@ -278,15 +279,7 @@ function MachineSurface({
   );
 }
 
-function Article({
-  page,
-  copied,
-  copy,
-}: {
-  page: DocPage;
-  copied: string;
-  copy: (text: string, key: string) => void;
-}) {
+function Article({ page }: { page: DocPage }) {
   const { prev, next } = neighbors(page);
   const mdPath = `/docs/${page.group}/${page.slug}.md`;
 
@@ -294,9 +287,7 @@ function Article({
     <>
       <h1 className="docs-h1">{page.title}</h1>
       <p className="docs-lead">{page.lead}</p>
-      {page.blocks.map((b, i) => (
-        <Block key={i} block={b} index={i} copied={copied} copy={copy} />
-      ))}
+      <page.Body components={CORPUS_COMPONENTS} />
 
       <nav className="docs-nav" aria-label="Pagination">
         {prev ? (
@@ -319,116 +310,8 @@ function Article({
 
       <div className="docs-footnote">
         Reading this as an agent? Start at{' '}
-        <a href="#/docs/agents/llms">/llms.txt</a> · raw: <a href={mdPath}>{mdPath}</a>
+        <SiteLink to="/docs/agents/llms">/llms.txt</SiteLink> · raw: <a href={mdPath}>{mdPath}</a>
       </div>
     </>
   );
-}
-
-function Block({
-  block,
-  index,
-  copied,
-  copy,
-}: {
-  block: DocBlock;
-  index: number;
-  copied: string;
-  copy: (text: string, key: string) => void;
-}) {
-  switch (block.kind) {
-    case 'h2':
-      return (
-        <h2 className="docs-h2" id={block.id}>
-          {block.text}
-        </h2>
-      );
-    case 'p':
-      return <p className="docs-p">{block.text}</p>;
-    case 'code': {
-      const key = `code:${index}`;
-      return (
-        <div className="docs-codeblock">
-          <div className="docs-codebar">
-            <span className="docs-codebar-route">{block.route}</span>
-            <button
-              type="button"
-              className="docs-copy"
-              aria-label="Copy code"
-              onClick={() => copy(block.code, key)}
-            >
-              {copied === key ? 'Copied' : 'Copy'}
-            </button>
-          </div>
-          <pre className="docs-pre">
-            <code>{block.code}</code>
-          </pre>
-        </div>
-      );
-    }
-    case 'callout':
-      return (
-        <div className={`docs-callout docs-callout--${block.tone}`}>
-          <div className="docs-callout-title">{block.title}</div>
-          <div className="docs-callout-body">{block.text}</div>
-        </div>
-      );
-    case 'example':
-      return (
-        <div className="docs-example">
-          <div className="docs-example-meta">
-            <div className="docs-example-name">{block.name}</div>
-            <div className="docs-example-desc">{block.desc}</div>
-          </div>
-          <div className="docs-example-actions">
-            <a className="docs-btn docs-btn--open" href={block.presentHref}>
-              Open
-            </a>
-            <a className="docs-btn docs-btn--fork" href={block.editHref}>
-              Fork
-            </a>
-          </div>
-        </div>
-      );
-    case 'api':
-      return (
-        <div className="docs-api" id={block.id}>
-          <div className="docs-api-head">
-            <code className="docs-api-sig">{block.sig}</code>
-            <div>
-              <a className="docs-cap-chip" href={block.capHref}>
-                Requires the {block.cap} capability
-              </a>
-            </div>
-          </div>
-          <div className="docs-api-body">
-            {block.params.length > 0 && (
-              <>
-                <div className="docs-api-label">Parameters</div>
-                {block.params.map((p) => (
-                  <div className="docs-param" key={p.name}>
-                    <div>
-                      <code className="docs-param-name">{p.name}</code>
-                      <div className="docs-param-type">{p.type}</div>
-                    </div>
-                    <div className="docs-param-desc">{p.desc}</div>
-                  </div>
-                ))}
-              </>
-            )}
-            <div className="docs-api-label docs-api-label--mt">Returns</div>
-            <div className="docs-returns">{block.returns}</div>
-            <div className="docs-api-label docs-api-label--mt">Rejection codes</div>
-            {block.rejections.map((r) => (
-              <div className="docs-reject" key={r.code}>
-                <code className="docs-reject-code">{r.code}</code>
-                <span className="docs-reject-meaning">{r.meaning}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    default:
-      return null;
-  }
 }

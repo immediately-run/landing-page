@@ -18,7 +18,7 @@ export interface ChangelogEntry {
   detail?: string;
   /** Optional bullet list shown inside the expanded detail. */
   bullets?: string[];
-  /** Optional link into the reference, e.g. "#/docs/capabilities". */
+  /** Optional link into the reference, e.g. "/docs/capabilities". */
   docHref?: string;
 }
 
@@ -56,7 +56,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'a downgraded role now fires onMountsChange so affordances can hide themselves.',
       'forbidden is returned as policy, never as a retryable error.',
     ],
-    docHref: '#/docs/capabilities',
+    docHref: '/docs/capabilities',
   },
   {
     id: 'mcp-bridge',
@@ -70,7 +70,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'each tool call carries the same typed-error contract as a direct SDK call.',
       'cross-app tasks you invoke must be declared under "invokes".',
     ],
-    docHref: '#/docs/agents',
+    docHref: '/docs/agents',
   },
   {
     id: 'push-to-github',
@@ -83,7 +83,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'commits land on a branch you name; the host opens the pull request.',
       'read-only mounts stay read-only — writes there fail with EROFS.',
     ],
-    docHref: '#/docs/push',
+    docHref: '/docs/push',
   },
   {
     id: 'spaces',
@@ -91,7 +91,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     kind: 'rel',
     version: 'v2.3',
     message: 'spaces — per-app storage that travels with a fork.',
-    docHref: '#/docs/spaces',
+    docHref: '/docs/spaces',
   },
   {
     id: 'offline-cache',
@@ -123,6 +123,6 @@ export const CHANGELOG: ChangelogEntry[] = [
       'requests resolve to { ok: false, code: "cancelled" | "forbidden" } when declined.',
       'degrade the feature on cancellation — never block the app.',
     ],
-    docHref: '#/docs/consent',
+    docHref: '/docs/consent',
   },
 ];

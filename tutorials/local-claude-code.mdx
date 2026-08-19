@@ -1,0 +1,61 @@
+---
+title: "Change an app by asking a coding agent."
+num: "02"
+pillar: "AGENTS"
+outcome: "An app feature written by a local coding agent, then run from source."
+prereqs: "An app repo cloned locally and a coding agent installed."
+time: "12 min"
+difficulty: "Intermediate"
+tags: ["agents", "local-dev", "forking"]
+order: 20
+nextSlug: "bind-a-space"
+nextLabel: "Give a fork a folder to work in."
+---
+
+### Clone an app you want to change.
+
+Agents are first-class authors here, because apps are plain files. Clone the repo locally so the agent has the real tree to work in — no special format, just React and TypeScript.
+
+<CodeBlock route="terminal">
+
+```tsx
+git clone https://github.com/immediately-run/whiteboard
+cd whiteboard
+```
+
+</CodeBlock>
+
+### Ask the agent for the change.
+
+Run your coding agent in the repo and describe the change in plain language. It reads the existing components, follows the one-component-per-file rule, and writes the files. You review the diff.
+
+<CodeBlock route="terminal">
+
+```tsx
+claude "add a color picker to the toolbar that\n  sets the active stroke colour"
+```
+
+</CodeBlock>
+
+<Checkpoint alt="a coding agent proposing a diff in the terminal">
+  A diff touching the toolbar component and its CSS, ready to review.
+</Checkpoint>
+
+### Run it against your working tree.
+
+Start the local dev server and the platform renders the app from your files. Iterate with the agent until the feature does what you meant — the loop is read, ask, run.
+
+<CodeBlock route="terminal">
+
+```tsx
+npm install
+npm run dev
+```
+
+</CodeBlock>
+
+### Push the agent’s work.
+
+Once it is right, commit and push. The change is live from source on the next launch — the agent wrote it, you shipped it, and the whole thing stays a hackable repo.
+
+<DeepLink label="Open the edited file in immediately.run →" href="/edit/github/immediately-run/whiteboard/main/files/src/App.tsx" />

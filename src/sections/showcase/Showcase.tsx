@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { APPS, CATEGORIES } from '../../data/apps';
 import { presentRoute, editRoute } from '../../lib/routes';
 import ProvenanceChip from '../../components/ProvenanceChip';
+import SiteLink from '../../components/SiteLink';
 
 // The curated storefront, bound to #/showcase. Section hero, a one-row category
 // filter, an asymmetric 6-col grid of real apps, and a route into the directory.
@@ -40,9 +41,9 @@ function Showcase() {
       {apps.length === 0 ? (
         <div className="sc-empty">
           <p className="sc-empty__title">No apps in this category yet.</p>
-          <a className="sc-empty__link" href="#/apps">
+          <SiteLink className="sc-empty__link" to="/apps">
             Browse all apps →
-          </a>
+          </SiteLink>
         </div>
       ) : (
         <section className="sc-grid" aria-label="Apps built with immediately.run">
@@ -79,9 +80,9 @@ function Showcase() {
       )}
 
       <div className="sc-browse">
-        <a className="sc-btn sc-btn--browse" href="#/apps">
+        <SiteLink className="sc-btn sc-btn--browse" to="/apps">
           Browse all apps →
-        </a>
+        </SiteLink>
       </div>
     </div>
   );

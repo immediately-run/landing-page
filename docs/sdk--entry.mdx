@@ -1,0 +1,52 @@
+---
+title: "The SDK entry point."
+lead: "All platform interaction goes through @immediately-run/sdk — the only channel between your sandboxed app and the host. Pin it, import it, and call protocol methods reactively."
+group: "sdk"
+groupLabel: "SDK"
+order: 20
+---
+
+Your app runs in a sandboxed iframe with an opaque origin. It cannot reach sibling iframes, share storage with other apps, or postMessage the parent on its own. The SDK is the single, audited surface for everything the host provides.
+
+## Install and import.
+
+Add the pinned dependency to package.json and import the functions you need. The version is pinned so the protocol your app speaks is stable across host releases.
+
+<CodeBlock route="src/App.tsx">
+
+```tsx
+import { getAuthState, invokeTask } from '@immediately-run/sdk';
+
+export default function App() {
+  const auth = getAuthState();
+  return auth.status === 'signed-in'
+    ? <Workspace />
+    : <SignedOutHint />;
+}
+```
+
+</CodeBlock>
+
+<Callout tone="security" title="Never handle credentials.">
+  You will never see the user’s GitHub token or any secret. Sign-in and privileged actions are host-driven. Gate calls on getAuthState().status === ’signed-in’; never store or request tokens.
+</Callout>
+
+<ApiSignature
+  id="signature"
+  toc="getAuthState()"
+  sig="getAuthState(): AuthState"
+  cap="identity"
+  capHref="#/docs/capabilities/identity"
+  returns="An AuthState with status: ’signed-in’ | ’signed-out’ | ’unknown’, plus a stable opaque user handle when signed in. Synchronous; reflects the current host session."
+  params={[
+
+  ]}
+  rejections={[
+  { code: "auth-required", meaning: "A gated method was called while signed out." },
+  { code: "forbidden", meaning: "The app lacks the identity capability — policy, not a retry." }
+  ]}
+/>
+
+## Protocol and versioning.
+
+The SDK major version is the protocol version. The host accepts a range of recent protocols, so a pinned app keeps working as the host advances. New capabilities arrive as additive methods you opt into.

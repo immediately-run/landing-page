@@ -1,4 +1,5 @@
 import { presentRoute } from '../lib/routes';
+import SiteLink from './SiteLink';
 
 function ClosingCta() {
   return (
@@ -12,9 +13,9 @@ function ClosingCta() {
         <a className="btn" href={presentRoute('whiteboard')}>
           Run an app →
         </a>
-        <a className="btn-ghost" href="#/tutorials">
+        <SiteLink className="btn-ghost" to="/tutorials">
           Build your own →
-        </a>
+        </SiteLink>
       </div>
     </section>
   );

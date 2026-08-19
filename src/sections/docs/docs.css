@@ -229,3 +229,23 @@
   .docs-layout{grid-template-columns:minmax(0,1fr);gap:0}
   .docs-aside,.docs-toc{display:none}
 }
+
+/* The heading permalink affordance. Hidden until the heading is hovered or the button is
+   focused, so it never competes with the heading itself. */
+.docs-heading-anchor {
+  margin-left: 0.4em;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.14s ease;
+}
+
+h2:hover > .docs-heading-anchor,
+h3:hover > .docs-heading-anchor,
+.docs-heading-anchor:focus-visible {
+  opacity: 1;
+}

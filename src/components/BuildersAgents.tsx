@@ -1,3 +1,4 @@
+import SiteLink from './SiteLink';
 function BuildersAgents() {
   return (
     <section className="section" aria-label="For builders and agents">
@@ -10,9 +11,9 @@ function BuildersAgents() {
             describe the change. It rewrites the running app for you. Editing source by hand is the
             exception, not the rule.
           </p>
-          <a className="link" href="#/tutorials/local-claude-code">
+          <SiteLink className="link" to="/tutorials/local-claude-code">
             See how it works →
-          </a>
+          </SiteLink>
         </div>
         <div className="panel">
           <div className="k">/FOR AGENTS</div>
@@ -21,9 +22,9 @@ function BuildersAgents() {
             Plain files, conventional React. An MCP bridge and a machine-readable reference at{' '}
             <span className="mono-inline">/llms.txt</span>.
           </p>
-          <a className="link" href="#/docs/agents/llms">
+          <SiteLink className="link" to="/docs/agents/llms">
             See the agent surface →
-          </a>
+          </SiteLink>
         </div>
       </div>
     </section>

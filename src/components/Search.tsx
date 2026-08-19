@@ -1,32 +1,44 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
+import SiteLink from './SiteLink';
 
 interface SearchProps {
   onClose: () => void;
 }
 
-interface Entry {
+/**
+ * A search hit is one of two kinds, and conflating them is what a single `href` field did:
+ *
+ *   - `to` — an app-space route (`/docs`, `/tutorials/…`). Rendered as a <SiteLink>, so it
+ *     routes in place and its href is a real host URL under the platform prefix.
+ *   - `href` — a link that LEAVES the app: a platform route (`/present/…`, `/edit/…`) or an
+ *     external URL. A plain <a>; routing it in place would be wrong, since the destination
+ *     is not this app.
+ *
+ * Splitting the field makes the distinction checkable instead of a convention — the union
+ * means neither can be rendered by the other's element.
+ */
+type Entry = {
   name: string;
   sub: string;
   slug: string;
-  href: string;
-}
+} & ({ to: string; href?: never } | { href: string; to?: never });
 
 // One ranked list across apps, docs, and tutorials, grouped by source — owned by
 // the shell in the full site; a self-contained version here so the ⌘K button is
 // never dead. Section search is intentionally lightweight.
 const SECTIONS: Entry[] = [
-  { name: 'Showcase', sub: 'Curated apps built with immediately.run', slug: '/SHOWCASE', href: '#/showcase' },
-  { name: 'Apps', sub: 'The full, filterable app directory', slug: '/APPS', href: '#/apps' },
-  { name: 'Docs', sub: 'API and reference', slug: '/DOCS', href: '#/docs' },
-  { name: 'Tutorials', sub: 'Step-by-step workflows', slug: '/TUTORIALS', href: '#/tutorials' },
-  { name: "What's new", sub: 'Latest releases and notes', slug: '/NEWS', href: '#/changelog' },
+  { name: 'Showcase', sub: 'Curated apps built with immediately.run', slug: '/SHOWCASE', to: '/showcase' },
+  { name: 'Apps', sub: 'The full, filterable app directory', slug: '/APPS', to: '/apps' },
+  { name: 'Docs', sub: 'API and reference', slug: '/DOCS', to: '/docs' },
+  { name: 'Tutorials', sub: 'Step-by-step workflows', slug: '/TUTORIALS', to: '/tutorials' },
+  { name: "What's new", sub: 'Latest releases and notes', slug: '/NEWS', to: '/changelog' },
 ];
 
 const TUTORIALS: Entry[] = [
-  { name: 'Your first app', sub: 'Push a repo, no deploy step', slug: '/TUTORIALS', href: '#/tutorials' },
-  { name: 'Change an app by asking', sub: 'Drive a coding agent over a running app', slug: '/TUTORIALS', href: '#/tutorials/local-claude-code' },
+  { name: 'Your first app', sub: 'Push a repo, no deploy step', slug: '/TUTORIALS', to: '/tutorials' },
+  { name: 'Change an app by asking', sub: 'Drive a coding agent over a running app', slug: '/TUTORIALS', to: '/tutorials/local-claude-code' },
 ];
 
 const APP_ENTRIES: Entry[] = APPS.map((a) => ({
@@ -95,16 +107,28 @@ function Search({ onClose }: SearchProps) {
             {groups.map((g) => (
               <div className="search-group" key={g.heading}>
                 <div className="gh">{g.heading}</div>
-                {g.entries.map((e) => (
-                  <a className="search-item" href={e.href} key={e.name + e.href} onClick={onClose}>
-                    <span>
-                      <span className="si-name">{e.name}</span>
-                      <br />
-                      <span className="si-sub">{e.sub}</span>
-                    </span>
-                    <span className="si-slug">{e.slug}</span>
-                  </a>
-                ))}
+                {g.entries.map((e) => {
+                  const body = (
+                    <>
+                      <span>
+                        <span className="si-name">{e.name}</span>
+                        <br />
+                        <span className="si-sub">{e.sub}</span>
+                      </span>
+                      <span className="si-slug">{e.slug}</span>
+                    </>
+                  );
+                  const key = e.name + (e.to ?? e.href);
+                  return e.to !== undefined ? (
+                    <SiteLink className="search-item" to={e.to} key={key} onClick={onClose}>
+                      {body}
+                    </SiteLink>
+                  ) : (
+                    <a className="search-item" href={e.href} key={key} onClick={onClose}>
+                      {body}
+                    </a>
+                  );
+                })}
               </div>
             ))}
           </div>

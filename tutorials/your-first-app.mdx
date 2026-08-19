@@ -1,0 +1,63 @@
+---
+title: "Publish an app by pushing a repo."
+num: "01"
+pillar: "PUBLISHING"
+outcome: "A live app, running from your GitHub repo. No deploy step."
+prereqs: "A GitHub account and a repo you can push to."
+time: "8 min"
+difficulty: "Beginner"
+tags: ["publishing", "github", "no-deploy"]
+order: 10
+nextSlug: "local-claude-code"
+nextLabel: "Change an app by asking a coding agent."
+---
+
+### Start from the template.
+
+An app is a React and TypeScript repo with src/App.tsx as the entry point. Fork the template, or open a fresh one in the editor — the platform transpiles in the browser, so there is nothing to build.
+
+<DeepLink label="Open a new app in the editor →" href="/edit/new" />
+
+### Make it yours in App.tsx.
+
+The default export of src/App.tsx is what the platform renders. Edit it, import your global CSS from here, and keep one component per file. That is the whole contract.
+
+<CodeBlock route="src/App.tsx">
+
+```tsx
+import './index.css';
+
+export default function App() {
+  return <h1>Hello from my first app.</h1>;
+}
+```
+
+</CodeBlock>
+
+<Checkpoint alt="editor with App.tsx open beside a live preview">
+  Your headline renders in the preview pane, restyled in the brand canvas.
+</Checkpoint>
+
+### Push to GitHub.
+
+Commit and push to main. Publishing is the push — there is no separate deploy, no pipeline to wait on. The platform loads the app straight from the repo on its next launch.
+
+<CodeBlock route="terminal">
+
+```tsx
+git add -A
+git commit -m "my first app"
+git push origin main
+```
+
+</CodeBlock>
+
+### Run it live.
+
+Open the present route for your repo, branch, and entry file. Share that URL and anyone can run your app from source — the same way every app on the platform runs.
+
+<Checkpoint alt="a published app running full-screen">
+  Your app, running full-screen from its repo at the present route.
+</Checkpoint>
+
+<DeepLink label="Open this app in immediately.run →" href="/present/github/immediately-run/whiteboard/main/files/src/App.tsx" />

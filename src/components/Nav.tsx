@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
+import SiteLink from './SiteLink';
 
 // Section links. The whole site lives in this one app, routed by hash.
-const NAV_ITEMS: { label: string; href: string; section: Section }[] = [
-  { label: 'Showcase', href: '#/showcase', section: 'showcase' },
-  { label: 'Apps', href: '#/apps', section: 'apps' },
-  { label: 'Docs', href: '#/docs', section: 'docs' },
-  { label: 'Tutorials', href: '#/tutorials', section: 'tutorials' },
-  { label: "What's new", href: '#/changelog', section: 'changelog' },
+const NAV_ITEMS: { label: string; to: string; section: Section }[] = [
+  { label: 'Showcase', to: '/showcase', section: 'showcase' },
+  { label: 'Apps', to: '/apps', section: 'apps' },
+  { label: 'Docs', to: '/docs', section: 'docs' },
+  { label: 'Tutorials', to: '/tutorials', section: 'tutorials' },
+  { label: "What's new", to: '/changelog', section: 'changelog' },
 ];
 
 interface NavProps {
@@ -26,20 +27,20 @@ function Nav({ active, onOpenSearch }: NavProps) {
     <>
       <nav className="nav" aria-label="Primary">
         <div className="nav-inner">
-          <a className="logo" href="#/">
+          <SiteLink className="logo" to="/">
             <img className="logo-mark" src={logoMark} alt="" width={27} height={27} />
             immediately.run
-          </a>
+          </SiteLink>
           <div className="nav-links">
             {NAV_ITEMS.map((item) => (
-              <a
-                key={item.href}
+              <SiteLink
+                key={item.to}
                 className={`nav-link${active === item.section ? ' nav-link--active' : ''}`}
-                href={item.href}
+                to={item.to}
                 aria-current={active === item.section ? 'page' : undefined}
               >
                 {item.label}
-              </a>
+              </SiteLink>
             ))}
           </div>
           <div className="nav-right">
@@ -99,14 +100,14 @@ function Nav({ active, onOpenSearch }: NavProps) {
           </div>
           <div className="nav-sheet-links">
             {NAV_ITEMS.map((item) => (
-              <a
-                key={item.href}
+              <SiteLink
+                key={item.to}
                 className="nav-sheet-link"
-                href={item.href}
+                to={item.to}
                 onClick={() => setMenuOpen(false)}
               >
                 {item.label}
-              </a>
+              </SiteLink>
             ))}
           </div>
           <a className="btn" href="/edit/new">
