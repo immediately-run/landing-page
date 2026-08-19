@@ -1,0 +1,15 @@
+{
+  "opensWith": { "task": "open-wiki", "version": "1.0" },
+  "kind": "wiki",
+  "frontmatter": {
+    "required": {
+      "title": "string",
+      "lead": "string",
+      "group": "enum:start|sdk|capabilities|agents",
+      "groupLabel": "string",
+      "order": "number"
+    },
+    "optional": {},
+    "passThrough": false
+  }
+}

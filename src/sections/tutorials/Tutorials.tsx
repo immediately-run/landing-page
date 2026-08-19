@@ -1,6 +1,7 @@
 import './tutorials.css';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { TUTORIALS, findTutorial } from './data';
+import { CORPUS_COMPONENTS } from '../../corpus/components';
 import type { Tutorial } from './data';
 
 // The tutorials section, bound to #/tutorials (index) and #/tutorials/:slug (a page).
@@ -9,18 +10,9 @@ import type { Tutorial } from './data';
 export default function Tutorials({ rest }: { rest: string[] }) {
   const slug = rest[0];
 
-  const [copied, setCopied] = useState<string>('');
-
-  const copy = useCallback((text: string, key: string) => {
-    navigator.clipboard?.writeText(text).then(
-      () => {
-        setCopied(key);
-        window.setTimeout(() => setCopied((c) => (c === key ? '' : c)), 1600);
-      },
-      () => undefined,
-    );
-  }, []);
-
+  // Copy-to-clipboard moved into the corpus components (<CodeBlock/>, <DeepLink/>), which
+  // own the buttons that use it — so the section no longer threads a `copied` key through
+  // three levels of props to decide which button says "Copied".
   const goStep = useCallback((id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
@@ -34,7 +26,7 @@ export default function Tutorials({ rest }: { rest: string[] }) {
     return <NotFound />;
   }
 
-  return <TutorialPage tut={tut} copied={copied} copy={copy} goStep={goStep} />;
+  return <TutorialPage tut={tut} goStep={goStep} />;
 }
 
 function TutorialIndex() {
@@ -83,17 +75,7 @@ function NotFound() {
   );
 }
 
-function TutorialPage({
-  tut,
-  copied,
-  copy,
-  goStep,
-}: {
-  tut: Tutorial;
-  copied: string;
-  copy: (text: string, key: string) => void;
-  goStep: (id: string) => void;
-}) {
+function TutorialPage({ tut, goStep }: { tut: Tutorial; goStep: (id: string) => void }) {
   return (
     <div className="tut tut-fade">
       <div className="tut-layout">
@@ -118,67 +100,14 @@ function TutorialPage({
             </div>
           </div>
 
-          <ol className="tut-steps">
-            {tut.steps.map((st, i) => (
-              <li key={st.id} id={st.id} className="tut-step">
-                <span className="tut-step-n">{i + 1}</span>
-                <div className="tut-step-body">
-                  <h2 className="tut-step-title">{st.title}</h2>
-                  <p className="tut-step-prose">{st.prose}</p>
-
-                  {st.code && (
-                    <div className="tut-code">
-                      <div className="tut-code-bar">
-                        <span className="tut-code-name">{st.code.filename}</span>
-                        <button
-                          type="button"
-                          className="tut-code-copy"
-                          onClick={() => copy(st.code!.src, `code:${st.id}`)}
-                        >
-                          {copied === `code:${st.id}` ? 'Copied' : 'Copy'}
-                        </button>
-                      </div>
-                      <pre className="tut-code-pre">
-                        <code>{st.code.src}</code>
-                      </pre>
-                    </div>
-                  )}
-
-                  {st.check && (
-                    <div className="tut-check">
-                      <div className="tut-check-head">
-                        <span className="tut-check-tag">You should now see…</span>
-                        <div className="tut-check-text">{st.check.text}</div>
-                      </div>
-                      <div className="tut-check-art" role="img" aria-label={st.check.alt}>
-                        <span className="tut-check-cap">screenshot · {st.check.alt}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {st.deep && (
-                    <div className="tut-deep">
-                      <a
-                        className="tut-deep-pill"
-                        href={st.deep.href}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {st.deep.label}
-                      </a>
-                      <button
-                        type="button"
-                        className="tut-deep-copy"
-                        onClick={() => copy(st.deep!.href, `deep:${st.id}`)}
-                      >
-                        {copied === `deep:${st.id}` ? 'Link copied' : 'Popup blocked? Copy the link'}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ol>
+          {/* The steps are the MDX body: each `###` heading opens a step, and the
+              corpus components (<CodeBlock/>, <Checkpoint/>, <DeepLink/>) render the
+              furniture that used to be optional fields on a step record. The numbered
+              rail below and the aside both key off the SAME heading ids the remark
+              plugin renders, so a step link always lands. */}
+          <div className="tut-body">
+            <tut.Body components={CORPUS_COMPONENTS} />
+          </div>
 
           <div className="tut-next">
             <div className="tut-next-label">Learn next</div>

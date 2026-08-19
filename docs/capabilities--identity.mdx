@@ -1,0 +1,31 @@
+---
+title: "Identity and sign-in."
+lead: "Identity is a capability like any other. You get a stable, opaque handle for the signed-in user — never a token, never an email, never a secret."
+group: "capabilities"
+groupLabel: "Capabilities"
+order: 40
+---
+
+Read the session synchronously and react to it. Sign-in is host-driven: render your own affordance that asks the host to start the flow, but never imitate the host’s consent or sign-in chrome — imitations read as spoofing.
+
+## Reacting to session changes.
+
+Subscribe to auth changes and re-render. On a fork of your app the identity capability may be absent entirely; treat that as a degraded mode, not an error to retry.
+
+<CodeBlock route="src/hooks/useAuth.ts">
+
+```tsx
+import { onAuthChange, getAuthState } from '@immediately-run/sdk';
+
+export function useAuth() {
+  const [s, set] = useState(getAuthState());
+  useEffect(() => onAuthChange(set), []);
+  return s;
+}
+```
+
+</CodeBlock>
+
+<Callout tone="security" title="No fake host chrome.">
+  Never render fake sign-in prompts, consent dialogs, or the platform’s seam and header. The host draws those. Your app draws its own content and asks the host to handle privileged UI.
+</Callout>

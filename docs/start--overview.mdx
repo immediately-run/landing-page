@@ -1,0 +1,28 @@
+---
+title: "Run any app from its source."
+lead: "immediately.run loads a React + TypeScript app straight from a GitHub repo and transpiles it in the browser — no server, no deploy step. Open it, use it, then pop the hood."
+group: "start"
+groupLabel: "Getting started"
+order: 10
+---
+
+Every app is a public repo. The platform reads the source, compiles it in a sandboxed iframe, and renders the default export. There is no build artifact to host and nothing to deploy — publishing is pushing to GitHub.
+
+## The run, edit, contribute loop.
+
+Open an app to run it. Fork it to edit it from the page itself. Push your change back and it is live the next time anyone runs it. The same three moves work for every app on the platform, including this documentation.
+
+<Example
+  name="whiteboard"
+  desc="A complete app you can open and fork in one click."
+  presentHref="/present/github/immediately-run/whiteboard/main/files/src/App.tsx"
+  editHref="/edit/new"
+/>
+
+<Callout tone="note" title="No runtime build step.">
+  What looks fine in local vite dev can still break on the platform if the entry rules are not followed. App.tsx is the entry point, and its default export is what renders.
+</Callout>
+
+## Where to go next.
+
+Wire up the SDK to talk to the platform, then learn the capability model that governs what your app can ask for. Agents should start at the machine surface.

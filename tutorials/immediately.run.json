@@ -1,0 +1,22 @@
+{
+  "opensWith": { "task": "open-wiki", "version": "1.0" },
+  "kind": "wiki",
+  "frontmatter": {
+    "required": {
+      "title": "string",
+      "num": "string",
+      "pillar": "string",
+      "outcome": "string",
+      "prereqs": "string",
+      "time": "string",
+      "difficulty": "enum:Beginner|Intermediate|Advanced",
+      "tags": "string[]",
+      "order": "number"
+    },
+    "optional": {
+      "nextSlug": "string",
+      "nextLabel": "string"
+    },
+    "passThrough": false
+  }
+}
