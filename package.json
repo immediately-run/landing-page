@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "check:corpora": "node scripts/check-corpora.mjs",
-    "verify": "npm run check:corpora && git diff --exit-code src/data/corpusIndex.ts && npm run lint && npm run build && npm run test",
+    "verify": "npm run check:corpora && git diff --exit-code src/data/corpusIndex.ts public/llms.txt && npm run lint && npm run build && npm run test",
     "test": "vitest run"
   },
   "dependencies": {
