@@ -1,6 +1,7 @@
 import ProvenanceChip from './ProvenanceChip';
 import { APPS } from '../data/apps';
 import { presentRoute, editRoute } from '../lib/routes';
+import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
 
 // A trimmed slice of the full showcase grid. The same app record renders here,
@@ -8,6 +9,7 @@ import SiteLink from './SiteLink';
 const TEASER = APPS.slice(0, 4);
 
 function ShowcaseTeaser() {
+  const platform = usePlatformHref();
   return (
     <section className="section" aria-labelledby="teaser">
       <div className="sec-head">
@@ -28,10 +30,10 @@ function ShowcaseTeaser() {
               <ProvenanceChip provenance={app.provenance} />
               <p>{app.blurb}</p>
               <div className="app-actions">
-                <a className="open" href={presentRoute(app.repo)}>
+                <a className="open" href={platform(presentRoute(app.repo))}>
                   Open
                 </a>
-                <a className="fork" href={editRoute(app.repo)}>
+                <a className="fork" href={platform(editRoute(app.repo))}>
                   Fork
                 </a>
               </div>

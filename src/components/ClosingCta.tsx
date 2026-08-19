@@ -1,7 +1,9 @@
 import { presentRoute } from '../lib/routes';
+import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
 
 function ClosingCta() {
+  const platform = usePlatformHref();
   return (
     <section className="closing">
       <h2 className="grad-text">Run it. Fork it. Keep it.</h2>
@@ -10,7 +12,7 @@ function ClosingCta() {
         you. The whole platform is apps you can reshape — including this page.
       </p>
       <div className="hero-ctas">
-        <a className="btn" href={presentRoute('whiteboard')}>
+        <a className="btn" href={platform(presentRoute('whiteboard'))}>
           Run an app →
         </a>
         <SiteLink className="btn-ghost" to="/tutorials">

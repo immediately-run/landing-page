@@ -17,7 +17,7 @@ Need another space or folder? Call the SDK request method and the user picks in 
   toc="requestFolder()"
   sig="requestFolder(opts: { mode: ’ro’ | ’rw’ }): Promise<Result<Mount>>"
   cap="filesystem"
-  capHref="#/docs/capabilities/model"
+  capHref="/docs/capabilities/model"
   returns="A Result<Mount>. On ok, a Mount with a mountId and root you can read and (if rw) write. Outside paths do not exist; .. and absolute escapes are not addressable."
   params={[
   { name: "opts.mode", type: "’ro’ | ’rw’", desc: "Whether the app is asking for read-only or read-write access. The user may grant a narrower mode than requested." }

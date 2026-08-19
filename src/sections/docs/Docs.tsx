@@ -92,14 +92,14 @@ function Sidebar({ active }: { active: string }) {
                 const href = pageHref(p);
                 const isActive = active === `${p.group}/${p.slug}`;
                 return (
-                  <a
+                  <SiteLink
                     key={p.slug}
-                    href={href}
+                    to={href}
                     className={`docs-navlink${isActive ? ' docs-navlink--active' : ''}`}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     {p.title.replace(/\.$/, '')}
-                  </a>
+                  </SiteLink>
                 );
               })}
             </nav>
@@ -146,11 +146,11 @@ function DocsIndex() {
           const lead = first ? first.lead : 'The machine surface — llms.txt, raw markdown, and a structured capability index.';
           const name = first ? first.title : 'Reference, for agents.';
           return (
-            <a key={g.key} className="docs-index-card" href={href}>
+            <SiteLink key={g.key} className="docs-index-card" to={href}>
               <div className="docs-navgroup-label">{g.group}</div>
               <div className="docs-index-name">{name.replace(/\.$/, '')}</div>
               <p className="docs-index-lead">{lead}</p>
-            </a>
+            </SiteLink>
           );
         })}
       </div>
@@ -291,18 +291,18 @@ function Article({ page }: { page: DocPage }) {
 
       <nav className="docs-nav" aria-label="Pagination">
         {prev ? (
-          <a className="docs-navcard" href={pageHref(prev)}>
+          <SiteLink className="docs-navcard" to={pageHref(prev)}>
             <div className="docs-navcard-dir">← Previous</div>
             <div className="docs-navcard-label">{prev.title.replace(/\.$/, '')}</div>
-          </a>
+          </SiteLink>
         ) : (
           <span className="docs-navcard docs-navcard--ghost" aria-hidden="true" />
         )}
         {next ? (
-          <a className="docs-navcard docs-navcard--next" href={pageHref(next)}>
+          <SiteLink className="docs-navcard docs-navcard--next" to={pageHref(next)}>
             <div className="docs-navcard-dir">Next →</div>
             <div className="docs-navcard-label">{next.title.replace(/\.$/, '')}</div>
-          </a>
+          </SiteLink>
         ) : (
           <span className="docs-navcard docs-navcard--ghost" aria-hidden="true" />
         )}

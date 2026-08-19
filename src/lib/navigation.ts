@@ -54,6 +54,29 @@ export function hrefFor(loc: HostLocation, appPath: string): string {
 }
 
 /**
+ * The href to render for a PLATFORM-space path — `/present/github/…`, `/edit/new`. These are
+ * the host's URLs, not this app's, so they are NOT app paths and must not go through
+ * `hrefFor`: there is no `sandboxPath` that means "the editor".
+ *
+ * Why they cannot simply stay root-relative (which is what they were): on the platform the
+ * app runs in an opaque sandboxed iframe whose origin is `sandbox.<host>`, so a bare
+ * `href="/edit/new"` resolves against the SANDBOX origin and lands on a host that serves no
+ * such page. Correct under `vite dev`, broken everywhere that matters — the exact shape of
+ * defect this whole environment split keeps producing.
+ *
+ * Resolving against `outerHref` gives the host origin without hard-coding one, so prod,
+ * staging and a local instance each get their own.
+ */
+export function platformHref(loc: HostLocation, path: string): string {
+  if (!hasHost(loc)) return path;
+  try {
+    return new URL(path, loc.outerHref).toString();
+  } catch {
+    return path;
+  }
+}
+
+/**
  * Navigate to an app-space path. On the platform this asks the HOST to change the URL; the
  * host then pushes the new `sandboxPath` back down, which is what re-renders the app. There
  * is deliberately no local state update on that path — the host's push is the single source

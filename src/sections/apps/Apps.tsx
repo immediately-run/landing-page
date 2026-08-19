@@ -2,6 +2,7 @@ import './apps.css';
 import { useMemo, useState } from 'react';
 import { APPS, CATEGORIES, CAPABILITIES, type AppRecord } from '../../data/apps';
 import { presentRoute, editRoute } from '../../lib/routes';
+import { usePlatformHref } from '../../hooks/useRoute';
 
 type ProvKey = 'official' | 'community';
 type SortKey = 'featured' | 'name' | 'category';
@@ -76,12 +77,13 @@ function ProvChip({ app, className }: { app: AppRecord; className?: string }) {
 }
 
 function Cta({ app }: { app: AppRecord }) {
+  const platform = usePlatformHref();
   return (
     <>
-      <a className="apps-open" href={presentRoute(app.repo, app.entry)}>
+      <a className="apps-open" href={platform(presentRoute(app.repo, app.entry))}>
         Open
       </a>
-      <a className="apps-fork" href={editRoute(app.repo, app.entry)}>
+      <a className="apps-fork" href={platform(editRoute(app.repo, app.entry))}>
         Fork
       </a>
     </>

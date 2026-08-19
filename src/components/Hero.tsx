@@ -1,5 +1,6 @@
 import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
+import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
 
 // The hero "Run an app" CTA opens the strongest, mobile-friendly showcase app.
@@ -10,6 +11,7 @@ const HERO_APP = 'whiteboard';
 const MARQUEE = APPS.map((a) => a.name.toUpperCase());
 
 function Hero() {
+  const platform = usePlatformHref();
   return (
     <header className="hero">
       <div className="hero-grid">
@@ -22,7 +24,7 @@ function Hero() {
             source-diving required.
           </p>
           <div className="hero-ctas">
-            <a className="btn" href={presentRoute(HERO_APP)}>
+            <a className="btn" href={platform(presentRoute(HERO_APP))}>
               Run an app →
             </a>
             <SiteLink className="btn-ghost" to="/tutorials">
