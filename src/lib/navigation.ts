@@ -54,13 +54,13 @@ export function hrefFor(loc: HostLocation, appPath: string): string {
 }
 
 /**
- * The href to render for a PLATFORM-space path — `/present/github/…`, `/edit/new`. These are
+ * The href to render for a PLATFORM-space path — `/present/github/…`, `/edit/github/…`. These are
  * the host's URLs, not this app's, so they are NOT app paths and must not go through
  * `hrefFor`: there is no `sandboxPath` that means "the editor".
  *
  * Why they cannot simply stay root-relative (which is what they were): on the platform the
  * app runs in an opaque sandboxed iframe whose origin is `sandbox.<host>`, so a bare
- * `href="/edit/new"` resolves against the SANDBOX origin and lands on a host that serves no
+ * `href="/edit/github/…"` resolves against the SANDBOX origin and lands on a host that serves no
  * such page. Correct under `vite dev`, broken everywhere that matters — the exact shape of
  * defect this whole environment split keeps producing.
  *

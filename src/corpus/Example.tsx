@@ -1,6 +1,6 @@
 // The MDX `<Example>` — a named app with the platform's two standing CTAs.
 //
-// The two hrefs are PLATFORM paths authored in the corpus (`/present/github/…`, `/edit/new`),
+// The two hrefs are PLATFORM paths authored in the corpus (`/present/github/…`, `/edit/github/…`),
 // so they are resolved against the host's origin rather than rendered raw: inside the
 // sandboxed iframe a root-relative href resolves against `sandbox.<host>`, which serves no
 // such page. See `platformHref`.

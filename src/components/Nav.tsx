@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
-import { usePlatformHref } from '../hooks/useRoute';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
 import SiteLink from './SiteLink';
@@ -20,7 +19,6 @@ interface NavProps {
 }
 
 function Nav({ active, onOpenSearch }: NavProps) {
-  const platform = usePlatformHref();
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLight = theme === 'light';
@@ -72,7 +70,17 @@ function Nav({ active, onOpenSearch }: NavProps) {
             >
               ★ GitHub
             </a>
-            <a className="btn nav-cta desk-only" href={platform('/edit/new')}>
+            {/* `/edit/new` is not a route — in-product app creation is the
+                APP_ONBOARDING_SPEC funnel and is not built yet (R3-164). Until it
+                lands, this points at the transport that funnel's v1 default path
+                actually uses (§3.4.1): GitHub's own template-generate flow. A
+                broken CTA is worse than an honest off-platform one. */}
+            <a
+              className="btn nav-cta desk-only"
+              href="https://github.com/immediately-run/new-project-template/generate"
+              target="_blank"
+              rel="noopener"
+            >
               Start building →
             </a>
             <button
@@ -112,7 +120,12 @@ function Nav({ active, onOpenSearch }: NavProps) {
               </SiteLink>
             ))}
           </div>
-          <a className="btn" href={platform('/edit/new')}>
+          <a
+            className="btn"
+            href="https://github.com/immediately-run/new-project-template/generate"
+            target="_blank"
+            rel="noopener"
+          >
             Start building →
           </a>
         </div>

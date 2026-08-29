@@ -38,7 +38,7 @@ function matches(app: AppRecord, f: Filters): boolean {
   if (f.cats.size && !f.cats.has(app.category)) return false;
   if (f.provs.size && !f.provs.has(provKey(app))) return false;
   if (f.caps.size) {
-    for (const c of f.caps) if (!app.caps.includes(c)) return false;
+    for (const c of f.caps) if (!(app.caps ?? []).includes(c)) return false;
   }
   return true;
 }
@@ -116,7 +116,7 @@ export default function Apps() {
   }, []);
   const capCounts = useMemo(() => {
     const m = new Map<string, number>();
-    for (const a of APPS) for (const c of a.caps) m.set(c, (m.get(c) ?? 0) + 1);
+    for (const a of APPS) for (const c of a.caps ?? []) m.set(c, (m.get(c) ?? 0) + 1);
     return m;
   }, []);
 
@@ -141,7 +141,7 @@ export default function Apps() {
   return (
     <div className="apps-root">
       <span className="apps-tag">/APPS</span>
-      <h1 className="apps-title">Every app on immediately.run.</h1>
+      <h1 className="apps-title">Apps built on immediately.run.</h1>
       <p className="apps-deck">
         Browse by category, author, or what an app is allowed to touch.
       </p>
@@ -296,7 +296,7 @@ export default function Apps() {
                   </div>
                   <div className="apps-row-tags">
                     <span className="apps-tag-chip">{a.categoryLabel}</span>
-                    {a.caps.map((c) => (
+                    {(a.caps ?? []).map((c) => (
                       <span className="apps-tag-chip apps-tag-chip--cap" key={c}>
                         {c}
                       </span>

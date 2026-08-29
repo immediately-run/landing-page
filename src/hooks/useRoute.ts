@@ -92,7 +92,7 @@ export function useRoute(): Route {
   return route;
 }
 
-/** Build a PLATFORM-space href (`/present/…`, `/edit/new`) in the host's URL space.
+/** Build a PLATFORM-space href (`/present/…`, `/edit/github/…`) in the host's URL space.
  *  See `platformHref` for why these cannot stay root-relative on the platform. */
 export function usePlatformHref(): (path: string) => string {
   const loc = useHostLocation();

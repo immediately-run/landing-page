@@ -44,85 +44,54 @@ export const FILTER_CHIPS: FilterChip[] = [
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    id: 'v2-4',
-    date: 'jun 09',
+    id: 'tools-activity',
+    date: 'aug 28',
+    kind: 'feat',
+    message: 'typecheck, lint and build problems in one list.',
+    detail:
+      'The Tools activity runs a typecheck and a lint over the app you have open and lists every problem in one tree, whichever tool reported it. Clicking a row switches activity, opens the file, and puts the caret on the character.',
+    bullets: [
+      'a run says how it fell short rather than silently truncating.',
+      'a run marks itself out of date when a file changes underneath it.',
+    ],
+  },
+  {
+    id: 'present-mode-chrome',
+    date: 'aug 27',
+    kind: 'feat',
+    message: 'present mode no longer stacks a second navbar over your app.',
+    detail:
+      'The pull-down tab now opens a host-owned platform menu — an anchored panel on desktop, a bottom sheet on mobile — and the app dims and insets behind it. Nothing is persisted and the app frame is never resized.',
+  },
+  {
+    id: 'llm-providers',
+    date: 'aug 24',
+    kind: 'feat',
+    message: 'connect a language model by picking a provider, not by naming a secret.',
+    detail:
+      'Choose a provider, follow a deep link to its key page, and paste the key. The platform sets the credential type and the destination it is bound to; you never see the words api-key or bearer-token. Anthropic, OpenAI, Google Gemini, OpenRouter, and any OpenAI-compatible endpoint.',
+    bullets: [
+      'the key is sealed with your passkey and used without ever being readable by an app.',
+      'errors say out of credit or key rejected, not a generic auth failure.',
+    ],
+    docHref: '/docs/capabilities/model',
+  },
+  {
+    id: 'editor-as-app',
+    date: 'jul 07',
     kind: 'rel',
-    version: 'v2.4',
-    message: 'consent receipts and a tighter capability ladder.',
+    message: 'the code editor is an ordinary immediately.run app.',
     detail:
-      'Every grant a user approves now writes a signed receipt your app can read back, so the host and the app agree on exactly what was allowed. The capability ladder narrows by default — apps start with their own spaces and ask for anything more.',
-    bullets: [
-      'receipts list the mount, the mode (ro / rw), and when the grant expires.',
-      'a downgraded role now fires onMountsChange so affordances can hide themselves.',
-      'forbidden is returned as policy, never as a retryable error.',
-    ],
-    docHref: '/docs/capabilities',
+      'The editor is no longer built into the host — it is a repo you can fork and replace like any other part of the interface. The native editor was deleted once the app reached parity.',
+    docHref: '/docs/start/overview',
   },
   {
-    id: 'mcp-bridge',
-    date: 'may 28',
+    id: 'space-invitations',
+    date: 'jul 02',
     kind: 'feat',
-    message: 'agents reach your app through the MCP bridge.',
+    message: 'sharing a space is an invitation you accept, not a folder that appears.',
     detail:
-      'An embedded agent now uses the SDK method catalog as its tool list — pre-filtered to the grants your app holds, so the agent can never exceed what the app may do. No hand-rolled tools, no shelling around the SDK.',
-    bullets: [
-      'the catalog updates live as grants change.',
-      'each tool call carries the same typed-error contract as a direct SDK call.',
-      'cross-app tasks you invoke must be declared under "invokes".',
-    ],
-    docHref: '/docs/agents',
-  },
-  {
-    id: 'push-to-github',
-    date: 'may 26',
-    kind: 'feat',
-    message: 'push your work straight back to github.',
-    detail:
-      'Edits made in a fork can now be committed and pushed without leaving the runtime. Sign-in stays host-driven — you never see the token — and the push is gated on the signed-in auth state.',
-    bullets: [
-      'commits land on a branch you name; the host opens the pull request.',
-      'read-only mounts stay read-only — writes there fail with EROFS.',
-    ],
-    docHref: '/docs/push',
-  },
-  {
-    id: 'spaces',
-    date: 'may 14',
-    kind: 'rel',
-    version: 'v2.3',
-    message: 'spaces — per-app storage that travels with a fork.',
-    docHref: '/docs/spaces',
-  },
-  {
-    id: 'offline-cache',
-    date: 'apr 30',
-    kind: 'feat',
-    message: 'offline zip cache loads apps without a round trip.',
-    detail:
-      'Each push to main publishes a pre-cached zip to the repo\'s own pages, discovered by convention, so an app loads fast and within anonymous rate limits — and keeps working offline.',
-    bullets: [
-      'requireLatest picks the freshness mode: stale_ok, optimistic, or strict.',
-      'the default serves the cache, then checks in the background.',
-    ],
-  },
-  {
-    id: 'opaque-origin',
-    date: 'apr 18',
-    kind: 'note',
-    message: 'every app now runs in a sandboxed iframe with an opaque origin.',
-  },
-  {
-    id: 'consent-ui',
-    date: 'apr 02',
-    kind: 'feat',
-    version: 'v2.2',
-    message: 'the host draws consent — apps never imitate it.',
-    detail:
-      'Sign-in prompts, consent dialogs, and the platform seam are all host chrome. Apps request access through the SDK and the user picks in host UI; an imitation reads as spoofing.',
-    bullets: [
-      'requests resolve to { ok: false, code: "cancelled" | "forbidden" } when declined.',
-      'degrade the feature on cancellation — never block the app.',
-    ],
-    docHref: '/docs/consent',
+      'An owner offers access and the recipient accepts from their own invitations list, so nothing joins your account without you agreeing to it. Roles are reader, writer, or owner, and revocation takes effect live.',
+    docHref: '/docs/capabilities/identity',
   },
 ];
