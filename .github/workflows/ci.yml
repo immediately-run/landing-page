@@ -1,0 +1,52 @@
+# CI for the immediately.run website.
+#
+# This repo had NO CI at all — `.github` held only `cache.yml`, the Pages
+# zip-cache publisher — so `npm run verify` never ran on a push. Everything the
+# gate would have caught shipped to production and stayed there: a `requestFolder()`
+# that does not exist in the SDK, documented with a full signature block and shipped
+# as runnable code in a tutorial; a fabricated changelog; a "MIT licensed" footer on
+# an Apache-2.0 repo; and `/edit/new` — the primary call to action — referenced from
+# five places and matching no route.
+#
+# `verify` chains: corpora frontmatter check -> assert the generated corpusIndex.ts
+# and public/llms.txt are committed in sync -> eslint -> tsc + vite build -> vitest.
+# It is the existing gate; the only thing missing was something that runs it.
+#
+# What this still does NOT catch, deliberately recorded rather than implied: the
+# checker validates frontmatter and never resolves a link, a repo, or an SDK symbol.
+# A dead `/edit/new`, a stale app record, or a fabricated export would pass this
+# workflow today. Those need link resolution and an api.json check against the
+# published SDK; both are filed rather than faked here.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Matches cache.yml, the only other workflow here. No repo in the org
+          # pins `engines.node`, so the version is declared per workflow.
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The whole gate. Fails on a corpora violation, on a generated file that was
+      # not committed alongside its source, on a lint error, on a type error, on a
+      # build failure, or on a red test.
+      - run: npm run verify

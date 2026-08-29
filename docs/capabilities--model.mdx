@@ -10,27 +10,25 @@ A capability is a narrow, revocable grant: a specific mount, a specific task con
 
 ## Requesting more access.
 
-Need another space or folder? Call the SDK request method and the user picks in the host’s own picker. Expect cancellation and absence — degrade the feature, do not crash.
+Need another space or folder? Call the SDK request method and the user picks in the host’s own picker. Note what the app does NOT get to say: there is no mode argument. The user chooses read-only or read-write explicitly, with no default, and picks a single project folder inside the space — so a shared space opens scoped to that project, never whole. Expect cancellation and absence — degrade the feature, do not crash.
 
 <ApiSignature
   id="signature"
-  toc="requestFolder()"
-  sig="requestFolder(opts: { mode: ’ro’ | ’rw’ }): Promise<Result<Mount>>"
+  toc="requestMount()"
+  sig="requestMount(): Promise<SandboxMount>"
   cap="filesystem"
   capHref="/docs/capabilities/model"
-  returns="A Result<Mount>. On ok, a Mount with a mountId and root you can read and (if rw) write. Outside paths do not exist; .. and absolute escapes are not addressable."
-  params={[
-  { name: "opts.mode", type: "’ro’ | ’rw’", desc: "Whether the app is asking for read-only or read-write access. The user may grant a narrower mode than requested." }
-  ]}
+  returns="A SandboxMount for the ONE project folder the user granted, chroot'd to it. Read the granted access off mount.mode — the user decided it, not you. Paths outside the project are unnameable; .. and absolute escapes are not addressable."
+  params={[]}
   rejections={[
   { code: "cancelled", meaning: "The user dismissed the host picker." },
   { code: "forbidden", meaning: "Policy denies this app the filesystem capability." },
-  { code: "invalid-params", meaning: "mode was not one of the accepted values." }
+  { code: "auth-required", meaning: "The operation needs a signed-in user and there is not one." }
   ]}
 />
 
 <Callout tone="warning" title="Writes to a read-only mount fail.">
-  A grant may be read-only. Writing to it rejects with EROFS. Gate write affordances on the mount mode and re-evaluate on mount changes; never surface EROFS as UX.
+  A grant may be read-only — and since the user picks the mode, assume it will be. Writing to a ro mount rejects with EROFS. Gate write affordances on `mount.mode` and re-evaluate on mount changes; never surface EROFS as UX.
 </Callout>
 
 ## Typed errors everywhere.

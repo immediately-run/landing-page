@@ -170,10 +170,10 @@ export const CAP_INDEX: CapEntry[] = [
     rejects: 'forbidden · EROFS',
   },
   {
-    name: 'request-folder',
-    desc: 'Ask the user to grant another folder or space through host UI.',
-    consent: 'user picks',
-    rejects: 'cancelled · forbidden',
+    name: 'request-mount',
+    desc: 'Ask the user to grant a project folder inside a space, through host UI.',
+    consent: 'user picks the folder AND the mode',
+    rejects: 'cancelled · forbidden · auth-required',
   },
   {
     name: 'invoke-task',

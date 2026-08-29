@@ -26,18 +26,22 @@ function Footer() {
           <div className="foot-col">
             <div className="h">Platform</div>
             <div className="links">
-              <a href={platform('/edit/new')}>Open the editor</a>
+              <a
+                href="https://github.com/immediately-run/new-project-template/generate"
+                target="_blank"
+                rel="noopener"
+              >
+                Start from the template
+              </a>
               <SiteLink to="/docs/sdk/entry">SDK</SiteLink>
               <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
                 GitHub org
               </a>
-              <SiteLink to="/changelog">Status</SiteLink>
             </div>
           </div>
           <div className="foot-col">
             <div className="h">Community</div>
             <div className="links">
-              <SiteLink to="/changelog">Meetup</SiteLink>
               <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
                 Discussions
               </a>
@@ -47,7 +51,7 @@ function Footer() {
         </div>
         <div className="foot-bottom">
           <div className="foot-meta">
-            immediately.run — MIT licensed · built by the commons, 2024–2026
+            immediately.run — this site is Apache-2.0 and forkable · 2025–2026
             <br />
             set in Gabarito &amp; Space Mono
           </div>

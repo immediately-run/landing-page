@@ -20,22 +20,27 @@ Open the app in the editor to fork it. A fork is yours to change, but it starts 
 
 ### Request a folder.
 
-The app asks for access through the SDK. It does not reach for a path — it calls the request method and the host hands control to you. Your code handles cancelled and forbidden gracefully.
+The app asks for access through the SDK. It does not reach for a path, and it does not ask for a mode — it calls the request method and the host hands control to you. The call REJECTS when you decline, so handle it as an error, not as a falsy result.
 
 <CodeBlock route="src/lib/grant.ts">
 
 ```tsx
-import { requestFolder } from '@immediately-run/sdk';
+import { requestMount } from '@immediately-run/sdk';
 
-const res = await requestFolder({ mode: 'rw' });
-if (!res.ok) return; // cancelled or forbidden
+try {
+  const mount = await requestMount();
+  // The USER chose ro or rw — read it back, never assume it.
+  const writable = mount.mode === 'rw';
+} catch (e) {
+  // 'cancelled' | 'forbidden' | 'auth-required' — degrade, do not crash.
+}
 ```
 
 </CodeBlock>
 
 ### Grant access in the host prompt.
 
-The platform draws the consent prompt — the app never imitates it. You pick the folder and the role: reader, writer, or owner. Access is asked for, not taken.
+The platform draws the consent prompt — the app never imitates it. You pick one project folder inside a space, and you choose read-only or read-write explicitly; there is no default, and the app cannot ask for one. Access is asked for, not taken.
 
 <Checkpoint alt="host consent prompt for a folder grant">
   The host consent prompt, asking you to pick a folder and a role.

@@ -192,9 +192,32 @@ function MachineSurface({
       <h1 className="docs-machine-h1">Reference, for agents.</h1>
       <p className="docs-machine-lead">
         A curated, link-rich index in the llms.txt convention — the platform definition, every
-        reference page with a stable URL, and the repo path of the source behind it.
+        reference page with a stable URL, and the repo path of the source behind it. For the
+        SDK's own surface, go to its generated reference: it is produced by TypeDoc from the
+        published package on every release, so unlike this page it cannot drift from the code.
       </p>
       <div className="docs-pills">
+        {/* The SDK's llms.txt / api.json / HTML reference are GENERATED (typedoc + gen-llms
+            in the SDK's release CI) and published to its own Pages origin. This site used to
+            link none of them and hand-authored a couple of signatures instead — which is how
+            a `requestFolder()` that never existed survived in the reference for months.
+            Point at the generated artifact; do not restate it here. */}
+        <a
+          className="docs-pill docs-pill--primary"
+          href="https://immediately-run.github.io/immediately-run-sdk/llms.txt"
+          target="_blank"
+          rel="noopener"
+        >
+          SDK llms.txt
+        </a>
+        <a
+          className="docs-pill"
+          href="https://immediately-run.github.io/immediately-run-sdk/"
+          target="_blank"
+          rel="noopener"
+        >
+          SDK API reference
+        </a>
         {/* One real URL. Both of these used to be root-relative paths to a file that was
             generated in neither environment — and inside the sandboxed iframe a root-relative
             href resolves against `sandbox.<host>` on top of that. It is now a repo file,
