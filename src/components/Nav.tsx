@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@immediately-run/sdk';
 import { useTheme } from '../hooks/useTheme';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
@@ -22,6 +23,13 @@ function Nav({ active, onOpenSearch }: NavProps) {
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLight = theme === 'light';
+  // R3-486 (OSO §4.1 R-OSO-17): `/` stays the front door for everyone; when the
+  // user is signed in it gains a route to /home. The auth read degrades
+  // gracefully — unresolved or signed-out renders exactly the signed-out nav
+  // (no flash of a broken link): `useAuth()` outside the platform sandbox
+  // resolves null, so the static/standalone render is unchanged.
+  const { user } = useAuth();
+  const signedIn = Boolean(user);
 
   return (
     <>
@@ -62,6 +70,13 @@ function Nav({ active, onOpenSearch }: NavProps) {
               <span className="ic">{isLight ? '☾' : '☀'}</span>
               <span className="desk-only">{isLight ? 'Dark' : 'Light'}</span>
             </button>
+            {/* `target="_top"`: the sandboxed landing navigates the HOST
+                document to /home, not its own iframe. */}
+            {signedIn && (
+              <a className="gh-link desk-only" href="/home" target="_top">
+                ★ Home
+              </a>
+            )}
             <a
               className="gh-link desk-only"
               href="https://github.com/immediately-run"
