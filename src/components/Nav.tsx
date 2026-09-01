@@ -134,6 +134,17 @@ function Nav({ active, onOpenSearch }: NavProps) {
                 {item.label}
               </SiteLink>
             ))}
+            {/* R3-486 — the SAME signed-in route to /home the desktop nav offers.
+                It has to be repeated here because the desktop link carries
+                `desk-only`, which `@media(max-width:900px)` sets to
+                `display:none!important` — so without this a signed-in phone user
+                had no route to Home from `/` at all. Product value 8: mobile is
+                not an afterthought, and ~25% of sessions are phones. */}
+            {signedIn && (
+              <a className="nav-sheet-link" href="/home" target="_top" onClick={() => setMenuOpen(false)}>
+                ★ Home
+              </a>
+            )}
           </div>
           <a
             className="btn"
