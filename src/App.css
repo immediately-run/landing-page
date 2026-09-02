@@ -262,3 +262,25 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
 @media(max-width:560px){
   .show-grid{grid-template-columns:1fr}
 }
+
+/* ── R3-513: the door, the new nav cluster, the mobile sheet ────────────── */
+.door{display:inline-flex;align-items:center;justify-content:center;min-height:38px;
+  padding:8px 16px;border:1px solid var(--line-2);border-radius:var(--r-pill);
+  color:var(--ink);font:600 14px var(--sans);text-decoration:none;transition:border-color .14s}
+.door:hover{border-color:var(--accent-2)}
+.nav-omnibox{display:inline-flex}
+.nav-make{color:var(--ink)}
+.nav-door{display:inline-flex}
+.nav-search-btn{display:none;padding:8px 10px}
+.nav-sheet-omnibox{padding:10px 14px;border-bottom:1px solid var(--line)}
+.nav-sheet-door{padding:6px 14px}
+.nav-sheet-door .door{width:100%;min-height:44px;justify-content:center}
+.nav-sheet-theme{display:block;width:100%;min-height:44px;text-align:left;
+  border:0;background:transparent;color:var(--ink-2);font:400 15px var(--sans);
+  padding:10px 14px;cursor:pointer}
+.nav-sheet-link{min-height:44px;display:flex;align-items:center}
+@media(min-width:901px){.nav-search-btn{display:none!important}}
+@media(max-width:900px){
+  .nav-omnibox,.nav-door,.nav-make{display:none}
+  .nav-search-btn{display:inline-flex}
+}

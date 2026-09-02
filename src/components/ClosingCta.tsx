@@ -12,7 +12,7 @@ function ClosingCta() {
         you. The whole platform is apps you can reshape — including this page.
       </p>
       <div className="hero-ctas">
-        <a className="btn" href={platform(presentRoute('whiteboard'))}>
+        <a className="btn" href={platform(presentRoute('whiteboard'))} target="_top">
           Run an app →
         </a>
         <SiteLink className="btn-ghost" to="/tutorials">

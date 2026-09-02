@@ -29,7 +29,7 @@ function Hero() {
               here; this mounts the hero variant so `/` has its omnibox. */}
           <Omnibox variant="hero" />
           <div className="hero-ctas">
-            <a className="btn" href={platform(presentRoute(HERO_APP))}>
+            <a className="btn" href={platform(presentRoute(HERO_APP))} target="_top">
               Run an app →
             </a>
             <SiteLink className="btn-ghost" to="/tutorials">

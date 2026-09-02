@@ -14,7 +14,7 @@
 // of the hash was that a URL has exactly one fragment and the router owned it, so a heading
 // permalink had nowhere to go.
 
-export type Section = 'home' | 'showcase' | 'apps' | 'docs' | 'tutorials' | 'changelog';
+export type Section = 'home' | 'apps' | 'docs' | 'tutorials' | 'changelog';
 
 export interface Route {
   section: Section;
@@ -22,10 +22,23 @@ export interface Route {
   rest: string[];
 }
 
-export const SECTIONS: Section[] = ['home', 'showcase', 'apps', 'docs', 'tutorials', 'changelog'];
+export const SECTIONS: Section[] = ['home', 'apps', 'docs', 'tutorials', 'changelog'];
 
 /** Split a path into clean segments, tolerating leading/trailing/duplicate slashes. */
 const segmentsOf = (path: string): string[] => path.split('/').filter(Boolean);
+
+/**
+ * R3-513 — one directory: `/showcase` redirects to `/apps`, the way legacy hash
+ * routes redirect (once, with `replace` semantics). `showcase` is deliberately
+ * NOT in `SECTIONS` — it is not a route any more, only a redirect, so old links
+ * keep working while the nav and the site map carry exactly one directory.
+ * Returns null when the path needs no redirect.
+ */
+export function redirectForPath(appPath: string): string | null {
+  const first = segmentsOf(appPath)[0];
+  if (first === 'showcase') return '/apps';
+  return null;
+}
 
 /**
  * Parse an app-space path into a route. Unknown first segments resolve to `home` rather

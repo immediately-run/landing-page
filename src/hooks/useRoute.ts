@@ -16,7 +16,7 @@
 
 import { use, useEffect, useRef, useSyncExternalStore } from 'react';
 import { TinkerableContext } from '@immediately-run/sdk/TinkerableContext';
-import { appPathFromSandboxPath, legacyHashPath, parseRoute } from '../lib/routeSpace';
+import { appPathFromSandboxPath, legacyHashPath, parseRoute, redirectForPath } from '../lib/routeSpace';
 import type { Route } from '../lib/routeSpace';
 // Re-exported so the many components that only need the section type keep one import site.
 export type { Route, Section } from '../lib/routeSpace';
@@ -73,7 +73,15 @@ export function useRoute(): Route {
     }
   }, [hash, loc]);
 
-  const route = parseRoute(appPath);
+  // R3-513 — retired section routes (`/showcase` → `/apps`) redirect the same
+  // way the legacy hash spelling does: after paint, once, with `replace`.
+  const redirect = redirectForPath(appPath);
+  useEffect(() => {
+    if (redirect === null) return;
+    redirectTo(loc, redirect);
+  }, [redirect, loc]);
+
+  const route = parseRoute(redirect ?? appPath);
 
   // Scrolling to the top belongs to a SECTION change, not to every route change: moving
   // between two docs pages should land at the top, but re-rendering the same section (a

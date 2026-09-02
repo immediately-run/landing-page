@@ -23,7 +23,6 @@ import Footer from './components/Footer';
 import { focusOmnibox } from './lib/omniboxFocus';
 import SectionErrorBoundary from './components/SectionErrorBoundary';
 import Home from './components/Home';
-import Showcase from './sections/showcase/Showcase';
 import Apps from './sections/apps/Apps';
 import Docs from './sections/docs/Docs';
 import Tutorials from './sections/tutorials/Tutorials';
@@ -55,7 +54,6 @@ function App() {
         {/* Keyed by section so a thrown section's error clears when you navigate. */}
         <SectionErrorBoundary key={route.section}>
           {route.section === 'home' && <Home />}
-          {route.section === 'showcase' && <Showcase />}
           {route.section === 'apps' && <Apps />}
           {route.section === 'docs' && <Docs rest={route.rest} />}
           {route.section === 'tutorials' && <Tutorials rest={route.rest} />}

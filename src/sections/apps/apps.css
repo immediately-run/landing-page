@@ -483,3 +483,6 @@
     transform: none;
   }
 }
+
+/* R3-513 — the featured band (the former showcase grid) at the top of /apps. */
+.apps-featured{margin:26px 0 34px;padding-bottom:8px;border-bottom:1px solid var(--line)}

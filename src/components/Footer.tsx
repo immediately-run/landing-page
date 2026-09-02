@@ -1,9 +1,17 @@
 import { editRoute } from '../lib/routes';
-import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
+import PlatformLink from './PlatformLink';
+
+// The footer (R3-513; FRONT_DOOR_IA §4.9): columns by AUDIENCE, not by section.
+// Product → readers; Build → creators; Contributors → the people inside the
+// platform. The engineering wiki lives ONLY here (never on /docs); the GitHub
+// org link lives only here since the nav dropped it.
+
+// The wiki is the docs repo rendered by Grove — a platform route, so it goes
+// through PlatformLink (host-space href + target="_top").
+const WIKI_PATH = '/present/github/immediately-run/docs/main';
 
 function Footer() {
-  const platform = usePlatformHref();
   return (
     <footer className="foot">
       <div className="foot-inner">
@@ -16,36 +24,47 @@ function Footer() {
           <div className="foot-col">
             <div className="h">Product</div>
             <div className="links">
-              <SiteLink to="/showcase">Showcase</SiteLink>
               <SiteLink to="/apps">Apps</SiteLink>
               <SiteLink to="/docs">Docs</SiteLink>
               <SiteLink to="/tutorials">Tutorials</SiteLink>
-              <SiteLink to="/changelog">Changelog</SiteLink>
+              <SiteLink to="/changelog">What's new</SiteLink>
             </div>
           </div>
           <div className="foot-col">
-            <div className="h">Platform</div>
+            <div className="h">Build</div>
             <div className="links">
+              <SiteLink to="/new">Make an app</SiteLink>
               <a
-                href="https://github.com/immediately-run/new-project-template/generate"
+                href="https://github.com/apps/immediately-run/installations/new"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
-                Start from the template
+                Install the GitHub App
               </a>
-              <SiteLink to="/docs/sdk/entry">SDK</SiteLink>
-              <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
+              <a
+                href="https://immediately-run.github.io/immediately-run-sdk/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                API reference (generated)
+              </a>
+              <a
+                href="https://www.npmjs.com/package/@immediately-run/sdk"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                SDK on npm
+              </a>
+            </div>
+          </div>
+          <div className="foot-col">
+            <div className="h">Contributors</div>
+            <div className="links">
+              <PlatformLink path={WIKI_PATH}>Engineering wiki</PlatformLink>
+              <a href="https://github.com/immediately-run" target="_blank" rel="noopener noreferrer">
                 GitHub org
               </a>
-            </div>
-          </div>
-          <div className="foot-col">
-            <div className="h">Community</div>
-            <div className="links">
-              <a href="https://github.com/immediately-run" target="_blank" rel="noopener">
-                Discussions
-              </a>
-              <SiteLink to="/docs/agents/llms">For agents</SiteLink>
+              <SiteLink to="/docs/agents/llms">The machine surface</SiteLink>
             </div>
           </div>
         </div>
@@ -55,10 +74,11 @@ function Footer() {
             <br />
             set in Gabarito &amp; Space Mono
           </div>
-          {/* Quiet forkability: this very page is itself a forkable app. */}
-          <a className="foot-fork" href={platform(editRoute('landing-page'))}>
+          {/* Quiet forkability: this very page is itself a forkable app.
+              `target="_top"` — a platform route navigates the HOST document. */}
+          <PlatformLink className="foot-fork" path={editRoute('landing-page')}>
             view source · fork this page →
-          </a>
+          </PlatformLink>
         </div>
       </div>
     </footer>
