@@ -1,0 +1,103 @@
+/* The /new page (R3-515; FRONT_DOOR_IA §7.1). */
+
+.new-root {
+  max-width: 860px;
+}
+
+.new-install {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 26px 0 34px;
+  padding: 16px 18px;
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-md);
+}
+
+.new-install-label {
+  font: 700 12px var(--mono);
+  letter-spacing: 0.12em;
+  color: var(--accent-3);
+}
+
+.new-install-copy {
+  flex: 1 1 340px;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+.new-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 12px;
+  align-self: flex-start;
+  cursor: pointer;
+  font: 600 15px var(--sans);
+}
+
+.new-start {
+  border: 0;
+  background: var(--grad-btn);
+  color: #fff;
+}
+
+.new-start:hover {
+  filter: brightness(1.05);
+  box-shadow: var(--glow);
+}
+
+.new-template-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.new-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--panel);
+  padding: 22px 24px;
+}
+
+.new-card-kind {
+  font: 700 11px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.new-card-name {
+  font: 700 22px var(--disp);
+  color: var(--ink);
+}
+
+.new-card-gives {
+  margin: 4px 0 8px;
+  padding-left: 18px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.new-card-unavailable {
+  font: 400 12px var(--mono);
+  color: var(--ink-3);
+  margin-top: 10px;
+}
+
+.new-run-step {
+  margin-top: 36px;
+}
+
+@media (max-width: 720px) {
+  .new-template-cards {
+    grid-template-columns: 1fr;
+  }
+}
