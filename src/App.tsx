@@ -15,12 +15,12 @@
 // heading permalink had nowhere to point.
 import './index.css';
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFragment, useRoute } from './hooks/useRoute';
 import { useFragmentScroll } from './hooks/useFragmentScroll';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-import Search from './components/Search';
+import { focusOmnibox } from './lib/omniboxFocus';
 import SectionErrorBoundary from './components/SectionErrorBoundary';
 import Home from './components/Home';
 import Showcase from './sections/showcase/Showcase';
@@ -35,14 +35,13 @@ function App() {
   // fires before the section renders. See the hook for what that looked like.
   const fragment = useFragment();
   useFragmentScroll(fragment, `${route.section}/${route.rest.join('/')}`);
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  // Global ⌘K / Ctrl+K opens the search palette.
+  // R3-512: ⌘K / Ctrl+K stays as a CONVENIENCE that focuses the omnibox — it
+  // is not the affordance (FRONT_DOOR_IA §5.4).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setSearchOpen(true);
+        focusOmnibox();
       }
     };
     document.addEventListener('keydown', onKey);
@@ -51,7 +50,7 @@ function App() {
 
   return (
     <>
-      <Nav active={route.section} onOpenSearch={() => setSearchOpen(true)} />
+      <Nav active={route.section} />
       <main className="wrap site-main" id="main" role="main">
         {/* Keyed by section so a thrown section's error clears when you navigate. */}
         <SectionErrorBoundary key={route.section}>
@@ -64,7 +63,6 @@ function App() {
         </SectionErrorBoundary>
       </main>
       <Footer />
-      {searchOpen && <Search onClose={() => setSearchOpen(false)} />}
     </>
   );
 }
