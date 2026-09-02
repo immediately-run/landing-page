@@ -2,6 +2,7 @@ import { APPS } from '../data/apps';
 import { presentRoute } from '../lib/routes';
 import { usePlatformHref } from '../hooks/useRoute';
 import SiteLink from './SiteLink';
+import Omnibox from './Omnibox';
 
 // The hero "Run an app" CTA opens the strongest, mobile-friendly showcase app.
 const HERO_APP = 'whiteboard';
@@ -23,6 +24,10 @@ function Hero() {
             <b className="mark">Ask a coding agent</b> — it rewires the running app for you. No
             source-diving required.
           </p>
+          {/* R3-512: the omnibox is the page's primary control. The full hero
+              rebuild (copy, doors, still) is R3-514 and deliberately not done
+              here; this mounts the hero variant so `/` has its omnibox. */}
+          <Omnibox variant="hero" />
           <div className="hero-ctas">
             <a className="btn" href={platform(presentRoute(HERO_APP))}>
               Run an app →

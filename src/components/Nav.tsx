@@ -4,6 +4,7 @@ import { useTheme } from '../hooks/useTheme';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
 import SiteLink from './SiteLink';
+import Omnibox from './Omnibox';
 
 // Section links. The whole site lives in this one app, routed by hash.
 const NAV_ITEMS: { label: string; to: string; section: Section }[] = [
@@ -16,10 +17,9 @@ const NAV_ITEMS: { label: string; to: string; section: Section }[] = [
 
 interface NavProps {
   active: Section;
-  onOpenSearch: () => void;
 }
 
-function Nav({ active, onOpenSearch }: NavProps) {
+function Nav({ active }: NavProps) {
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLight = theme === 'light';
@@ -52,15 +52,12 @@ function Nav({ active, onOpenSearch }: NavProps) {
             ))}
           </div>
           <div className="nav-right">
-            <button
-              type="button"
-              className="icon-btn search-btn"
-              onClick={onOpenSearch}
-              aria-label="Search apps, docs, and tutorials"
-            >
-              <span className="desk-only">Search</span>
-              <span className="kbd">⌘K</span>
-            </button>
+            {/* R3-512: the omnibox in its `nav` variant replaces the search
+                button. On `/` it renders as the shortcut that focuses the hero
+                omnibox; on every other route it is the field, expanding in
+                place. The full nav restructure (items, Make an app, the door)
+                is R3-513 and deliberately not done here. */}
+            <Omnibox variant="nav" heroShortcut={active === 'home'} />
             <button
               type="button"
               className="icon-btn theme-btn"
