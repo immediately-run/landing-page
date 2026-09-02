@@ -87,7 +87,9 @@ function Nav({ active }: NavProps) {
             <SiteLink className="nav-link nav-make desk-only" to="/new">
               Make an app
             </SiteLink>
-            <span className="nav-door desk-only">
+            {/* The door stays in the top bar at every width — it is one of the
+                two controls outside the burger (§4.1), not a desktop extra. */}
+            <span className="nav-door">
               <Door />
             </span>
             <button

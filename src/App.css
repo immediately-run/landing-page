@@ -279,10 +279,11 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
   border:0;background:transparent;color:var(--ink-2);font:400 15px var(--sans);
   padding:10px 14px;cursor:pointer}
 .nav-sheet-link{min-height:44px;display:flex;align-items:center}
-@media(min-width:901px){.nav-search-btn{display:none!important}}
 @media(max-width:900px){
-  .nav-omnibox,.nav-door,.nav-make{display:none}
+  .nav-omnibox,.nav-make{display:none}
   .nav-search-btn{display:inline-flex}
+  /* The door is a top-bar control on mobile too, at a 44px tap target. */
+  .nav-door .door{min-height:44px;padding:10px 16px}
 }
 
 /* ── R3-514: the rebuilt front door ─────────────────────────────────────── */
