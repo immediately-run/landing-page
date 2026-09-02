@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "blank",
+    "kind": "blank",
+    "name": "Blank app",
+    "pitch": "A minimal React and TypeScript repo with nothing to delete first.",
+    "gives": ["A src/App.tsx that renders", "A manifest declaring no capabilities", "A push-to-publish repo"],
+    "repo": "immediately-run/new-project-template",
+    "example": "whiteboard",
+    "start": { "kind": "generate" }
+  },
+  {
+    "slug": "grove-wiki",
+    "kind": "app",
+    "name": "Wiki, on Grove",
+    "pitch": "A wiki that is a folder of markdown files, rendered by Grove.",
+    "gives": ["One MDX file per entry", "A corpus marker declaring the entry rule", "A rendered wiki from the first push"],
+    "repo": "immediately-run/grove",
+    "example": "grove",
+    "start": { "kind": "unavailable", "reason": "start mechanism pending the Grove template decision" }
+  }
+]
