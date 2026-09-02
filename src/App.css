@@ -284,3 +284,29 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
   .nav-omnibox,.nav-door,.nav-make{display:none}
   .nav-search-btn{display:inline-flex}
 }
+
+/* ── R3-514: the rebuilt front door ─────────────────────────────────────── */
+.hero-doors{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.hero-door{min-height:44px}
+.hero-still{max-width:380px;justify-self:end;align-self:center}
+.hero-still svg{width:100%;height:auto;display:block}
+.publish-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.publish-cta{margin-top:10px;align-self:flex-start;cursor:pointer;font:600 15px var(--sans)}
+.publish-install{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:24px;
+  padding:16px 18px;border:1px dashed var(--line-2);border-radius:var(--r-md)}
+.publish-install-label{font:700 12px var(--mono);letter-spacing:.12em;color:var(--accent-3)}
+.publish-install-copy{flex:1 1 320px;margin:0;color:var(--ink-2);font-size:14.5px}
+.publish-closing{margin-top:18px;color:var(--ink-2);font-size:14.5px}
+.publish-closing a{color:var(--ink)}
+.remix-still{max-width:460px;margin-top:20px}
+.remix-still svg{width:100%;height:auto;display:block}
+.closing-run{cursor:pointer}
+.closing-fork{margin-top:16px;font:400 13px var(--mono)}
+.closing-fork a{color:var(--ink-3)}
+@media(max-width:900px){
+  .publish-cards{grid-template-columns:1fr}
+  .hero-still,.remix-still{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-doors,.publish-cards,.remix-still{transition:none}
+}
