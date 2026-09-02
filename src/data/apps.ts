@@ -340,3 +340,29 @@ export const APPS: AppRecord[] = [
     span: 'sm',
   },
 ];
+
+/**
+ * Resolve a hand-typed list of repo keys against APPS, in the order given.
+ *
+ * THROWS on a key that resolves to nothing. The curated lists below are typed by
+ * hand and a mistyped one used to be dropped by `.filter(Boolean)`, so the page
+ * rendered three tiles where four were intended and nothing anywhere said so. A
+ * module-level call therefore fails the build's first render loudly, and the
+ * accompanying test fails in CI before that.
+ */
+export function appsByRepo(repos: string[]): AppRecord[] {
+  return repos.map((repo) => {
+    const app = APPS.find((a) => a.repo === repo);
+    if (!app) {
+      throw new Error(`appsByRepo: no app in APPS has repo '${repo}' — fix the key or add the record.`);
+    }
+    return app;
+  });
+}
+
+// The two curated selections on `/`, kept beside the dataset they index into so a
+// test can resolve them against the real records. They are deliberately DISJOINT:
+// the Run section proves the sandbox with four Open buttons, and the directory
+// teaser is the shop window for four different apps.
+export const RUN_TILE_REPOS = ['whiteboard', 'kanban-board', 'sqlite-studio', 'chess'];
+export const TEASER_REPOS = ['markdown-notebook', 'todo', 'photo-album', 'grove'];

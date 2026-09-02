@@ -1,4 +1,4 @@
-import { APPS } from '../data/apps';
+import { appsByRepo, RUN_TILE_REPOS } from '../data/apps';
 import AppTile from './AppTile';
 
 // The Run section (R3-514; FRONT_DOOR_IA §4.3) — M1's proof. The sandbox is not
@@ -7,11 +7,7 @@ import AppTile from './AppTile';
 // for range and mobile-friendliness, whiteboard first; the three capability
 // cards are kept from the old Safety section, tightened.
 
-const RUN_TILES = ['whiteboard', 'kanban-board', 'sqlite-studio', 'chess'];
-
-const RUN_APPS = RUN_TILES.map((repo) => APPS.find((a) => a.repo === repo)).filter(
-  (a): a is (typeof APPS)[number] => Boolean(a),
-);
+const RUN_APPS = appsByRepo(RUN_TILE_REPOS);
 
 function RunSection() {
   return (
