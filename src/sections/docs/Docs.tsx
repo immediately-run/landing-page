@@ -17,6 +17,7 @@ import type { DocGroup, DocPage, TocItem } from './data';
 import { CORPUS_COMPONENTS } from '../../corpus/components';
 import SiteLink from '../../components/SiteLink';
 import { LLMS_TXT } from '../../data/corpusIndex';
+import { TUTORIALS } from '../tutorials/data';
 import { rawUrl, sourceUrl } from '../../lib/routes';
 
 // The /docs section: the technical reference, served to two audiences from one
@@ -133,6 +134,13 @@ function Toc({ items, go }: { items: TocItem[]; go: (id: string) => void }) {
   );
 }
 
+// The docs index, re-cut (R3-516; FRONT_DOOR_IA §8) into THREE labelled
+// destinations, because in-app help links here and the API reference is
+// generated elsewhere: product documentation on this site (stable URLs — what
+// in-app help links to), tutorials on this site, and the generated API
+// reference off-site. The engineering wiki is deliberately NOT here — footer
+// only (Contributors). The /DOCS tag, the h1 and every article route are
+// unchanged.
 function DocsIndex() {
   return (
     <div>
@@ -141,21 +149,70 @@ function DocsIndex() {
       <p className="docs-machine-lead">
         The SDK, the capability model, providers, spaces, and agents — one source, two views.
       </p>
-      <div className="docs-index-grid">
-        {DOC_GROUPS.map((g) => {
-          const pages = DOC_PAGES.filter((p) => p.group === g.key);
-          const first = g.key === 'agents' ? undefined : pages[0];
-          const href = first ? pageHref(first) : '/docs/agents/llms';
-          const lead = first ? first.lead : 'The machine surface — llms.txt, raw markdown, and a structured capability index.';
-          const name = first ? first.title : 'Reference, for agents.';
-          return (
-            <SiteLink key={g.key} className="docs-index-card" to={href}>
-              <div className="docs-navgroup-label">{g.group}</div>
-              <div className="docs-index-name">{name.replace(/\.$/, '')}</div>
-              <p className="docs-index-lead">{lead}</p>
-            </SiteLink>
-          );
-        })}
+      <div className="docs-index-grid docs-index-grid--recut">
+        {/* 1 — product documentation, this site. */}
+        <section className="docs-index-card docs-index-dest" aria-label="Product documentation">
+          <div className="docs-navgroup-label">this site · /docs/…</div>
+          <div className="docs-index-name">How the platform works.</div>
+          <p className="docs-index-lead">
+            Product documentation. These URLs are stable; in-app help links here.
+          </p>
+          <ul className="docs-index-list">
+            {DOC_GROUPS.filter((g) => g.key !== 'agents').flatMap((g) =>
+              DOC_PAGES.filter((p) => p.group === g.key).map((p) => (
+                <li key={p.group + p.slug}>
+                  <SiteLink to={pageHref(p)}>{p.title.replace(/\.$/, '')}</SiteLink>
+                </li>
+              )),
+            )}
+          </ul>
+        </section>
+        {/* 2 — tutorials, this site. */}
+        <section className="docs-index-card docs-index-dest" aria-label="Tutorials">
+          <div className="docs-navgroup-label">this site · /tutorials</div>
+          <div className="docs-index-name">Do one thing, end to end.</div>
+          <p className="docs-index-lead">Step-by-step, from an empty repo to a running app.</p>
+          <ul className="docs-index-list">
+            {TUTORIALS.map((t) => (
+              <li key={t.slug}>
+                <SiteLink to={`/tutorials/${t.slug}`}>{t.title.replace(/\.$/, '')}</SiteLink>
+              </li>
+            ))}
+          </ul>
+        </section>
+        {/* 3 — the generated API reference, off-site. */}
+        <section className="docs-index-card docs-index-dest" aria-label="API reference">
+          <div className="docs-navgroup-label">external · generated</div>
+          <div className="docs-index-name">Every export, with its signature.</div>
+          <p className="docs-index-lead">
+            The API reference is generated from the SDK's own sources and lives off-site.
+          </p>
+          <ul className="docs-index-list">
+            <li>
+              <a href="https://immediately-run.github.io/immediately-run-sdk/" target="_blank" rel="noopener noreferrer">
+                API reference
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://immediately-run.github.io/immediately-run-sdk/llms.txt"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                llms.txt
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://immediately-run.github.io/immediately-run-sdk/api.json"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                api.json
+              </a>
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
   );
