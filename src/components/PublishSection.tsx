@@ -1,6 +1,6 @@
 import SiteLink from './SiteLink';
 import PlatformLink from './PlatformLink';
-import { focusHeroOmnibox } from '../lib/omniboxFocus';
+import { revealHeroOmnibox } from '../lib/omniboxFocus';
 
 // The Publish section (R3-514; FRONT_DOOR_IA §4.4) — M2, the author message,
 // second in weight. The lede is verbatim from the brief because it carries the
@@ -47,10 +47,7 @@ function PublishSection() {
           <button
             type="button"
             className="btn-ghost publish-cta"
-            onClick={() => {
-              document.querySelector('.omnibox-outer--hero')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              focusHeroOmnibox();
-            }}
+            onClick={revealHeroOmnibox}
           >
             Paste a repo →
           </button>
