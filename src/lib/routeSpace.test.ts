@@ -37,6 +37,13 @@ describe('parseRoute', () => {
     expect(parseRoute('/changelog')).toEqual({ section: 'changelog', rest: [] });
   });
 
+  it('reads /new as its own section, not as the home fallback', () => {
+    // `new` is in SECTIONS, so a mistyped route and a real one are told apart:
+    // an unknown first segment lands on home, and this must not.
+    expect(parseRoute('/new')).toEqual({ section: 'new', rest: [] });
+    expect(parseRoute('/new/')).toEqual({ section: 'new', rest: [] });
+  });
+
   it('reads the segments after a section as `rest`', () => {
     expect(parseRoute('/docs/start/overview')).toEqual({
       section: 'docs',
@@ -72,6 +79,7 @@ describe('routePath', () => {
     for (const path of [
       '/',
       '/apps',
+      '/new',
       '/docs',
       '/docs/start/overview',
       '/tutorials/your-first-app',
