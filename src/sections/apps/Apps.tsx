@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { APPS, CATEGORIES, CAPABILITIES, type AppRecord } from '../../data/apps';
 import { presentRoute, editRoute } from '../../lib/routes';
 import { usePlatformHref } from '../../hooks/useRoute';
+import AppCard from '../../components/AppCard';
 
 type ProvKey = 'official' | 'community';
 type SortKey = 'featured' | 'name' | 'category';
@@ -90,6 +91,19 @@ function Cta({ app }: { app: AppRecord }) {
   );
 }
 
+// The directory's card, rendered identically by the featured band and by the
+// grid view — one component, so the two cannot drift.
+function DirectoryCard({ app }: { app: AppRecord }) {
+  return (
+    <AppCard
+      app={app}
+      variant="directory"
+      chip={<ProvChip app={app} className="apps-card-prov" />}
+      actions={<Cta app={app} />}
+    />
+  );
+}
+
 export default function Apps() {
   const [filters, setFilters] = useState<Filters>({
     cats: new Set(),
@@ -154,19 +168,7 @@ export default function Apps() {
         <section className="apps-featured" aria-label="Featured apps">
           <div className="apps-grid">
             {featured.map((a) => (
-              <article className="apps-card" key={a.repo}>
-                <div className="apps-card-art">
-                  <span className="apps-card-cat">{a.categoryLabel}</span>
-                </div>
-                <div className="apps-card-body">
-                  <h3 className="apps-card-name">{a.name}</h3>
-                  <ProvChip app={a} className="apps-card-prov" />
-                  <p className="apps-card-blurb">{a.blurb}</p>
-                  <div className="apps-card-cta">
-                    <Cta app={a} />
-                  </div>
-                </div>
-              </article>
+              <DirectoryCard app={a} key={a.repo} />
             ))}
           </div>
         </section>
@@ -335,19 +337,7 @@ export default function Apps() {
           ) : (
             <div className="apps-grid">
               {results.map((a) => (
-                <article className="apps-card" key={a.repo}>
-                  <div className="apps-card-art">
-                    <span className="apps-card-cat">{a.categoryLabel}</span>
-                  </div>
-                  <div className="apps-card-body">
-                    <h3 className="apps-card-name">{a.name}</h3>
-                    <ProvChip app={a} className="apps-card-prov" />
-                    <p className="apps-card-blurb">{a.blurb}</p>
-                    <div className="apps-card-cta">
-                      <Cta app={a} />
-                    </div>
-                  </div>
-                </article>
+                <DirectoryCard app={a} key={a.repo} />
               ))}
             </div>
           )}
