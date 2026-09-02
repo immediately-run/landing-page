@@ -9,8 +9,7 @@ import SiteLink from '../../components/SiteLink';
 import PlatformLink from '../../components/PlatformLink';
 import Omnibox from '../../components/Omnibox';
 import { TEMPLATES, type TemplateRecord } from '../../data/templates';
-
-const INSTALL_URL = 'https://github.com/apps/immediately-run/installations/new';
+import { GITHUB_APP_INSTALL_URL } from '../../lib/urls';
 
 /** The start button a record's `start` decides. `generate` links GitHub's
  *  template-generate flow (new tab); `unavailable` has NO button — the reason
@@ -78,7 +77,7 @@ export default function New() {
           repos and open pull requests. Running public apps does not need it; for a private app,
           install it on that repo so the people you allow can run it.
         </p>
-        <a className="new-cta" href={INSTALL_URL} target="_blank" rel="noopener noreferrer">
+        <a className="new-cta" href={GITHUB_APP_INSTALL_URL} target="_blank" rel="noopener noreferrer">
           Install the app →
         </a>
       </div>

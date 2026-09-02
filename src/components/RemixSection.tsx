@@ -1,5 +1,6 @@
 import SiteLink from './SiteLink';
 import PlatformLink from './PlatformLink';
+import { editRoute } from '../lib/routes';
 
 // The Remix section (R3-514; FRONT_DOOR_IA §4.5) — M3, the shortest section:
 // the consequence of M1's sandbox (modification resets trust), not a separate
@@ -20,7 +21,7 @@ function RemixSection() {
         </p>
       </div>
       <div className="hero-ctas">
-        <PlatformLink className="btn-ghost" path="/edit/github/immediately-run/landing-page/main">
+        <PlatformLink className="btn-ghost" path={editRoute('landing-page')}>
           Fork this page →
         </PlatformLink>
         <SiteLink className="btn-ghost" to="/docs/start/overview#the-run-edit-contribute-loop">
