@@ -322,7 +322,9 @@ const llmsTxt =
   `/showcase redirects to /apps.\n\n` +
   `## Running a repo without loading the page\n` +
   `The omnibox grammar is \`provider:namespace/repository@ref\` (\`github\` is the ` +
-  `default provider; a bare \`owner/repo\` or a GitHub URL works too). The resulting ` +
+  `default provider; a bare \`owner/repo\`, a GitHub repo URL and a /tree/ URL ` +
+  `all work too — a /blob/ URL on a ref containing '/' is misread and is not ` +
+  `supported). The resulting ` +
   `URL on the host is \`/present/<provider>/<namespace>/<repository>[/<ref>]\` — ` +
   `a ref is percent-encoded once, and the app's entry resolves from its ` +
   `package.json (no /files/ suffix needed).\n\n` +
