@@ -249,3 +249,11 @@ h3:hover > .docs-heading-anchor,
 .docs-heading-anchor:focus-visible {
   opacity: 1;
 }
+
+/* R3-516 — the three-destination docs index. */
+.docs-index-grid--recut{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.docs-index-dest{display:flex;flex-direction:column}
+.docs-index-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.docs-index-list a{color:var(--ink);font-size:14px;text-decoration:none}
+.docs-index-list a:hover{color:var(--accent-3)}
+@media(max-width:900px){.docs-index-grid--recut{grid-template-columns:1fr}}

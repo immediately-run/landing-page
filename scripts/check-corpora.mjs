@@ -306,10 +306,30 @@ for (const e of docEntries) {
   }
   groupsInOrder.find((g) => g.key === key).items.push(e);
 }
+// R3-516 — the machine surface now names the site's routes, the omnibox
+// grammar (so an agent can construct a run URL without loading the page), and
+// its own fetchable URL (there is NO host-served /llms.txt; the file lives in
+// the repo and is fetched from raw.githubusercontent.com — FRONT_DOOR_IA §9.3).
+// Deep links use the /s/<path> short-link alias (R3-509, shipped): a REDIRECT
+// to the long present URL of this deployment's landing binding.
 const llmsTxt =
   `# immediately.run\n` +
   `> Apps you can take apart. Run any React/TS app from its source, in the browser. ` +
   `Fork and contribute back from the page itself.\n\n` +
+  `## Routes\n` +
+  `/ (front door) · /apps (the app directory) · /new (make an app) · /docs · ` +
+  `/docs/<group>/<slug> · /tutorials · /tutorials/<slug> · /changelog. ` +
+  `/showcase redirects to /apps.\n\n` +
+  `## Running a repo without loading the page\n` +
+  `The omnibox grammar is \`provider:namespace/repository@ref\` (\`github\` is the ` +
+  `default provider; a bare \`owner/repo\` or a GitHub URL works too). The resulting ` +
+  `URL on the host is \`/present/<provider>/<namespace>/<repository>[/<ref>]\` — ` +
+  `a ref is percent-encoded once, and the app's entry resolves from its ` +
+  `package.json (no /files/ suffix needed).\n\n` +
+  `## This file\n` +
+  `There is no host-served /llms.txt. Fetch this file from ` +
+  `https://raw.githubusercontent.com/immediately-run/landing-page/main/public/llms.txt ; ` +
+  `the in-site page that links it is https://immediately.run/s/docs/agents/llms .\n\n` +
   groupsInOrder
     .map(
       (g) =>
@@ -318,7 +338,7 @@ const llmsTxt =
           .map((e) => {
             const [group, slug] = e.slug.split('--');
             const title = String(e.frontmatter.title).replace(/\.$/, '');
-            return `- [${title}](/docs/${group}/${slug}): ${e.frontmatter.lead} (source: ${e.path})`;
+            return `- [${title}](https://immediately.run/s/docs/${group}/${slug}): ${e.frontmatter.lead} (source: ${e.path})`;
           })
           .join('\n'),
     )
