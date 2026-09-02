@@ -24,6 +24,7 @@ import { focusOmnibox } from './lib/omniboxFocus';
 import SectionErrorBoundary from './components/SectionErrorBoundary';
 import Home from './components/Home';
 import Apps from './sections/apps/Apps';
+import New from './sections/new/New';
 import Docs from './sections/docs/Docs';
 import Tutorials from './sections/tutorials/Tutorials';
 import Changelog from './sections/changelog/Changelog';
@@ -55,6 +56,7 @@ function App() {
         <SectionErrorBoundary key={route.section}>
           {route.section === 'home' && <Home />}
           {route.section === 'apps' && <Apps />}
+          {route.section === 'new' && <New />}
           {route.section === 'docs' && <Docs rest={route.rest} />}
           {route.section === 'tutorials' && <Tutorials rest={route.rest} />}
           {route.section === 'changelog' && <Changelog />}

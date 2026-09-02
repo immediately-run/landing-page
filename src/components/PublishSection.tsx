@@ -10,7 +10,6 @@ import { focusHeroOmnibox } from '../lib/omniboxFocus';
 // section's closing line, and it points at a tutorial, not at an agent.
 
 const INSTALL_URL = 'https://github.com/apps/immediately-run/installations/new';
-const TEMPLATE_GENERATE = 'https://github.com/immediately-run/new-project-template/generate';
 const GROVE_EXAMPLE = '/present/github/immediately-run/grove/main';
 
 function PublishSection() {
@@ -31,10 +30,9 @@ function PublishSection() {
         <div className="cap">
           <div className="t">Blank app</div>
           <p>A minimal React and TypeScript repo with nothing to delete first.</p>
-          {/* → /new once R3-515 lands; the template's generate URL until then. */}
-          <a className="btn-ghost publish-cta" href={TEMPLATE_GENERATE} target="_blank" rel="noopener noreferrer">
+          <SiteLink className="btn-ghost publish-cta" to="/new">
             Start from blank →
-          </a>
+          </SiteLink>
         </div>
         <div className="cap">
           <div className="t">Wiki, on Grove</div>

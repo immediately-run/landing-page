@@ -14,7 +14,7 @@
 // of the hash was that a URL has exactly one fragment and the router owned it, so a heading
 // permalink had nowhere to go.
 
-export type Section = 'home' | 'apps' | 'docs' | 'tutorials' | 'changelog';
+export type Section = 'home' | 'apps' | 'new' | 'docs' | 'tutorials' | 'changelog';
 
 export interface Route {
   section: Section;
@@ -22,7 +22,7 @@ export interface Route {
   rest: string[];
 }
 
-export const SECTIONS: Section[] = ['home', 'apps', 'docs', 'tutorials', 'changelog'];
+export const SECTIONS: Section[] = ['home', 'apps', 'new', 'docs', 'tutorials', 'changelog'];
 
 /** Split a path into clean segments, tolerating leading/trailing/duplicate slashes. */
 const segmentsOf = (path: string): string[] => path.split('/').filter(Boolean);
