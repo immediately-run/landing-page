@@ -30,10 +30,10 @@ function ShowcaseTeaser() {
               <ProvenanceChip provenance={app.provenance} />
               <p>{app.blurb}</p>
               <div className="app-actions">
-                <a className="open" href={platform(presentRoute(app.repo))}>
+                <a className="open" href={platform(presentRoute(app.repo))} target="_top">
                   Open
                 </a>
-                <a className="fork" href={platform(editRoute(app.repo))}>
+                <a className="fork" href={platform(editRoute(app.repo))} target="_top">
                   Fork
                 </a>
               </div>

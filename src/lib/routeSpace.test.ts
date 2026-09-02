@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   appPathFromSandboxPath,
+  redirectForPath,
   legacyHashPath,
   parseRoute,
   routePath,
@@ -10,6 +11,20 @@ import {
 // the part where a mistake is invisible: a wrong parse renders the homepage instead of an
 // error, so nothing looks broken — the reader just does not arrive.
 
+describe('redirectForPath (R3-513 — one directory)', () => {
+  it('redirects the retired showcase route to /apps', () => {
+    expect(redirectForPath('/showcase')).toBe('/apps');
+    expect(redirectForPath('/showcase/')).toBe('/apps');
+  });
+
+  it('leaves every live route alone', () => {
+    expect(redirectForPath('/apps')).toBeNull();
+    expect(redirectForPath('/docs/start/overview')).toBeNull();
+    expect(redirectForPath('/')).toBeNull();
+    expect(redirectForPath('/new')).toBeNull();
+  });
+});
+
 describe('parseRoute', () => {
   it('reads the root as home', () => {
     expect(parseRoute('/')).toEqual({ section: 'home', rest: [] });
@@ -17,7 +32,8 @@ describe('parseRoute', () => {
   });
 
   it('reads a bare section', () => {
-    expect(parseRoute('/showcase')).toEqual({ section: 'showcase', rest: [] });
+    // R3-513: `showcase` left SECTIONS — /showcase is a redirect to /apps now,
+    // not a route (see redirectForPath).
     expect(parseRoute('/changelog')).toEqual({ section: 'changelog', rest: [] });
   });
 
@@ -55,7 +71,6 @@ describe('routePath', () => {
   it('round-trips every section and sub-path', () => {
     for (const path of [
       '/',
-      '/showcase',
       '/apps',
       '/docs',
       '/docs/start/overview',

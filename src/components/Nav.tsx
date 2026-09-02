@@ -1,14 +1,25 @@
 import { useState } from 'react';
-import { useAuth } from '@immediately-run/sdk';
+import { Search } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
 import SiteLink from './SiteLink';
 import Omnibox from './Omnibox';
+import Door from './Door';
 
-// Section links. The whole site lives in this one app, routed by hash.
+// The nav (R3-513; FRONT_DOOR_IA §4.1): four items — Apps · Docs · Tutorials ·
+// What's new. Showcase is gone (one directory: /showcase redirects to /apps);
+// the GitHub org link moved to the footer; "Start building" became "Make an
+// app" → /new as a hairline secondary. The right cluster is the omnibox (nav
+// variant), Make an app, and the door — no gradient primary in the nav: the
+// view's one primary is the omnibox's Run.
+//
+// Mobile top bar: logo · search icon · the door · burger — the two controls
+// outside the burger are the two fastest paths for the majority returning case
+// (W1/W2 and W4). The sheet opens with the omnibox row at its top.
+
+// Section links. The whole site lives in this one app, routed by path.
 const NAV_ITEMS: { label: string; to: string; section: Section }[] = [
-  { label: 'Showcase', to: '/showcase', section: 'showcase' },
   { label: 'Apps', to: '/apps', section: 'apps' },
   { label: 'Docs', to: '/docs', section: 'docs' },
   { label: 'Tutorials', to: '/tutorials', section: 'tutorials' },
@@ -23,13 +34,8 @@ function Nav({ active }: NavProps) {
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLight = theme === 'light';
-  // R3-486 (OSO §4.1 R-OSO-17): `/` stays the front door for everyone; when the
-  // user is signed in it gains a route to /home. The auth read degrades
-  // gracefully — unresolved or signed-out renders exactly the signed-out nav
-  // (no flash of a broken link): `useAuth()` outside the platform sandbox
-  // resolves null, so the static/standalone render is unchanged.
-  const { user } = useAuth();
-  const signedIn = Boolean(user);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <>
@@ -52,12 +58,20 @@ function Nav({ active }: NavProps) {
             ))}
           </div>
           <div className="nav-right">
-            {/* R3-512: the omnibox in its `nav` variant replaces the search
-                button. On `/` it renders as the shortcut that focuses the hero
-                omnibox; on every other route it is the field, expanding in
-                place. The full nav restructure (items, Make an app, the door)
-                is R3-513 and deliberately not done here. */}
-            <Omnibox variant="nav" heroShortcut={active === 'home'} />
+            {/* R3-512: the omnibox in its `nav` variant. On `/` it renders as the
+                shortcut that focuses the hero omnibox; elsewhere it is the field. */}
+            <span className="nav-omnibox desk-only">
+              <Omnibox variant="nav" heroShortcut={active === 'home'} />
+            </span>
+            {/* Mobile search: opens the sheet, whose first row is the omnibox. */}
+            <button
+              type="button"
+              className="icon-btn nav-search-btn"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Search apps and docs, or paste a repo"
+            >
+              <Search size={18} aria-hidden="true" />
+            </button>
             <button
               type="button"
               className="icon-btn theme-btn"
@@ -67,34 +81,15 @@ function Nav({ active }: NavProps) {
               <span className="ic">{isLight ? '☾' : '☀'}</span>
               <span className="desk-only">{isLight ? 'Dark' : 'Light'}</span>
             </button>
-            {/* `target="_top"`: the sandboxed landing navigates the HOST
-                document to /home, not its own iframe. */}
-            {signedIn && (
-              <a className="gh-link desk-only" href="/home" target="_top">
-                ★ Home
-              </a>
-            )}
-            <a
-              className="gh-link desk-only"
-              href="https://github.com/immediately-run"
-              target="_blank"
-              rel="noopener"
-            >
-              ★ GitHub
-            </a>
-            {/* `/edit/new` is not a route — in-product app creation is the
-                APP_ONBOARDING_SPEC funnel and is not built yet (R3-164). Until it
-                lands, this points at the transport that funnel's v1 default path
-                actually uses (§3.4.1): GitHub's own template-generate flow. A
-                broken CTA is worse than an honest off-platform one. */}
-            <a
-              className="btn nav-cta desk-only"
-              href="https://github.com/immediately-run/new-project-template/generate"
-              target="_blank"
-              rel="noopener"
-            >
-              Start building →
-            </a>
+            {/* Make an app: a hairline secondary — /new is an app-owned route
+                (R3-515 builds the page; the route resolves to the site root
+                until then). NEVER the gradient primary (FRONT_DOOR_IA §1.1). */}
+            <SiteLink className="nav-link nav-make desk-only" to="/new">
+              Make an app
+            </SiteLink>
+            <span className="nav-door desk-only">
+              <Door />
+            </span>
             <button
               type="button"
               className="burger"
@@ -114,11 +109,15 @@ function Nav({ active }: NavProps) {
             <button
               type="button"
               className="sheet-close"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               aria-label="Close menu"
             >
               ×
             </button>
+          </div>
+          {/* The omnibox row comes FIRST in the sheet (§4.1). */}
+          <div className="nav-sheet-omnibox">
+            <Omnibox variant="nav" heroShortcut={false} />
           </div>
           <div className="nav-sheet-links">
             {NAV_ITEMS.map((item) => (
@@ -126,31 +125,26 @@ function Nav({ active }: NavProps) {
                 key={item.to}
                 className="nav-sheet-link"
                 to={item.to}
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenu}
               >
                 {item.label}
               </SiteLink>
             ))}
-            {/* R3-486 — the SAME signed-in route to /home the desktop nav offers.
-                It has to be repeated here because the desktop link carries
-                `desk-only`, which `@media(max-width:900px)` sets to
-                `display:none!important` — so without this a signed-in phone user
-                had no route to Home from `/` at all. Product value 8: mobile is
-                not an afterthought, and ~25% of sessions are phones. */}
-            {signedIn && (
-              <a className="nav-sheet-link" href="/home" target="_top" onClick={() => setMenuOpen(false)}>
-                ★ Home
-              </a>
-            )}
+            <SiteLink className="nav-sheet-link" to="/new" onClick={closeMenu}>
+              Make an app
+            </SiteLink>
           </div>
-          <a
-            className="btn"
-            href="https://github.com/immediately-run/new-project-template/generate"
-            target="_blank"
-            rel="noopener"
+          <div className="nav-sheet-door">
+            <Door />
+          </div>
+          <button
+            type="button"
+            className="nav-sheet-theme"
+            onClick={toggle}
+            aria-label={isLight ? 'Switch to dark theme' : 'Switch to light theme'}
           >
-            Start building →
-          </a>
+            {isLight ? '☾ Dark' : '☀ Light'}
+          </button>
         </div>
       )}
     </>

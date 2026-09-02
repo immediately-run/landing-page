@@ -80,10 +80,10 @@ function Cta({ app }: { app: AppRecord }) {
   const platform = usePlatformHref();
   return (
     <>
-      <a className="apps-open" href={platform(presentRoute(app.repo, app.entry))}>
+      <a className="apps-open" href={platform(presentRoute(app.repo, app.entry))} target="_top">
         Open
       </a>
-      <a className="apps-fork" href={platform(editRoute(app.repo, app.entry))}>
+      <a className="apps-fork" href={platform(editRoute(app.repo, app.entry))} target="_top">
         Fork
       </a>
     </>
@@ -138,6 +138,10 @@ export default function Apps() {
   const toggleCap = (slug: string) =>
     setFilters((f) => ({ ...f, caps: toggle(f.caps, slug) }));
 
+  // R3-513 — one directory: the former showcase grid is a featured band at the
+  // top of /apps, rendered with the SAME card the directory grid uses.
+  const featured = useMemo(() => APPS.filter((a) => a.featured), []);
+
   return (
     <div className="apps-root">
       <span className="apps-tag">/APPS</span>
@@ -145,6 +149,28 @@ export default function Apps() {
       <p className="apps-deck">
         Browse by category, author, or what an app is allowed to touch.
       </p>
+
+      {featured.length > 0 && (
+        <section className="apps-featured" aria-label="Featured apps">
+          <div className="apps-grid">
+            {featured.map((a) => (
+              <article className="apps-card" key={a.repo}>
+                <div className="apps-card-art">
+                  <span className="apps-card-cat">{a.categoryLabel}</span>
+                </div>
+                <div className="apps-card-body">
+                  <h3 className="apps-card-name">{a.name}</h3>
+                  <ProvChip app={a} className="apps-card-prov" />
+                  <p className="apps-card-blurb">{a.blurb}</p>
+                  <div className="apps-card-cta">
+                    <Cta app={a} />
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="apps-layout">
         <aside className="apps-rail">
