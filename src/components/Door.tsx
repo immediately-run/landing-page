@@ -22,7 +22,7 @@ function Door({ className = 'door' }: { className?: string }) {
   const { status } = useAuth();
   const signedIn = status === 'signed-in';
   return (
-    <PlatformLink className={className} path="/home" aria-label={signedIn ? 'Home' : 'Sign in'}>
+    <PlatformLink className={className} path="/home">
       {signedIn ? 'Home' : 'Sign in'}
     </PlatformLink>
   );

@@ -19,6 +19,7 @@ import SiteLink from '../../components/SiteLink';
 import { LLMS_TXT } from '../../data/corpusIndex';
 import { TUTORIALS } from '../tutorials/data';
 import { rawUrl, sourceUrl } from '../../lib/routes';
+import { SDK_REFERENCE_URL, sdkReferenceUrl } from '../../lib/urls';
 
 // The /docs section: the technical reference, served to two audiences from one
 // source. The same typed records in data.ts render both the human article view
@@ -189,25 +190,17 @@ function DocsIndex() {
           </p>
           <ul className="docs-index-list">
             <li>
-              <a href="https://immediately-run.github.io/immediately-run-sdk/" target="_blank" rel="noopener noreferrer">
+              <a href={SDK_REFERENCE_URL} target="_blank" rel="noopener noreferrer">
                 API reference
               </a>
             </li>
             <li>
-              <a
-                href="https://immediately-run.github.io/immediately-run-sdk/llms.txt"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={sdkReferenceUrl('llms.txt')} target="_blank" rel="noopener noreferrer">
                 llms.txt
               </a>
             </li>
             <li>
-              <a
-                href="https://immediately-run.github.io/immediately-run-sdk/api.json"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={sdkReferenceUrl('api.json')} target="_blank" rel="noopener noreferrer">
                 api.json
               </a>
             </li>
@@ -261,7 +254,7 @@ function MachineSurface({
             Point at the generated artifact; do not restate it here. */}
         <a
           className="docs-pill docs-pill--primary"
-          href="https://immediately-run.github.io/immediately-run-sdk/llms.txt"
+          href={sdkReferenceUrl('llms.txt')}
           target="_blank"
           rel="noopener"
         >
@@ -269,7 +262,7 @@ function MachineSurface({
         </a>
         <a
           className="docs-pill"
-          href="https://immediately-run.github.io/immediately-run-sdk/"
+          href={SDK_REFERENCE_URL}
           target="_blank"
           rel="noopener"
         >

@@ -1,4 +1,4 @@
-import { APPS } from '../data/apps';
+import { APPS, appsByRepo, TEASER_REPOS } from '../data/apps';
 import SiteLink from './SiteLink';
 import AppTile from './AppTile';
 
@@ -7,9 +7,7 @@ import AppTile from './AppTile';
 // COMPUTED from APPS.length — never typed — and the four tiles are distinct
 // from the Run section's four (§4.3). Fork lives on the tiles (AppTile).
 
-const TEASER = ['markdown-notebook', 'todo', 'photo-album', 'grove']
-  .map((repo) => APPS.find((a) => a.repo === repo))
-  .filter((a): a is (typeof APPS)[number] => Boolean(a));
+const TEASER = appsByRepo(TEASER_REPOS);
 
 function DirectoryTeaser() {
   return (

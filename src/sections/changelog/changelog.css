@@ -230,21 +230,6 @@
   color: var(--ink-2);
 }
 
-.cl-feed {
-  margin-top: 18px;
-  font: 400 12px var(--mono);
-  color: var(--ink-3);
-}
-
-.cl-feed a {
-  color: var(--accent-3);
-  transition: color 0.14s ease;
-}
-
-.cl-feed a:hover {
-  color: var(--ink);
-}
-
 @media (max-width: 560px) {
   .cl-section { padding-top: 32px; }
   .cl-timeline { padding-left: 20px; }

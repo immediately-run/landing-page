@@ -1,4 +1,5 @@
 import { editRoute } from '../lib/routes';
+import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL } from '../lib/urls';
 import SiteLink from './SiteLink';
 import PlatformLink from './PlatformLink';
 
@@ -34,18 +35,10 @@ function Footer() {
             <div className="h">Build</div>
             <div className="links">
               <SiteLink to="/new">Make an app</SiteLink>
-              <a
-                href="https://github.com/apps/immediately-run/installations/new"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={GITHUB_APP_INSTALL_URL} target="_blank" rel="noopener noreferrer">
                 Install the GitHub App
               </a>
-              <a
-                href="https://immediately-run.github.io/immediately-run-sdk/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={SDK_REFERENCE_URL} target="_blank" rel="noopener noreferrer">
                 API reference (generated)
               </a>
               <a

@@ -470,9 +470,6 @@
   .apps-row-tags {
     display: none;
   }
-  .apps-row-star {
-    display: none;
-  }
   .apps-grid {
     grid-template-columns: 1fr;
   }

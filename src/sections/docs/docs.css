@@ -64,8 +64,6 @@
 }
 .docs-copy:hover{color:var(--ink);border-color:var(--accent-2)}
 .docs-copy:focus-visible{outline:none;box-shadow:var(--glow)}
-.docs-pre{margin:0;padding:16px 18px;overflow-x:auto}
-.docs-pre code{font:400 13px/1.6 var(--mono);color:var(--ink);white-space:pre}
 
 /* callout */
 .docs-callout{
@@ -158,8 +156,6 @@
 .docs-pill{font:600 13px var(--mono);padding:9px 16px;border-radius:var(--r-pill);text-decoration:none}
 .docs-pill--primary{background:var(--grad-btn);color:#fff}
 .docs-pill--primary:hover{filter:brightness(1.05)}
-.docs-pill--ghost{background:var(--panel);border:1px solid var(--line-2);color:var(--ink)}
-.docs-pill--ghost:hover{border-color:var(--accent-2)}
 
 .docs-llms{
   margin-top:26px;border:1px solid var(--line);border-radius:var(--r-md);
@@ -208,11 +204,12 @@
 
 /* ---- landing index -------------------------------------------------------- */
 .docs-index-grid{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+/* A static <section>, not a link: no hover lift and no transition, because there
+   is nothing here to click. The links are the list items inside the card. */
 .docs-index-card{
   border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel);
-  padding:16px 18px;transition:transform .14s,box-shadow .14s,border-color .14s;
+  padding:16px 18px;
 }
-.docs-index-card:hover{transform:translate(-3px,-3px);box-shadow:var(--shadow-card);border-color:var(--line-2)}
 .docs-index-name{font:700 16px var(--disp);letter-spacing:-.01em;color:var(--ink)}
 .docs-index-lead{font:400 14px/1.5 var(--sans);color:var(--ink-2);margin-top:4px;max-width:62ch}
 

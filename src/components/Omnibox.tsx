@@ -8,6 +8,7 @@ import ProvenanceChip from './ProvenanceChip';
 import SiteLink from './SiteLink';
 import { usePlatformHref } from '../hooks/useRoute';
 import { focusHeroOmnibox, registerOmniboxFocus } from '../lib/omniboxFocus';
+import type { OmniboxVariant } from '../lib/omniboxFocus';
 
 // The omnibox (R3-512; FRONT_DOOR_IA §5) — the front door's primary control. It
 // does W1 (run a repo by URL or tuple) and W2 (find an app) in one place, as a
@@ -16,8 +17,6 @@ import { focusHeroOmnibox, registerOmniboxFocus } from '../lib/omniboxFocus';
 // `target="_top"`: a platform route navigates the HOST document, and a
 // root-relative href inside the sandboxed frame would resolve against the
 // sandbox origin and land nowhere.
-
-export type OmniboxVariant = 'hero' | 'nav' | 'new';
 
 function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(() =>
@@ -100,6 +99,7 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
   const [query, setQuery] = useState('');
   const [highlight, setHighlight] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const inputId = `${listId}-input`;
   const helperId = useId();
@@ -166,8 +166,17 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
     return list;
   }, [locationRow, appHits, docHits, listId]);
 
-  // Register with the focus registry (⌘K and the nav shortcut both land here).
-  useEffect(() => registerOmniboxFocus(variant === 'hero' ? 'hero' : 'nav', () => inputRef.current?.focus()), [variant]);
+  // Register with the focus registry (⌘K, the nav shortcut and the "paste a repo"
+  // CTAs all land here). `reveal` is what lets those CTAs scroll this field into
+  // view without any component querying for its CSS class.
+  useEffect(
+    () =>
+      registerOmniboxFocus(variant, {
+        focus: () => inputRef.current?.focus(),
+        reveal: () => outerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+      }),
+    [variant],
+  );
 
   const onKeyDown = useCallback(
     (e: ReactKeyboardEvent<HTMLInputElement>) => {
@@ -368,7 +377,7 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
   }
 
   return (
-    <div className={`omnibox-outer omnibox-outer--${variant}`}>
+    <div className={`omnibox-outer omnibox-outer--${variant}`} ref={outerRef}>
       <label className="omnibox-visually-hidden" htmlFor={inputId}>
         Paste a repo, or search apps and docs
       </label>

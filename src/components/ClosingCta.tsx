@@ -1,7 +1,8 @@
 import SiteLink from './SiteLink';
 import PlatformLink from './PlatformLink';
 import Door from './Door';
-import { focusHeroOmnibox } from '../lib/omniboxFocus';
+import { revealHeroOmnibox } from '../lib/omniboxFocus';
+import { editRoute } from '../lib/routes';
 
 // The closing band (R3-514; FRONT_DOOR_IA §4.8): the headline and one row of
 // doors. "Run a repo" is the band's gradient primary and it scrolls to and
@@ -19,10 +20,7 @@ function ClosingCta() {
         <button
           type="button"
           className="btn closing-run"
-          onClick={() => {
-            document.querySelector('.omnibox-outer--hero')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            focusHeroOmnibox();
-          }}
+          onClick={revealHeroOmnibox}
         >
           Run a repo →
         </button>
@@ -37,7 +35,7 @@ function ClosingCta() {
       {/* The fork line lives in the footer (PlatformLink there); the platform
           route link below exists for readers who land here directly. */}
       <p className="closing-fork">
-        <PlatformLink path="/edit/github/immediately-run/landing-page/main">
+        <PlatformLink path={editRoute('landing-page')}>
           view source · fork this page →
         </PlatformLink>
       </p>

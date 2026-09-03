@@ -1,6 +1,7 @@
 import SiteLink from './SiteLink';
 import PlatformLink from './PlatformLink';
-import { focusHeroOmnibox } from '../lib/omniboxFocus';
+import { revealHeroOmnibox } from '../lib/omniboxFocus';
+import { GITHUB_APP_INSTALL_URL } from '../lib/urls';
 
 // The Publish section (R3-514; FRONT_DOOR_IA §4.4) — M2, the author message,
 // second in weight. The lede is verbatim from the brief because it carries the
@@ -9,7 +10,6 @@ import { focusHeroOmnibox } from '../lib/omniboxFocus';
 // mono GITHUB APP label. The one agent-mentioning sentence on `/` is this
 // section's closing line, and it points at a tutorial, not at an agent.
 
-const INSTALL_URL = 'https://github.com/apps/immediately-run/installations/new';
 const GROVE_EXAMPLE = '/present/github/immediately-run/grove/main';
 
 function PublishSection() {
@@ -47,10 +47,7 @@ function PublishSection() {
           <button
             type="button"
             className="btn-ghost publish-cta"
-            onClick={() => {
-              document.querySelector('.omnibox-outer--hero')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              focusHeroOmnibox();
-            }}
+            onClick={revealHeroOmnibox}
           >
             Paste a repo →
           </button>
@@ -63,7 +60,7 @@ function PublishSection() {
           Install the immediately.run GitHub App to create and publish. Running public apps
           needs no install.
         </p>
-        <a className="btn-ghost publish-cta" href={INSTALL_URL} target="_blank" rel="noopener noreferrer">
+        <a className="btn-ghost publish-cta" href={GITHUB_APP_INSTALL_URL} target="_blank" rel="noopener noreferrer">
           Install the app →
         </a>
       </div>

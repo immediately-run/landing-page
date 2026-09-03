@@ -49,4 +49,11 @@ jobs:
       # The whole gate. Fails on a corpora violation, on a generated file that was
       # not committed alongside its source, on a lint error, on a type error, on a
       # build failure, or on a red test.
+      #
+      # GITHUB_TOKEN is the workflow's own token: check-templates asks the GitHub
+      # API whether each `generate` template repo is flagged is_template, and an
+      # anonymous call is rate-limited per runner IP — a shared-runner coin flip
+      # that fails the gate for a reason that has nothing to do with the change.
       - run: npm run verify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
