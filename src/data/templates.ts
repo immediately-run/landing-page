@@ -6,8 +6,9 @@
 // formatting changes. JSON is data both a module and a script can read.
 //
 // This module is the TYPE and the typed view of that data. The array is asserted
-// rather than validated at load — the shape is checked by the checker's tests,
-// which read the same file.
+// rather than validated at load; the shape is CHECKED at the JSON boundary by
+// `validateRecords` in scripts/check-templates.mjs, which `npm run verify` runs
+// over this same file, so a malformed record fails the gate rather than `/new`.
 //
 // NO `fork` kind: forking the template is rejected (APP_ONBOARDING §3.1) and an
 // explicit fork exists only for Remix, which is 1.0 (release plan D2).
@@ -16,20 +17,20 @@
 // (verified 2026-09-02), so a `generate` record for it would ship a button that
 // 404s — which is what scripts/check-templates.mjs exists to catch.
 
-import records from './templates.json';
+import records from "./templates.json";
 
 export interface TemplateRecord {
   slug: string; // 'blank' | 'grove-wiki' | …
-  kind: 'blank' | 'app'; // the blank template vs an application template
+  kind: "blank" | "app"; // the blank template vs an application template
   name: string; // 'Blank app', 'Wiki, on Grove'
   pitch: string; // one line, sentence case
   gives: string[]; // what you get, 2–4 bullets
   repo: string; // 'immediately-run/new-project-template'
   example?: string; // repo whose present route is "Try it live"
   start:
-    | { kind: 'generate' } // GitHub /generate — the repo MUST be flagged as a template
-    | { kind: 'run'; route: string } // opens an app that itself does the onboarding
-    | { kind: 'unavailable'; reason: string }; // record exists; the card has no start button
+    | { kind: "generate" } // GitHub /generate — the repo MUST be flagged as a template
+    | { kind: "run"; route: string } // opens an app that itself does the onboarding
+    | { kind: "unavailable"; reason: string }; // record exists; the card has no start button
 }
 
 export const TEMPLATES = records as TemplateRecord[];
