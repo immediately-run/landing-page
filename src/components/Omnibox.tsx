@@ -1,36 +1,48 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
-import './omnibox.css';
-import { parseLaunch, PROVIDERS, type Launch } from '../lib/launch';
-import { APPS, type Provenance } from '../data/apps';
-import { CORPUS_INDEX } from '../data/corpusIndex';
-import ProvenanceChip from './ProvenanceChip';
-import SiteLink from './SiteLink';
-import { PlatformLink } from '@immediately-run/sdk/platformLink';
-import { focusHeroOmnibox, registerOmniboxFocus } from '../lib/omniboxFocus';
-import type { OmniboxVariant } from '../lib/omniboxFocus';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
+import "./omnibox.css";
+import { parseLaunch, PROVIDERS, type Launch } from "../lib/launch";
+import { APPS, type Provenance } from "../data/apps";
+import { CORPUS_INDEX } from "../data/corpusIndex";
+import ProvenanceChip from "./ProvenanceChip";
+import SiteLink from "./SiteLink";
+import { PlatformLink } from "@immediately-run/sdk/platformLink";
+import { presentRoute } from "../lib/routes";
+import { focusHeroOmnibox, registerOmniboxFocus } from "../lib/omniboxFocus";
+import type { OmniboxVariant } from "../lib/omniboxFocus";
 
 // The omnibox (R3-512; FRONT_DOOR_IA §5) — the front door's primary control. It
 // does W1 (run a repo by URL or tuple) and W2 (find an app) in one place, as a
 // WAI-ARIA list-autocomplete combobox with three result groups of ONE action per
-// row. Run and Open rows are real links built with `platformHref` and carry
-// `target="_top"`: a platform route navigates the HOST document, and a
-// root-relative href inside the sandboxed frame would resolve against the
-// sandbox origin and land nowhere.
+// row. Run and Open rows render through `PlatformLink`, which resolves the
+// host-space href and escapes the frame: a platform route navigates the HOST
+// document, and a root-relative href inside the sandboxed frame would resolve
+// against the sandbox origin and land nowhere.
 
 function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(() =>
-    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    typeof window !== "undefined" && typeof window.matchMedia === "function"
       ? window.matchMedia(query).matches
       : false,
   );
   useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    )
+      return;
     const mq = window.matchMedia(query);
     const onChange = () => setMatches(mq.matches);
     onChange();
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, [query]);
   return matches;
 }
@@ -67,15 +79,16 @@ interface CorpusHit {
 function corpusHits(q: string): CorpusHit[] {
   const hits: CorpusHit[] = [];
   for (const entry of CORPUS_INDEX) {
-    const title = String(entry.frontmatter.title ?? '');
-    const lead = String(entry.frontmatter.lead ?? '');
-    if (!title.toLowerCase().includes(q) && !lead.toLowerCase().includes(q)) continue;
+    const title = String(entry.frontmatter.title ?? "");
+    const lead = String(entry.frontmatter.lead ?? "");
+    if (!title.toLowerCase().includes(q) && !lead.toLowerCase().includes(q))
+      continue;
     let to: string;
-    if (entry.path.startsWith('docs/')) {
-      const [group, slug] = entry.slug.split('--');
+    if (entry.path.startsWith("docs/")) {
+      const [group, slug] = entry.slug.split("--");
       to = `/docs/${group}/${slug}`;
     } else {
-      to = `/${entry.path.replace(/\.mdx$/, '')}`;
+      to = `/${entry.path.replace(/\.mdx$/, "")}`;
     }
     hits.push({ key: entry.path, title, lead, to });
     if (hits.length >= 5) break; // at most five rows
@@ -94,8 +107,8 @@ interface OmniboxProps {
 }
 
 function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
-  const isMobile = useMediaQuery('(max-width: 720px)');
-  const [query, setQuery] = useState('');
+  const isMobile = useMediaQuery("(max-width: 720px)");
+  const [query, setQuery] = useState("");
   const [highlight, setHighlight] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -105,15 +118,15 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
   const noticeId = useId();
 
   const parsed: Launch = useMemo(() => parseLaunch(query), [query]);
-  const runnable = parsed.kind === 'location' || parsed.kind === 'platform-url';
+  const runnable = parsed.kind === "location" || parsed.kind === "platform-url";
   const runPath =
-    parsed.kind === 'location'
+    parsed.kind === "location"
       ? parsed.presentPath
-      : parsed.kind === 'platform-url'
+      : parsed.kind === "platform-url"
         ? parsed.path
         : undefined;
 
-  const panelOpen = query.trim() !== '';
+  const panelOpen = query.trim() !== "";
 
   // Adjusting state during render (the sanctioned pattern): the highlight must
   // not survive the option set changing under it, and an effect would cascade.
@@ -126,12 +139,14 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
   // Unknown provider → the notice replaces the helper line's text and is
   // announced through the live region.
   const notice =
-    parsed.kind === 'unknown-provider'
+    parsed.kind === "unknown-provider"
       ? `${parsed.provider.charAt(0).toUpperCase()}${parsed.provider.slice(1)} is not supported yet. GitHub works today.`
-      : '';
+      : "";
 
   const helper =
-    variant === 'new' ? 'the repo you just created' : 'Accepts provider:namespace/repository@ref · GitHub is the first provider';
+    variant === "new"
+      ? "the repo you just created"
+      : "Accepts provider:namespace/repository@ref · GitHub is the first provider";
 
   const appHits = useMemo(() => {
     if (!panelOpen) return [];
@@ -150,18 +165,25 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
       .map(({ hit }) => hit);
   }, [panelOpen, query]);
 
-  const docHits = useMemo(() => (panelOpen ? corpusHits(query.trim().toLowerCase()) : []), [panelOpen, query]);
+  const docHits = useMemo(
+    () => (panelOpen ? corpusHits(query.trim().toLowerCase()) : []),
+    [panelOpen, query],
+  );
 
-  const locationRow = parsed.kind === 'location' ? parsed : undefined;
-  const hasResults = Boolean(locationRow) || appHits.length > 0 || docHits.length > 0;
+  const locationRow = parsed.kind === "location" ? parsed : undefined;
+  const hasResults =
+    Boolean(locationRow) || appHits.length > 0 || docHits.length > 0;
 
   // Flattened options, in group order — the arrow-key walk and the highlight id
   // both read this list.
   const options = useMemo(() => {
     const list: { id: string; label: string }[] = [];
-    if (locationRow) list.push({ id: `${listId}-opt-location`, label: locationRow.display });
-    for (const hit of appHits) list.push({ id: `${listId}-opt-${hit.key}`, label: hit.name });
-    for (const hit of docHits) list.push({ id: `${listId}-opt-doc-${hit.key}`, label: hit.title });
+    if (locationRow)
+      list.push({ id: `${listId}-opt-location`, label: locationRow.display });
+    for (const hit of appHits)
+      list.push({ id: `${listId}-opt-${hit.key}`, label: hit.name });
+    for (const hit of docHits)
+      list.push({ id: `${listId}-opt-doc-${hit.key}`, label: hit.title });
     return list;
   }, [locationRow, appHits, docHits, listId]);
 
@@ -172,23 +194,30 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
     () =>
       registerOmniboxFocus(variant, {
         focus: () => inputRef.current?.focus(),
-        reveal: () => outerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+        reveal: () =>
+          outerRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          }),
       }),
     [variant],
   );
 
   const onKeyDown = useCallback(
     (e: ReactKeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         if (!panelOpen || options.length === 0) return;
         e.preventDefault();
         setHighlight((h) => {
-          if (h === -1) return e.key === 'ArrowDown' ? 0 : options.length - 1;
-          return (h + (e.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+          if (h === -1) return e.key === "ArrowDown" ? 0 : options.length - 1;
+          return (
+            (h + (e.key === "ArrowDown" ? 1 : -1) + options.length) %
+            options.length
+          );
         });
         return;
       }
-      if (e.key === 'Enter') {
+      if (e.key === "Enter") {
         if (highlight >= 0 && highlight < options.length) {
           e.preventDefault();
           document.getElementById(options[highlight].id)?.click();
@@ -200,9 +229,9 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
         }
         return;
       }
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         // Close the panel, then clear the highlight, then blur — in that order.
-        setQuery('');
+        setQuery("");
         setHighlight(-1);
         inputRef.current?.blur();
       }
@@ -211,7 +240,10 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
   );
 
   const chip = (
-    <span className="omnibox-chip" aria-hidden={Object.keys(PROVIDERS).length === 1 || undefined}>
+    <span
+      className="omnibox-chip"
+      aria-hidden={Object.keys(PROVIDERS).length === 1 || undefined}
+    >
       {Object.keys(PROVIDERS).length === 1 ? (
         // One provider: a static label with no caret — NOT a dropdown of
         // providers that do not exist.
@@ -228,33 +260,34 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
     </span>
   );
 
-  const run = runPath !== undefined ? (
-    <PlatformLink
-      id={`${listId}-run`}
-      className="omnibox-run"
-      path={runPath}
-      aria-label="Run"
-    >
-      <span className="omnibox-run-label">Run</span>
-      <span className="omnibox-run-arrow" aria-hidden="true">
-        →
-      </span>
-    </PlatformLink>
-  ) : (
-    <button
-      id={`${listId}-run`}
-      type="button"
-      className="omnibox-run"
-      aria-disabled="true"
-      aria-describedby={`${helperId} ${noticeId}`}
-      onClick={(e) => e.preventDefault()}
-    >
-      <span className="omnibox-run-label">Run</span>
-      <span className="omnibox-run-arrow" aria-hidden="true">
-        →
-      </span>
-    </button>
-  );
+  const run =
+    runPath !== undefined ? (
+      <PlatformLink
+        id={`${listId}-run`}
+        className="omnibox-run"
+        path={runPath}
+        aria-label="Run"
+      >
+        <span className="omnibox-run-label">Run</span>
+        <span className="omnibox-run-arrow" aria-hidden="true">
+          →
+        </span>
+      </PlatformLink>
+    ) : (
+      <button
+        id={`${listId}-run`}
+        type="button"
+        className="omnibox-run"
+        aria-disabled="true"
+        aria-describedby={`${helperId} ${noticeId}`}
+        onClick={(e) => e.preventDefault()}
+      >
+        <span className="omnibox-run-label">Run</span>
+        <span className="omnibox-run-arrow" aria-hidden="true">
+          →
+        </span>
+      </button>
+    );
 
   const field = (
     <div className={`omnibox omnibox--${variant}`}>
@@ -269,10 +302,16 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
           aria-autocomplete="list"
           aria-expanded={panelOpen}
           aria-controls={panelOpen ? listId : undefined}
-          aria-activedescendant={highlight >= 0 ? options[highlight]?.id : undefined}
+          aria-activedescendant={
+            highlight >= 0 ? options[highlight]?.id : undefined
+          }
           aria-describedby={`${helperId} ${noticeId}`}
           aria-invalid={notice ? true : undefined}
-          placeholder={isMobile ? 'Paste a repo or an app name' : 'owner/repo@branch, a GitHub URL, or an app name'}
+          placeholder={
+            isMobile
+              ? "Paste a repo or an app name"
+              : "owner/repo@branch, a GitHub URL, or an app name"
+          }
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={onKeyDown}
@@ -287,11 +326,20 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
         {notice}
       </p>
       {panelOpen && (
-        <div className="omnibox-panel" id={listId} role="listbox" aria-label="Results">
+        <div
+          className="omnibox-panel"
+          id={listId}
+          role="listbox"
+          aria-label="Results"
+        >
           {hasResults ? (
             <>
               {locationRow && (
-                <div className="omnibox-group" role="group" aria-label="Run from source">
+                <div
+                  className="omnibox-group"
+                  role="group"
+                  aria-label="Run from source"
+                >
                   <PlatformLink
                     id={`${listId}-opt-location`}
                     className="omnibox-option"
@@ -299,15 +347,23 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
                     aria-selected={highlight === 0}
                     path={locationRow.presentPath}
                   >
-                    <span className="omnibox-option-name">{locationRow.display}</span>
+                    <span className="omnibox-option-name">
+                      {locationRow.display}
+                    </span>
                     <span className="omnibox-option-action">Run</span>
                   </PlatformLink>
                 </div>
               )}
               {appHits.length > 0 && (
-                <div className="omnibox-group" role="group" aria-label="Apps in the directory">
+                <div
+                  className="omnibox-group"
+                  role="group"
+                  aria-label="Apps in the directory"
+                >
                   {appHits.map((hit) => {
-                    const idx = options.findIndex((o) => o.id === `${listId}-opt-${hit.key}`);
+                    const idx = options.findIndex(
+                      (o) => o.id === `${listId}-opt-${hit.key}`,
+                    );
                     return (
                       <PlatformLink
                         key={hit.key}
@@ -315,11 +371,15 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
                         className="omnibox-option"
                         role="option"
                         aria-selected={highlight === idx}
-                        path={`/present/github/immediately-run/${hit.repo}/main/files/src/App.tsx`}
+                        path={presentRoute(hit.repo)}
                       >
                         <span className="omnibox-option-name">{hit.name}</span>
-                        <span className="omnibox-option-cat">{hit.category}</span>
-                        <span className="omnibox-option-blurb">{hit.blurb}</span>
+                        <span className="omnibox-option-cat">
+                          {hit.category}
+                        </span>
+                        <span className="omnibox-option-blurb">
+                          {hit.blurb}
+                        </span>
                         <ProvenanceChip provenance={hit.provenance} />
                       </PlatformLink>
                     );
@@ -327,9 +387,15 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
                 </div>
               )}
               {docHits.length > 0 && (
-                <div className="omnibox-group" role="group" aria-label="Docs and tutorials">
+                <div
+                  className="omnibox-group"
+                  role="group"
+                  aria-label="Docs and tutorials"
+                >
                   {docHits.map((hit) => {
-                    const idx = options.findIndex((o) => o.id === `${listId}-opt-doc-${hit.key}`);
+                    const idx = options.findIndex(
+                      (o) => o.id === `${listId}-opt-doc-${hit.key}`,
+                    );
                     return (
                       <SiteLink
                         key={hit.key}
@@ -348,7 +414,9 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
               )}
             </>
           ) : (
-            <div className="omnibox-empty">Nothing matched. Try an app name, or paste a repo.</div>
+            <div className="omnibox-empty">
+              Nothing matched. Try an app name, or paste a repo.
+            </div>
           )}
         </div>
       )}
@@ -358,7 +426,7 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
   // The nav variant collapses to a shortcut button while the hero omnibox is
   // mounted (on `/`): activating it focuses the hero field. On every other
   // route the field expands in place.
-  if (variant === 'nav' && heroShortcut) {
+  if (variant === "nav" && heroShortcut) {
     return (
       <button
         type="button"
