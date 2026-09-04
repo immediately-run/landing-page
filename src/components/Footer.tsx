@@ -1,7 +1,7 @@
-import { editRoute } from "../lib/routes";
-import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL } from "../lib/urls";
-import SiteLink from "./SiteLink";
-import { PlatformLink } from "@immediately-run/sdk/platformLink";
+import { editRoute } from '../lib/routes';
+import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL } from '../lib/urls';
+import SiteLink from './SiteLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 
 // The footer (R3-513; FRONT_DOOR_IA §4.9): columns by AUDIENCE, not by section.
 // Product → readers; Build → creators; Contributors → the people inside the
@@ -10,7 +10,7 @@ import { PlatformLink } from "@immediately-run/sdk/platformLink";
 
 // The wiki is the docs repo rendered by Grove — a platform route, so it goes
 // through PlatformLink (host-space href, frame-escaping navigation).
-const WIKI_PATH = "/present/github/immediately-run/docs/main";
+const WIKI_PATH = '/present/github/immediately-run/docs/main';
 
 function Footer() {
   return (
@@ -35,18 +35,10 @@ function Footer() {
             <div className="h">Build</div>
             <div className="links">
               <SiteLink to="/new">Make an app</SiteLink>
-              <a
-                href={GITHUB_APP_INSTALL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={GITHUB_APP_INSTALL_URL} target="_blank" rel="noopener noreferrer">
                 Install the GitHub App
               </a>
-              <a
-                href={SDK_REFERENCE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={SDK_REFERENCE_URL} target="_blank" rel="noopener noreferrer">
                 API reference (generated)
               </a>
               <a
@@ -62,11 +54,7 @@ function Footer() {
             <div className="h">Contributors</div>
             <div className="links">
               <PlatformLink path={WIKI_PATH}>Engineering wiki</PlatformLink>
-              <a
-                href="https://github.com/immediately-run"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://github.com/immediately-run" target="_blank" rel="noopener noreferrer">
                 GitHub org
               </a>
               <SiteLink to="/docs/agents/llms">The machine surface</SiteLink>
@@ -81,7 +69,7 @@ function Footer() {
           </div>
           {/* Quiet forkability: this very page is itself a forkable app.
               a platform route navigates the HOST document. */}
-          <PlatformLink className="foot-fork" path={editRoute("landing-page")}>
+          <PlatformLink className="foot-fork" path={editRoute('landing-page')}>
             view source · fork this page →
           </PlatformLink>
         </div>

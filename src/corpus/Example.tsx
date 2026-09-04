@@ -5,7 +5,7 @@
 // escapes the frame: inside the sandboxed iframe a root-relative href resolves against
 // `sandbox.<host>`, which serves no such page.
 
-import { PlatformLink } from "@immediately-run/sdk/platformLink";
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 
 export default function Example({
   name,

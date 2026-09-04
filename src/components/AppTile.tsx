@@ -1,8 +1,8 @@
-import type { AppRecord } from "../data/apps";
-import { presentRoute, editRoute } from "../lib/routes";
-import AppCard from "./AppCard";
-import { PlatformLink } from "@immediately-run/sdk/platformLink";
-import ProvenanceChip from "./ProvenanceChip";
+import type { AppRecord } from '../data/apps';
+import { presentRoute, editRoute } from '../lib/routes';
+import AppCard from './AppCard';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
+import ProvenanceChip from './ProvenanceChip';
 
 // The home page's app card: the shared AppCard skeleton in `/`'s class
 // vocabulary, with the chip and the two CTAs this context uses. Open and Fork
@@ -21,10 +21,7 @@ function AppTile({ app }: AppTileProps) {
       chip={<ProvenanceChip provenance={app.provenance} />}
       actions={
         <>
-          <PlatformLink
-            className="open"
-            path={presentRoute(app.repo, app.entry)}
-          >
+          <PlatformLink className="open" path={presentRoute(app.repo, app.entry)}>
             Open
           </PlatformLink>
           <PlatformLink className="fork" path={editRoute(app.repo, app.entry)}>
