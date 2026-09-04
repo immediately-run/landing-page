@@ -1,5 +1,5 @@
 import SiteLink from './SiteLink';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import { revealHeroOmnibox } from '../lib/omniboxFocus';
 import { GITHUB_APP_INSTALL_URL } from '../lib/urls';
 

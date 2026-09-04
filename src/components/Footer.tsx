@@ -1,7 +1,7 @@
 import { editRoute } from '../lib/routes';
 import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL } from '../lib/urls';
 import SiteLink from './SiteLink';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 
 // The footer (R3-513; FRONT_DOOR_IA §4.9): columns by AUDIENCE, not by section.
 // Product → readers; Build → creators; Contributors → the people inside the
@@ -9,7 +9,7 @@ import PlatformLink from './PlatformLink';
 // org link lives only here since the nav dropped it.
 
 // The wiki is the docs repo rendered by Grove — a platform route, so it goes
-// through PlatformLink (host-space href + target="_top").
+// through PlatformLink (host-space href, frame-escaping navigation).
 const WIKI_PATH = '/present/github/immediately-run/docs/main';
 
 function Footer() {
@@ -68,7 +68,7 @@ function Footer() {
             set in Gabarito &amp; Space Mono
           </div>
           {/* Quiet forkability: this very page is itself a forkable app.
-              `target="_top"` — a platform route navigates the HOST document. */}
+              a platform route navigates the HOST document. */}
           <PlatformLink className="foot-fork" path={editRoute('landing-page')}>
             view source · fork this page →
           </PlatformLink>

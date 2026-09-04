@@ -8,9 +8,9 @@ import type { AppRecord } from '../data/apps';
 // stylesheet's class vocabulary and in the chip and actions they hand in, so
 // neither one's appearance changes.
 //
-// `chip` and `actions` are slots rather than props on the record: /apps builds
-// its links with usePlatformHref and its own chip copy, while `/` uses
-// PlatformLink and ProvenanceChip. A card is a layout, not a link policy.
+// `chip` and `actions` are slots rather than props on the record: /apps spells
+// its own chip copy, while `/` uses ProvenanceChip; both render their links
+// through PlatformLink. A card is a layout, not a link policy.
 
 /** Which stylesheet's class vocabulary to render in: `/`'s App.css or /apps's apps.css. */
 export type AppCardVariant = 'home' | 'directory';

@@ -1,13 +1,13 @@
 import type { AppRecord } from '../data/apps';
 import { presentRoute, editRoute } from '../lib/routes';
 import AppCard from './AppCard';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import ProvenanceChip from './ProvenanceChip';
 
 // The home page's app card: the shared AppCard skeleton in `/`'s class
 // vocabulary, with the chip and the two CTAs this context uses. Open and Fork
 // are platform routes, so they go through PlatformLink: host-space href +
-// `target="_top"`. Fork lives HERE, on tiles — never in the omnibox panel.
+// frame-escaping navigation. Fork lives HERE, on tiles — never in the omnibox panel.
 
 interface AppTileProps {
   app: AppRecord;
