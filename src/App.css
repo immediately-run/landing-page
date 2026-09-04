@@ -92,6 +92,7 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
 .sec-head h2{font:800 clamp(30px,4.5vw,52px)/.95 var(--disp);letter-spacing:-.03em;color:var(--ink)}
 .sec-head .more{margin-left:auto;font:600 14.5px var(--sans);color:var(--ink-2);transition:color .14s}
 .sec-head .more:hover{color:var(--accent-3)}
+.run-cue{width:100%;max-width:72ch;font:400 13px/1.75 var(--mono);color:var(--ink-2)}
 
 .key{color:var(--ink);font-weight:600}
 

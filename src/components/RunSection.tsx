@@ -20,6 +20,10 @@ function RunSection() {
           keys. It gets exactly what you grant, when you grant it, and you can take that back. So
           clicking costs you nothing, whoever wrote the app.
         </p>
+        <p className="run-cue">
+          The pull-down tab means you are looking at an app someone published. Platform surfaces
+          carry the immediately.run name and open the platform menu.
+        </p>
       </div>
       <div className="show-grid">
         {RUN_APPS.map((app) => (
