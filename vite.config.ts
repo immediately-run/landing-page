@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import mdx from '@mdx-js/rollup'
 import remarkFrontmatter from 'remark-frontmatter'
@@ -28,4 +28,11 @@ export default defineConfig({
     { enforce: 'pre', ...mdx({ remarkPlugins: [remarkFrontmatter, remarkHeadingAnchors, remarkAdmonitions] }) },
     react(),
   ],
+  test: {
+    // The sdk's dist ships extensionless relative ESM imports (`./sandboxUtils`),
+    // which Vite's resolver accepts but Node's — used for externalized deps in
+    // vitest — rejects. Inlining the package routes it through Vite's resolver
+    // instead, in tests only; `vite build` was never affected.
+    server: { deps: { inline: ['@immediately-run/sdk'] } },
+  },
 })
