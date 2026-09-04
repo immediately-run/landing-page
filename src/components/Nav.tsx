@@ -4,7 +4,7 @@ import { useTheme } from '../hooks/useTheme';
 import type { Section } from '../hooks/useRoute';
 import logoMark from '../assets/logo-mark.png';
 import SiteLink from './SiteLink';
-import Omnibox from './Omnibox';
+import SiteOmnibox from './SiteOmnibox';
 import Door from './Door';
 
 // The nav (R3-513; FRONT_DOOR_IA §4.1): four items — Apps · Docs · Tutorials ·
@@ -61,7 +61,7 @@ function Nav({ active }: NavProps) {
             {/* R3-512: the omnibox in its `nav` variant. On `/` it renders as the
                 shortcut that focuses the hero omnibox; elsewhere it is the field. */}
             <span className="nav-omnibox desk-only">
-              <Omnibox variant="nav" heroShortcut={active === 'home'} />
+              <SiteOmnibox variant="nav" heroShortcut={active === 'home'} />
             </span>
             {/* Mobile search: opens the sheet, whose first row is the omnibox. */}
             <button
@@ -119,7 +119,7 @@ function Nav({ active }: NavProps) {
           </div>
           {/* The omnibox row comes FIRST in the sheet (§4.1). */}
           <div className="nav-sheet-omnibox">
-            <Omnibox variant="nav" heroShortcut={false} />
+            <SiteOmnibox variant="nav" heroShortcut={false} />
           </div>
           <div className="nav-sheet-links">
             {NAV_ITEMS.map((item) => (

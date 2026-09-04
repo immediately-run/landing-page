@@ -1,6 +1,6 @@
 import { useAuth } from '@immediately-run/sdk';
 import SiteLink from './SiteLink';
-import Omnibox from './Omnibox';
+import SiteOmnibox from './SiteOmnibox';
 import Door from './Door';
 
 // The hero (R3-514; FRONT_DOOR_IA §4.2) — the headline doubles as the omnibox
@@ -26,7 +26,7 @@ function Hero() {
             Nothing to install, no account to make, and an app reaches nothing of yours unless
             you hand it over.
           </p>
-          <Omnibox variant="hero" />
+          <SiteOmnibox variant="hero" />
           <div className="hero-doors">
             {status === 'signed-in' && (
               <Door className="btn-ghost hero-door" />

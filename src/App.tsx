@@ -20,7 +20,7 @@ import { useFragment, useRoute } from './hooks/useRoute';
 import { useFragmentScroll } from './hooks/useFragmentScroll';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-import { focusOmnibox } from './lib/omniboxFocus';
+import { focusOmnibox } from '@immediately-run/omnibox';
 import SectionErrorBoundary from './components/SectionErrorBoundary';
 import Home from './components/Home';
 import Apps from './sections/apps/Apps';
