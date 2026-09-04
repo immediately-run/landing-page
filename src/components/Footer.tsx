@@ -1,5 +1,10 @@
-import { editRoute } from '../lib/routes';
-import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL } from '../lib/urls';
+import { editRoute, WIKI_PRESENT_PATH } from '../lib/routes';
+import {
+  GITHUB_APP_INSTALL_URL,
+  GITHUB_ORG_URL,
+  NPM_SDK_URL,
+  SDK_REFERENCE_URL,
+} from '../lib/urls';
 import SiteLink from './SiteLink';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
 
@@ -7,10 +12,6 @@ import { PlatformLink } from '@immediately-run/sdk/platformLink';
 // Product → readers; Build → creators; Contributors → the people inside the
 // platform. The engineering wiki lives ONLY here (never on /docs); the GitHub
 // org link lives only here since the nav dropped it.
-
-// The wiki is the docs repo rendered by Grove — a platform route, so it goes
-// through PlatformLink (host-space href, frame-escaping navigation).
-const WIKI_PATH = '/present/github/immediately-run/docs/main';
 
 function Footer() {
   return (
@@ -41,11 +42,7 @@ function Footer() {
               <a href={SDK_REFERENCE_URL} target="_blank" rel="noopener noreferrer">
                 API reference (generated)
               </a>
-              <a
-                href="https://www.npmjs.com/package/@immediately-run/sdk"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={NPM_SDK_URL} target="_blank" rel="noopener noreferrer">
                 SDK on npm
               </a>
             </div>
@@ -53,8 +50,8 @@ function Footer() {
           <div className="foot-col">
             <div className="h">Contributors</div>
             <div className="links">
-              <PlatformLink path={WIKI_PATH}>Engineering wiki</PlatformLink>
-              <a href="https://github.com/immediately-run" target="_blank" rel="noopener noreferrer">
+              <PlatformLink path={WIKI_PRESENT_PATH}>Engineering wiki</PlatformLink>
+              <a href={GITHUB_ORG_URL} target="_blank" rel="noopener noreferrer">
                 GitHub org
               </a>
               <SiteLink to="/docs/agents/llms">The machine surface</SiteLink>

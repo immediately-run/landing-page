@@ -9,7 +9,8 @@ import SiteLink from '../../components/SiteLink';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import Omnibox from '../../components/Omnibox';
 import { TEMPLATES, type TemplateRecord } from '../../data/templates';
-import { GITHUB_APP_INSTALL_URL } from '../../lib/urls';
+import { GITHUB_APP_INSTALL_URL, githubGenerateUrl } from '../../lib/urls';
+import { examplePresentPath } from '../../lib/routes';
 
 /** The start button a record's `start` decides. `generate` links GitHub's
  *  template-generate flow (new tab); `unavailable` has NO button — the reason
@@ -20,7 +21,7 @@ function StartButton({ record }: { record: TemplateRecord }) {
     return (
       <a
         className="new-cta new-start"
-        href={`https://github.com/${record.repo}/generate`}
+        href={githubGenerateUrl(record.repo)}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -50,7 +51,7 @@ function TemplateCard({ record }: { record: TemplateRecord }) {
         ))}
       </ul>
       {record.example && (
-        <PlatformLink className="new-cta" path={`/present/github/immediately-run/${record.example}/main`}>
+        <PlatformLink className="new-cta" path={examplePresentPath(record.example)}>
           Try it live →
         </PlatformLink>
       )}

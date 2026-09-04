@@ -17,3 +17,15 @@ export const SDK_REFERENCE_URL = 'https://immediately-run.github.io/immediately-
 export function sdkReferenceUrl(file: string): string {
   return `${SDK_REFERENCE_URL}${file.replace(/^\/+/, '')}`;
 }
+
+/** The SDK's page on npm — the footer's "the SDK is a published package" link. */
+export const NPM_SDK_URL = 'https://www.npmjs.com/package/@immediately-run/sdk';
+
+/** The immediately-run org on GitHub — the footer's repository link. */
+export const GITHUB_ORG_URL = 'https://github.com/immediately-run';
+
+/** GitHub's template-generate flow for a `owner/repo` template. The /new page's
+ *  "start from this template" hand-off; R3-164 replaces it with the host's own flow. */
+export function githubGenerateUrl(repo: string): string {
+  return `https://github.com/${repo}/generate`;
+}
