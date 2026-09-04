@@ -6,7 +6,7 @@ import { APPS, type Provenance } from '../data/apps';
 import { CORPUS_INDEX } from '../data/corpusIndex';
 import ProvenanceChip from './ProvenanceChip';
 import SiteLink from './SiteLink';
-import { usePlatformHref } from '../hooks/useRoute';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import { focusHeroOmnibox, registerOmniboxFocus } from '../lib/omniboxFocus';
 import type { OmniboxVariant } from '../lib/omniboxFocus';
 
@@ -94,7 +94,6 @@ interface OmniboxProps {
 }
 
 function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
-  const platformHref = usePlatformHref();
   const isMobile = useMediaQuery('(max-width: 720px)');
   const [query, setQuery] = useState('');
   const [highlight, setHighlight] = useState(-1);
@@ -107,11 +106,11 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
 
   const parsed: Launch = useMemo(() => parseLaunch(query), [query]);
   const runnable = parsed.kind === 'location' || parsed.kind === 'platform-url';
-  const runHref =
+  const runPath =
     parsed.kind === 'location'
-      ? platformHref(parsed.presentPath)
+      ? parsed.presentPath
       : parsed.kind === 'platform-url'
-        ? platformHref(parsed.path)
+        ? parsed.path
         : undefined;
 
   const panelOpen = query.trim() !== '';
@@ -229,19 +228,18 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
     </span>
   );
 
-  const run = runnable ? (
-    <a
+  const run = runPath !== undefined ? (
+    <PlatformLink
       id={`${listId}-run`}
       className="omnibox-run"
-      href={runHref}
-      target="_top"
+      path={runPath}
       aria-label="Run"
     >
       <span className="omnibox-run-label">Run</span>
       <span className="omnibox-run-arrow" aria-hidden="true">
         →
       </span>
-    </a>
+    </PlatformLink>
   ) : (
     <button
       id={`${listId}-run`}
@@ -294,17 +292,16 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
             <>
               {locationRow && (
                 <div className="omnibox-group" role="group" aria-label="Run from source">
-                  <a
+                  <PlatformLink
                     id={`${listId}-opt-location`}
                     className="omnibox-option"
                     role="option"
                     aria-selected={highlight === 0}
-                    href={runHref}
-                    target="_top"
+                    path={locationRow.presentPath}
                   >
                     <span className="omnibox-option-name">{locationRow.display}</span>
                     <span className="omnibox-option-action">Run</span>
-                  </a>
+                  </PlatformLink>
                 </div>
               )}
               {appHits.length > 0 && (
@@ -312,20 +309,19 @@ function Omnibox({ variant, heroShortcut = false }: OmniboxProps) {
                   {appHits.map((hit) => {
                     const idx = options.findIndex((o) => o.id === `${listId}-opt-${hit.key}`);
                     return (
-                      <a
+                      <PlatformLink
                         key={hit.key}
                         id={`${listId}-opt-${hit.key}`}
                         className="omnibox-option"
                         role="option"
                         aria-selected={highlight === idx}
-                        href={platformHref(`/present/github/immediately-run/${hit.repo}/main/files/src/App.tsx`)}
-                        target="_top"
+                        path={`/present/github/immediately-run/${hit.repo}/main/files/src/App.tsx`}
                       >
                         <span className="omnibox-option-name">{hit.name}</span>
                         <span className="omnibox-option-cat">{hit.category}</span>
                         <span className="omnibox-option-blurb">{hit.blurb}</span>
                         <ProvenanceChip provenance={hit.provenance} />
-                      </a>
+                      </PlatformLink>
                     );
                   })}
                 </div>

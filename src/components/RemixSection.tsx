@@ -1,5 +1,5 @@
 import SiteLink from './SiteLink';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import { editRoute } from '../lib/routes';
 
 // The Remix section (R3-514; FRONT_DOOR_IA §4.5) — M3, the shortest section:

@@ -1,7 +1,7 @@
 import type { AppRecord } from '../data/apps';
 import { presentRoute, editRoute } from '../lib/routes';
 import AppCard from './AppCard';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import ProvenanceChip from './ProvenanceChip';
 
 // The home page's app card: the shared AppCard skeleton in `/`'s class

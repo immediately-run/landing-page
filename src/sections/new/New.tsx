@@ -6,7 +6,7 @@
 
 import './new.css';
 import SiteLink from '../../components/SiteLink';
-import PlatformLink from '../../components/PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import Omnibox from '../../components/Omnibox';
 import { TEMPLATES, type TemplateRecord } from '../../data/templates';
 import { GITHUB_APP_INSTALL_URL } from '../../lib/urls';

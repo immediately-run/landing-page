@@ -5,7 +5,7 @@
 // sandboxed iframe a root-relative href resolves against `sandbox.<host>`, which serves no
 // such page. See `platformHref`.
 
-import { usePlatformHref } from '../hooks/useRoute';
+import { usePlatformHref } from '@immediately-run/sdk/platformLink';
 
 export default function Example({
   name,

@@ -1,5 +1,5 @@
 import { useAuth } from '@immediately-run/sdk';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 
 // The door (R3-513; FRONT_DOOR_IA §6) — ONE element in the same position
 // everywhere it appears: nav right cluster, mobile top bar, mobile sheet,

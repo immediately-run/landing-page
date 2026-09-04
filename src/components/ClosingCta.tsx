@@ -1,5 +1,5 @@
 import SiteLink from './SiteLink';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import Door from './Door';
 import { revealHeroOmnibox } from '../lib/omniboxFocus';
 import { editRoute } from '../lib/routes';

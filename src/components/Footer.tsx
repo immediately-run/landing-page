@@ -1,7 +1,7 @@
 import { editRoute } from '../lib/routes';
 import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL } from '../lib/urls';
 import SiteLink from './SiteLink';
-import PlatformLink from './PlatformLink';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
 
 // The footer (R3-513; FRONT_DOOR_IA §4.9): columns by AUDIENCE, not by section.
 // Product → readers; Build → creators; Contributors → the people inside the

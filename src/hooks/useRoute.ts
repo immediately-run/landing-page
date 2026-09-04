@@ -20,7 +20,7 @@ import { appPathFromSandboxPath, legacyHashPath, parseRoute, redirectForPath } f
 import type { Route } from '../lib/routeSpace';
 // Re-exported so the many components that only need the section type keep one import site.
 export type { Route, Section } from '../lib/routeSpace';
-import { hasHost, platformHref, redirectTo } from '../lib/navigation';
+import { hasHost, redirectTo } from '../lib/navigation';
 import type { HostLocation } from '../lib/navigation';
 
 const subscribeToHistory = (onChange: () => void): (() => void) => {
@@ -98,11 +98,4 @@ export function useRoute(): Route {
   }, [route.section]);
 
   return route;
-}
-
-/** Build a PLATFORM-space href (`/present/…`, `/edit/github/…`) in the host's URL space.
- *  See `platformHref` for why these cannot stay root-relative on the platform. */
-export function usePlatformHref(): (path: string) => string {
-  const loc = useHostLocation();
-  return (path: string) => platformHref(loc, path);
 }
