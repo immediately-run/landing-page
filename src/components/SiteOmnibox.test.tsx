@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { cleanup, createEvent, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TinkerableContext } from '@immediately-run/sdk/TinkerableContext';
 import { CORPUS_INDEX } from '../data/corpusIndex';
 import SiteOmnibox from './SiteOmnibox';
@@ -68,5 +68,27 @@ describe('SiteOmnibox against the host location', () => {
     expect(href.replace(/^(https:\/\/immediately.run)\/+/, '$1/')).toBe(`${outerHref}${expectedTo}`);
     // And it is the site's in-app link, not a frame-navigating plain anchor.
     expect(docRow!.getAttribute('target')).toBeNull();
+  });
+
+  it('an unmodified left click on a doc row is intercepted and routed in-app', () => {
+    // The assertion that discriminates the renderDoc seam: SiteLink prevents the
+    // default and asks the host to push the route; the package's fallback anchor
+    // would let the click navigate the sandboxed frame (defaultPrevented false).
+    // navigateTo itself throws without a host transport — after preventDefault,
+    // so the assertion below is already decided; swallow its report.
+    const entry = CORPUS_INDEX.find(
+      (e) => String(e.frontmatter.title ?? '').trim().split(/\s+/)[0].length >= 4,
+    );
+    renderSiteOmnibox();
+    type(String(entry!.frontmatter.title).split(/\s+/)[0].toLowerCase());
+    const docRow = screen
+      .getAllByRole('option')
+      .find((el) => el.textContent?.includes(String(entry!.frontmatter.title)));
+    expect(docRow).toBeTruthy();
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const evt = createEvent.click(docRow!);
+    fireEvent(docRow!, evt);
+    err.mockRestore();
+    expect(evt.defaultPrevented).toBe(true);
   });
 });
