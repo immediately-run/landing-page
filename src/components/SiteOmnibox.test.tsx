@@ -35,6 +35,11 @@ const type = (query: string) => {
   fireEvent.change(screen.getByRole('combobox'), { target: { value: query } });
 };
 
+// What makes a corpus entry findable through the omnibox: a title whose first
+// word is long enough to be a real query. One definition, two cases.
+const entryWithLongFirstWord = () =>
+  CORPUS_INDEX.find((e) => String(e.frontmatter.title ?? '').trim().split(/\s+/)[0].length >= 4);
+
 describe('SiteOmnibox against the host location', () => {
   it("typing an app name resolves the app row through the site's own route builder", () => {
     renderSiteOmnibox();
@@ -49,9 +54,7 @@ describe('SiteOmnibox against the host location', () => {
   });
 
   it('doc rows render as in-app links whose href is real and absolute on the host origin', () => {
-    const entry = CORPUS_INDEX.find(
-      (e) => String(e.frontmatter.title ?? '').trim().split(/\s+/)[0].length >= 4,
-    );
+    const entry = entryWithLongFirstWord();
     expect(entry).toBeTruthy();
     renderSiteOmnibox();
     type(String(entry!.frontmatter.title).split(/\s+/)[0].toLowerCase());
@@ -76,9 +79,7 @@ describe('SiteOmnibox against the host location', () => {
     // would let the click navigate the sandboxed frame (defaultPrevented false).
     // Install the §4 runtime-discovery transport first, so the routed send has a
     // receiver and navigateTo completes instead of surfacing an unhandled throw.
-    const entry = CORPUS_INDEX.find(
-      (e) => String(e.frontmatter.title ?? '').trim().split(/\s+/)[0].length >= 4,
-    );
+    const entry = entryWithLongFirstWord();
     renderSiteOmnibox();
     type(String(entry!.frontmatter.title).split(/\s+/)[0].toLowerCase());
     const docRow = screen
