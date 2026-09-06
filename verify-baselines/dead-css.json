@@ -1,7 +1,4 @@
 [
-  "src/components/omnibox.css:.omnibox-outer--hero",
-  "src/components/omnibox.css:.omnibox-outer--nav",
-  "src/components/omnibox.css:.omnibox-outer--new",
   "src/sections/changelog/changelog.css:.cl-badge--feat",
   "src/sections/changelog/changelog.css:.cl-badge--note",
   "src/sections/changelog/changelog.css:.cl-badge--rel",
