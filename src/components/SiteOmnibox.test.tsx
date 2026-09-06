@@ -74,8 +74,8 @@ describe('SiteOmnibox against the host location', () => {
     // The assertion that discriminates the renderDoc seam: SiteLink prevents the
     // default and asks the host to push the route; the package's fallback anchor
     // would let the click navigate the sandboxed frame (defaultPrevented false).
-    // navigateTo itself throws without a host transport — after preventDefault,
-    // so the assertion below is already decided; swallow its report.
+    // Install the §4 runtime-discovery transport first, so the routed send has a
+    // receiver and navigateTo completes instead of surfacing an unhandled throw.
     const entry = CORPUS_INDEX.find(
       (e) => String(e.frontmatter.title ?? '').trim().split(/\s+/)[0].length >= 4,
     );
@@ -85,10 +85,15 @@ describe('SiteOmnibox against the host location', () => {
       .getAllByRole('option')
       .find((el) => el.textContent?.includes(String(entry!.frontmatter.title)));
     expect(docRow).toBeTruthy();
-    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const sendMessage = vi.fn();
+    (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__ = {
+      transport: { sendMessage, onMessage: () => () => {} },
+    };
     const evt = createEvent.click(docRow!);
     fireEvent(docRow!, evt);
-    err.mockRestore();
     expect(evt.defaultPrevented).toBe(true);
+    // The interception routed the click through the host, not a frame navigation.
+    expect(sendMessage).toHaveBeenCalled();
+    delete (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__;
   });
 });
