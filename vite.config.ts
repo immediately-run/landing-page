@@ -29,10 +29,10 @@ export default defineConfig({
     react(),
   ],
   test: {
-    // The sdk's dist ships extensionless relative ESM imports (`./sandboxUtils`),
-    // which Vite's resolver accepts but Node's — used for externalized deps in
-    // vitest — rejects. Inlining the package routes it through Vite's resolver
-    // instead, in tests only; `vite build` was never affected.
-    server: { deps: { inline: ['@immediately-run/sdk'] } },
+    // The @immediately-run/* dists ship extensionless relative ESM imports
+    // (`./sandboxUtils`), which Vite's resolver accepts but Node's — used for
+    // externalized deps in vitest — rejects. Inlining routes them through Vite's
+    // resolver instead, in tests only; `vite build` was never affected.
+    server: { deps: { inline: ['@immediately-run/sdk', '@immediately-run/omnibox'] } },
   },
 })

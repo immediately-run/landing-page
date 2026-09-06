@@ -7,7 +7,7 @@
 import './new.css';
 import SiteLink from '../../components/SiteLink';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
-import Omnibox from '../../components/Omnibox';
+import SiteOmnibox from '../../components/SiteOmnibox';
 import { TEMPLATES, type TemplateRecord } from '../../data/templates';
 import { GITHUB_APP_INSTALL_URL, githubGenerateUrl } from '../../lib/urls';
 import { examplePresentPath } from '../../lib/routes';
@@ -102,7 +102,7 @@ export default function New() {
           GitHub opens in a new tab and creates your repo. Come back and paste it here to run
           it. Push to main and it updates on the next launch.
         </p>
-        <Omnibox variant="new" />
+        <SiteOmnibox variant="new" />
       </section>
 
       <p className="publish-closing">

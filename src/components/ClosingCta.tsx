@@ -1,7 +1,7 @@
 import SiteLink from './SiteLink';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import Door from './Door';
-import { revealHeroOmnibox } from '../lib/omniboxFocus';
+import { revealHeroOmnibox } from '@immediately-run/omnibox';
 import { editRoute } from '../lib/routes';
 
 // The closing band (R3-514; FRONT_DOOR_IA §4.8): the headline and one row of
