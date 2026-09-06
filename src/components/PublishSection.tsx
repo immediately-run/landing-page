@@ -2,6 +2,7 @@ import SiteLink from './SiteLink';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import { revealHeroOmnibox } from '../lib/omniboxFocus';
 import { GITHUB_APP_INSTALL_URL } from '../lib/urls';
+import { examplePresentPath } from '../lib/routes';
 
 // The Publish section (R3-514; FRONT_DOOR_IA §4.4) — M2, the author message,
 // second in weight. The lede is verbatim from the brief because it carries the
@@ -10,7 +11,7 @@ import { GITHUB_APP_INSTALL_URL } from '../lib/urls';
 // mono GITHUB APP label. The one agent-mentioning sentence on `/` is this
 // section's closing line, and it points at a tutorial, not at an agent.
 
-const GROVE_EXAMPLE = '/present/github/immediately-run/grove/main';
+const GROVE_EXAMPLE = examplePresentPath('grove');
 
 function PublishSection() {
   return (

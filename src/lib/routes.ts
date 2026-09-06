@@ -9,6 +9,20 @@ export function presentRoute(repo: string, entry = 'src/App.tsx', branch = 'main
   return `/present/github/${OWNER}/${repo}/${branch}/files/${entry}`;
 }
 
+/** An example app under the org, opened in the runner — the /new cards' "Try it
+ *  live" and the Publish section's demo link. No `files/` segment: the entry
+ *  resolves from the app's package.json. */
+export function examplePresentPath(example: string, branch = 'main'): string {
+  return `/present/github/${OWNER}/${example}/${branch}`;
+}
+
+/** The docs wiki running as an app — the footer's wiki link. */
+export const WIKI_PRESENT_PATH = `/present/github/${OWNER}/docs/main`;
+
+/** The signed-in home inside the frame — the door hands the visitor here in
+ *  both auth states; the host draws its own sign-in posture when signed out. */
+export const HOME_PATH = '/home';
+
 /** "Fork / Tinker" — opens the app in the editor (copy-on-write). */
 export function editRoute(repo: string, entry = 'src/App.tsx', branch = 'main'): string {
   return `/edit/github/${OWNER}/${repo}/${branch}/files/${entry}`;

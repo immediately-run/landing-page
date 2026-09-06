@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { GITHUB_APP_INSTALL_URL, SDK_REFERENCE_URL, sdkReferenceUrl } from './urls';
+import {
+  GITHUB_APP_INSTALL_URL,
+  GITHUB_ORG_URL,
+  NPM_SDK_URL,
+  SDK_REFERENCE_URL,
+  githubGenerateUrl,
+  sdkReferenceUrl,
+} from './urls';
 
 describe('external URLs', () => {
   it('keeps the install flow on github.com/apps', () => {
@@ -20,5 +27,13 @@ describe('external URLs', () => {
 
   it('tolerates a leading slash on the file, rather than emitting a double slash', () => {
     expect(sdkReferenceUrl('/llms.txt')).toBe(sdkReferenceUrl('llms.txt'));
+  });
+
+  it('the footer links the npm package and the org; /new links the generate flow', () => {
+    expect(NPM_SDK_URL).toBe('https://www.npmjs.com/package/@immediately-run/sdk');
+    expect(GITHUB_ORG_URL).toBe('https://github.com/immediately-run');
+    expect(githubGenerateUrl('immediately-run/blank')).toBe(
+      'https://github.com/immediately-run/blank/generate',
+    );
   });
 });
