@@ -12,9 +12,12 @@ import type { AppHit, OmniboxHitSources } from '@immediately-run/omnibox';
 import { APPS } from '../data/apps';
 import { CORPUS_INDEX } from '../data/corpusIndex';
 import { hrefFor } from './navigation';
+import { presentRoute } from './routes';
 import { useHostLocation } from '../hooks/useRoute';
 
-/** The directory's app records as raw candidates — the package scores them. */
+/** The directory's app records as raw candidates — the package scores them. The
+ *  platform path comes from THIS repo's route builder (`presentRoute`), so the
+ *  `/present/…` spelling keeps its one home. */
 export function appHits(): AppHit[] {
   return APPS.map((a) => ({
     key: a.repo,
@@ -22,6 +25,7 @@ export function appHits(): AppHit[] {
     category: a.categoryLabel,
     blurb: a.blurb,
     repo: a.repo,
+    path: presentRoute(a.repo),
     provenance: a.provenance,
   }));
 }
@@ -62,6 +66,6 @@ export function useOmniboxHits(): OmniboxHitSources {
   return {
     apps: appHits,
     docs: (query) =>
-      corpusHits(query).map(({ key, title, lead, to }) => ({ key, title, lead, href: hrefFor(loc, to) })),
+      corpusHits(query).map(({ key, title, lead, to }) => ({ key, title, lead, href: hrefFor(loc, to), to })),
   };
 }
