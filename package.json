@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@immediately-run/mdx-plugins": "^0.3.0",
-    "@immediately-run/omnibox": "0.3.0",
     "@immediately-run/sdk": "0.60.0",
     "lucide-react": "^1.39.0",
     "react": "^19.2.5",
@@ -55,5 +54,11 @@
       "tutorials"
     ],
     "render": "app"
+  },
+  "knip": {
+    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "ignore": [
+      "src/vendor/**"
+    ]
   }
 }
