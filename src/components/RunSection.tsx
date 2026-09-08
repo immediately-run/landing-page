@@ -13,8 +13,10 @@ function RunSection() {
   return (
     <section className="section" aria-labelledby="run">
       <div className="sec-head">
-        <span className="tag">/RUN</span>
-        <h2 id="run">Nothing to install. Nothing to trust first.</h2>
+        <div className="sec-head-row">
+          <span className="tag">/RUN</span>
+          <h2 id="run">Nothing to install. Nothing to trust first.</h2>
+        </div>
         <p className="lede">
           Every app runs in a sandboxed frame that starts with nothing: no files, no network, no
           keys. It gets exactly what you grant, when you grant it, and you can take that back. So
@@ -32,17 +34,17 @@ function RunSection() {
       </div>
       <div className="cap-grid">
         <div className="cap">
-          <div className="k">files</div>
+          <div className="tag tag--label">files</div>
           <div className="t">Mount, don't roam.</div>
           <p>An app sees only the folder you mount — never the rest of your disk.</p>
         </div>
         <div className="cap">
-          <div className="k">network</div>
+          <div className="tag tag--label">network</div>
           <div className="t">Ask before reaching out.</div>
           <p>Every fetch to a new origin is a capability you consent to, once.</p>
         </div>
         <div className="cap">
-          <div className="k">keys</div>
+          <div className="tag tag--label">keys</div>
           <div className="t">Use a key, never read it.</div>
           <p>
             An app can <b className="key">use</b> your API key to make a call — it can never see

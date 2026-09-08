@@ -157,7 +157,7 @@ export default function Apps() {
 
   return (
     <div className="apps-root">
-      <span className="apps-tag">/APPS</span>
+      <span className="tag">/APPS</span>
       <h1 className="apps-title">Apps built on immediately.run.</h1>
       <p className="apps-deck">
         Browse by category, author, or what an app is allowed to touch.

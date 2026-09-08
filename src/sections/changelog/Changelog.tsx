@@ -23,7 +23,7 @@ export default function Changelog() {
 
   return (
     <section className="cl-section" aria-labelledby="cl-title">
-      <span className="cl-tag">/NEWS</span>
+      <span className="tag">/NEWS</span>
       <h1 id="cl-title" className="cl-title">
         What&apos;s new.
       </h1>

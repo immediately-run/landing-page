@@ -17,8 +17,10 @@ function PublishSection() {
   return (
     <section className="section" aria-labelledby="publish">
       <div className="sec-head">
-        <span className="tag">/PUBLISH</span>
-        <h2 id="publish">Publish by pushing. Keep the keys.</h2>
+        <div className="sec-head-row">
+          <span className="tag">/PUBLISH</span>
+          <h2 id="publish">Publish by pushing. Keep the keys.</h2>
+        </div>
         <p className="lede">
           An app is a React and TypeScript repo. Push it and it is live. There is no build to
           host and no server to run, so publishing is free. Who can run it is who can read the
@@ -56,7 +58,7 @@ function PublishSection() {
       </div>
 
       <div className="publish-install">
-        <span className="publish-install-label">GITHUB APP</span>
+        <span className="tag tag--label">GITHUB APP</span>
         <p className="publish-install-copy">
           Install the immediately.run GitHub App to create and publish. Running public apps
           needs no install.

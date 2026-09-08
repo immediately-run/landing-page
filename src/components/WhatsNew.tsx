@@ -15,8 +15,8 @@ function WhatsNew() {
   return (
     <section className="section" aria-label="What's new">
       <SiteLink className="news-row" to="/changelog">
-        <span className="ntag">/NEWS</span>
-        <span className={`badge ${latest.kind}`}>{BADGE_LABEL[latest.kind]}</span>
+        <span className="tag">/NEWS</span>
+        <span className="badge">{BADGE_LABEL[latest.kind]}</span>
         <span className="news-msg">{latest.message}</span>
         <span className="news-date">{latest.date} · full changelog →</span>
       </SiteLink>
