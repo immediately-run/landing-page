@@ -34,7 +34,7 @@ function TutorialIndex() {
   return (
     <div className="tut tut-fade">
       <header className="tut-head">
-        <span className="tag tut-tag">/TUTORIALS</span>
+        <span className="tag">/TUTORIALS</span>
         <h1 className="tut-h1">Do it once, then it's yours.</h1>
         <p className="tut-deck">Three workflows, start to finish. Read a step, then open it live.</p>
       </header>

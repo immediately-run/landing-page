@@ -13,11 +13,13 @@ function DirectoryTeaser() {
   return (
     <section className="section" aria-labelledby="teaser">
       <div className="sec-head">
-        <span className="tag">/APPS</span>
-        <h2 id="teaser">Built on immediately.run.</h2>
-        <SiteLink className="more" to="/apps">
-          See all {APPS.length} apps →
-        </SiteLink>
+        <div className="sec-head-row">
+          <span className="tag">/APPS</span>
+          <h2 id="teaser">Built on immediately.run.</h2>
+          <SiteLink className="more" to="/apps">
+            See all {APPS.length} apps →
+          </SiteLink>
+        </div>
       </div>
       <div className="show-grid">
         {TEASER.map((app) => (

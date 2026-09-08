@@ -63,7 +63,7 @@ function TemplateCard({ record }: { record: TemplateRecord }) {
 export default function New() {
   return (
     <div className="new-root">
-      <span className="apps-tag">/NEW</span>
+      <span className="tag">/NEW</span>
       <h1 className="apps-title">Make an app.</h1>
       <p className="apps-deck">
         Three things and you are live: a GitHub account with the immediately.run app installed,

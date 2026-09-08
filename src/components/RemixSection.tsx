@@ -12,8 +12,10 @@ function RemixSection() {
   return (
     <section className="section" aria-labelledby="remix">
       <div className="sec-head">
-        <span className="tag">/REMIX</span>
-        <h2 id="remix">Every app is yours to fork.</h2>
+        <div className="sec-head-row">
+          <span className="tag">/REMIX</span>
+          <h2 id="remix">Every app is yours to fork.</h2>
+        </div>
         <p className="lede">
           Open the source of anything you run, including this page. Change it in the editor;
           edits stay in your copy until you push them back as a commit or a pull request. A
