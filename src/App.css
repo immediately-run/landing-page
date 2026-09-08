@@ -4,9 +4,9 @@
    responsive. The home sections, in order: hero · run · publish · remix ·
    directory teaser · what's new · closing CTA · footer. */
 
-/* The measure and rhythm tokens for the quiet column (R3-532). One measure, one
-   gutter, one section gap — so the page width and rhythm can never be spelled a
-   second time. The gap is generous on desktop and today's value on mobile. */
+/* The section rhythm token for the quiet column (R3-532): generous on desktop,
+   today's spacing on mobile. The measure and gutter tokens live in index.css,
+   beside the radii. */
 :root {
   --section-gap: 132px;
 }
@@ -44,7 +44,7 @@
   padding:14px 24px;border-radius:var(--r-pill);text-decoration:none;transition:border-color .14s}
 .btn-ghost:hover{border-color:var(--accent-2)}
 
-/* mono "/slug" tag — a left-aligned micro-label, no pill */
+/* mono "/slug" tag */
 .tag{display:inline-block;font:400 13px var(--mono);letter-spacing:.04em;
   background:color-mix(in srgb,var(--accent-2) 16%,transparent);color:var(--accent-3);
   border:1px solid var(--line-2);padding:5px 12px;border-radius:var(--r-pill)}
@@ -100,10 +100,10 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
 
 /* ============================ HERO ======================================== */
 .hero{padding:120px 0 96px}
-.hero-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero-inner{display:flex;flex-direction:column;align-items:center}
 .eyebrow{display:inline-block;font:400 11px var(--mono);letter-spacing:.14em;color:var(--ink-3)}
-.hero h1{font:800 clamp(54px,9vw,124px)/.85 var(--disp);letter-spacing:-.04em;margin:20px 0 0}
-.deck{font:500 clamp(18px,2vw,24px)/1.34 var(--sans);color:var(--ink);max-width:32ch;margin:24px 0 0}
+.hero h1{font:800 clamp(54px,9vw,124px)/.85 var(--disp);letter-spacing:-.04em;margin:20px 0 0;text-align:center}
+.deck{font:500 clamp(18px,2vw,24px)/1.34 var(--sans);color:var(--ink);max-width:32ch;margin:24px 0 0;text-align:center}
 .hero-doors{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;justify-content:center}
 .hero-door{min-height:44px}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
@@ -136,6 +136,8 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
 .publish-install-copy{flex:1 1 320px;margin:0;color:var(--ink-2);font-size:14.5px}
 .publish-closing{margin-top:18px;color:var(--ink-2);font-size:14.5px}
 .publish-closing a{color:var(--ink)}
+
+/* remix still (Remix section) */
 .remix-still{max-width:460px;margin-top:20px}
 .remix-still svg{width:100%;height:auto;display:block}
 
@@ -199,7 +201,7 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
 
 /* ============================ RESPONSIVE ================================== */
 @media(max-width:900px){
-  :root{--section-gap:64px}
+  :root{--section-gap:64px;--gutter:32px}
   .desk-only{display:none!important}
   .nav-links{display:none}
   .nav-omnibox,.nav-make{display:none}
