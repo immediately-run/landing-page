@@ -28,6 +28,9 @@
   --mono:"Space Mono",ui-monospace,monospace;
   /* radii */
   --r-xs:5px;--r-sm:6px;--r-md:12px;--r-lg:16px;--r-xl:18px;--r-pill:30px;
+  /* layout measure + gutter (R3-532, the quiet column — one measure everywhere) */
+  --measure:1004px;
+  --gutter:88px;
   /* elevation */
   --shadow-card:6px 6px 0 var(--accent-2);   /* hard offset on tile hover */
   --shadow-pop:0 18px 50px rgba(0,0,0,.5);

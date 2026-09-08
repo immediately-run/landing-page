@@ -17,38 +17,37 @@ function Hero() {
   const { status } = useAuth();
   return (
     <header className="hero">
-      <div className="hero-grid">
-        <div className="hero-copy">
-          <span className="eyebrow">/RUN · FIND · MAKE</span>
-          <h1 className="grad-text">Paste a repo. Run the app.</h1>
-          <p className="deck">
-            immediately.run launches applications straight from their source, in your browser.
-            Nothing to install, no account to make, and an app reaches nothing of yours unless
-            you hand it over.
-          </p>
-          <SiteOmnibox variant="hero" />
-          <div className="hero-doors">
-            {status === 'signed-in' && (
-              <Door className="btn-ghost hero-door" />
-            )}
-            <SiteLink className="btn-ghost hero-door" to="/apps">
-              Browse apps →
-            </SiteLink>
-            <SiteLink className="btn-ghost hero-door" to="/new">
-              Make an app →
-            </SiteLink>
-          </div>
-          <div className="proof">
-            <span>0 installs</span>
-            <span aria-hidden="true">·</span>
-            <span>runs in your browser</span>
-            <span aria-hidden="true">·</span>
-            <span>sandboxed by default</span>
-          </div>
+      <div className="hero-inner">
+        <span className="eyebrow">/RUN · FIND · MAKE</span>
+        <h1 className="grad-text">Paste a repo. Run the app.</h1>
+        <p className="deck">
+          immediately.run launches applications straight from their source, in your browser.
+          Nothing to install, no account to make, and an app reaches nothing of yours unless
+          you hand it over.
+        </p>
+        <SiteOmnibox variant="hero" />
+        <div className="hero-doors">
+          {status === 'signed-in' && (
+            <Door className="btn-ghost hero-door" />
+          )}
+          <SiteLink className="btn-ghost hero-door" to="/apps">
+            Browse apps →
+          </SiteLink>
+          <SiteLink className="btn-ghost hero-door" to="/new">
+            Make an app →
+          </SiteLink>
+        </div>
+        <div className="proof">
+          <span>0 installs</span>
+          <span aria-hidden="true">·</span>
+          <span>runs in your browser</span>
+          <span aria-hidden="true">·</span>
+          <span>sandboxed by default</span>
         </div>
 
         {/* A still of the first Run tile's app in present mode — decoration, not
-            a control; nothing in it is live or interactive. */}
+            a control; nothing in it is live or interactive. It centres below the
+            proof line, not in a right column (R3-532). */}
         <div className="hero-still" aria-hidden="true">
           <svg viewBox="0 0 320 260" preserveAspectRatio="xMidYMid meet" role="presentation">
             <rect x="8" y="8" width="304" height="244" rx="10" fill="var(--panel)" stroke="var(--line-2)" />
