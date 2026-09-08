@@ -360,9 +360,10 @@ export function appsByRepo(repos: string[]): AppRecord[] {
   });
 }
 
-// The two curated selections on `/`, kept beside the dataset they index into so a
-// test can resolve them against the real records. They are deliberately DISJOINT:
-// the Run section proves the sandbox with four Open buttons, and the directory
-// teaser is the shop window for four different apps.
-export const RUN_TILE_REPOS = ['whiteboard', 'kanban-board', 'sqlite-studio', 'chess'];
-export const TEASER_REPOS = ['markdown-notebook', 'todo', 'photo-album', 'grove'];
+// The one curated selection on `/`, kept beside the dataset it indexes into so a
+// test can resolve it against the real records. There used to be two, deliberately
+// disjoint, because the Run section proved the sandbox with four Open buttons while
+// the teaser was a shop window for four others. The 1a redesign leaves one shelf, so
+// there is one selection and nothing for it to be disjoint from — three apps that
+// each answer "what is this for?" differently: a canvas, a database, a wiki.
+export const TEASER_REPOS = ['whiteboard', 'sqlite-studio', 'grove'];

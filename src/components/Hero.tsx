@@ -1,69 +1,41 @@
-import { useAuth } from '@immediately-run/sdk';
-import SiteLink from './SiteLink';
+import { APPS } from '../data/apps';
 import SiteOmnibox from './SiteOmnibox';
-import Door from './Door';
 
-// The hero (R3-514; FRONT_DOOR_IA §4.2) — the headline doubles as the omnibox
-// instruction; one deck for every breakpoint; the door row under the omnibox;
-// the proof line carries only verified facts. Desktop gets a STILL of the
-// first Run tile's app (the whiteboard) in present mode, aria-hidden —
-// deliberately not a live iframe, which would render the host inside its own
-// sandboxed app frame. The marquee and the fake browser-chrome preview are
-// gone.
+// The hero (FRONT_DOOR_IA §4.2, restyled to the 1a quiet column): eyebrow,
+// headline, one deck, the omnibox, the proof line. Centred at every width.
+//
+// The door row and the desktop still are gone. The doors duplicated navigation
+// the nav already carries at every scroll position, and the still was decoration
+// under the one control the section exists to deliver you to — both were height
+// between the headline and the omnibox, which is the only thing here that acts.
+//
+// The app count is COMPUTED, never typed: a hero that claims a number the
+// directory disagrees with is worse than a hero with no number.
 
 function Hero() {
-  // The door row prepends Home only when signed in; the gate is
-  // `status === 'signed-in'`, never `user` (§2/§6).
-  const { status } = useAuth();
   return (
     <header className="hero">
       <div className="hero-inner">
-        <span className="eyebrow">/RUN · FIND · MAKE</span>
-        <h1 className="grad-text">Paste a repo. Run the app.</h1>
+        <span className="eyebrow">/RUN · FORK · PUSH</span>
+        {/* The break is deliberate: one sentence per line. Left to wrap, the
+            measure splits it at "Run", which reads as a line that starts with a
+            verb belonging to the line above. */}
+        <h1 className="grad-text">
+          Paste a repo.
+          <br />
+          Run the app.
+        </h1>
         <p className="deck">
-          immediately.run launches applications straight from their source, in your browser.
-          Nothing to install, no account to make, and an app reaches nothing of yours unless
-          you hand it over.
+          React and TypeScript, straight from the source, in your browser. No install, no
+          deploy, no account.
         </p>
         <SiteOmnibox variant="hero" />
-        <div className="hero-doors">
-          {status === 'signed-in' && (
-            <Door className="btn-ghost hero-door" />
-          )}
-          <SiteLink className="btn-ghost hero-door" to="/apps">
-            Browse apps →
-          </SiteLink>
-          <SiteLink className="btn-ghost hero-door" to="/new">
-            Make an app →
-          </SiteLink>
-        </div>
         <div className="proof">
           <span>0 installs</span>
           <span aria-hidden="true">·</span>
-          <span>runs in your browser</span>
-          <span aria-hidden="true">·</span>
           <span>sandboxed by default</span>
-        </div>
-
-        {/* A still of the first Run tile's app in present mode — decoration, not
-            a control; nothing in it is live or interactive. It centres below the
-            proof line, not in a right column (R3-532). */}
-        <div className="hero-still" aria-hidden="true">
-          <svg viewBox="0 0 320 260" preserveAspectRatio="xMidYMid meet" role="presentation">
-            <rect x="8" y="8" width="304" height="244" rx="10" fill="var(--panel)" stroke="var(--line-2)" />
-            <path
-              d="M60 150 C110 90, 170 190, 250 100"
-              fill="none"
-              stroke="var(--accent-2)"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <circle cx="60" cy="150" r="6" fill="var(--accent)" />
-            <circle cx="250" cy="100" r="6" fill="var(--accent-3)" />
-            <text x="24" y="232" fontFamily="var(--mono)" fontSize="12" fill="var(--ink-3)">
-              whiteboard · /present
-            </text>
-          </svg>
+          <span aria-hidden="true">·</span>
+          <span>{APPS.length} apps to try</span>
         </div>
       </div>
     </header>
