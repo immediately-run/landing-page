@@ -1,6 +1,6 @@
 import SiteLink from './SiteLink';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
-import { revealHeroOmnibox } from '@immediately-run/omnibox';
+import { revealHeroOmnibox } from '../vendor/omnibox';
 import { GITHUB_APP_INSTALL_URL } from '../lib/urls';
 import { examplePresentPath } from '../lib/routes';
 
