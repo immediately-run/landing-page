@@ -1,4 +1,4 @@
-# `src/vendor/omnibox` — a TEMPORARY copy of `@immediately-run/omnibox@0.3.0`
+# `src/vendor/omnibox` — a TEMPORARY copy of `@immediately-run/omnibox@0.4.0`
 
 **Delete this directory the moment the package resolves again.** It exists to end a
 production outage, not to un-do R3-530.
@@ -24,10 +24,22 @@ copy removes the dependency from the critical path entirely.
 
 ## What it is
 
-`src/` of `@immediately-run/omnibox@0.3.0`, **verbatim** — deliberately not adapted, not
+`src/` of `@immediately-run/omnibox`, **verbatim** — deliberately not adapted, not
 tidied, not merged into `src/components/`. Byte-identical to the package makes the
 un-vendoring a `git rm -r` plus reverting one commit, and makes "has it drifted?"
 answerable with `diff`.
+
+**Tracking `0.4.0`, not `0.3.0` (2026-09-09, R3-570).** Two changes landed here and
+upstream as the same edit, in the same shape, so `diff -rq omnibox/src
+landing-page/src/vendor/omnibox` reports only the upstream test files and this README:
+
+- the accessibility fix for the unnamed submit button (R3-570 — the reason for the bump);
+- the stylesheet-injector's warning one-shot, which this copy had carried alone since
+  `e95c692` and which upstream lacked. Un-vendoring before that went upstream would have
+  reverted it, which is exactly the drift the byte-identity rule exists to catch — the
+  rule is being honoured here, not excepted.
+
+Un-vendor against **0.4.0 or later**; against 0.3.x you would reintroduce both.
 
 Its only external needs are `react` and `@immediately-run/sdk/*` subpaths, both of which
 this app already depends on and both of which the CDN resolves.
@@ -35,7 +47,12 @@ this app already depends on and both of which the CDN resolves.
 ## Undoing it
 
 1. Confirm the CDN resolves it: the `/package/` endpoint returns 200 for
-   `@immediately-run/omnibox@<version>` (see R3-566 for the exact probe).
+   `@immediately-run/omnibox@<version>` (see R3-566 for the exact probe), and that the
+   version is **≥ 0.4.0** — see the note above.
 2. Restore `"@immediately-run/omnibox"` in `package.json`.
-3. `git rm -r src/vendor/omnibox`, and point the five import sites back at the package —
-   they were changed in exactly one commit, so `git revert` does it.
+3. `git rm -r src/vendor/omnibox`, and point the **six** import sites back at the package.
+   Five were changed in one commit, so `git revert` does those; the sixth,
+   `src/components/SiteOmnibox.test.tsx`, arrived later (R3-570) and the revert does not
+   reach it. It imports from this barrel like the other five, so it is a one-line edit —
+   `RUN_LABEL` is exported from `index.ts` precisely so that no site has to deep-import a
+   module the package's `exports` map does not publish.
