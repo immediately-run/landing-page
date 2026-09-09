@@ -87,15 +87,28 @@ export function useRoute(): Route {
   // between two docs pages should land at the top, but re-rendering the same section (a
   // fragment scroll, a redirect) must not yank the reader.
   //
+  // ...and not when the destination names a fragment, which is the R3-571 half. A click
+  // from the front door into `/docs/start/overview#heading` — the in-app-help path the
+  // brief is about — DOES change the section, so without this guard both scrolls run on
+  // the same commit: this one to the top, `useFragmentScroll`'s to the heading. The
+  // heading won because `useRoute()` happens to be called before `useFragmentScroll()` in
+  // `App.tsx`, and `html { scroll-behavior: smooth }` made both of them animate. Correct
+  // by declaration order is not correct; the item's own instruction is that exactly one
+  // scroll may run.
+  //
   // A ref, not state: the previous section is bookkeeping the render does not read, and
   // holding it in state would set state from an effect — a cascading render for a value
   // nothing displays (`react-hooks/set-state-in-effect`, which caught exactly this).
+  const fragment = useFragment();
   const lastSection = useRef(route.section);
   useEffect(() => {
     if (route.section === lastSection.current) return;
     lastSection.current = route.section;
+    if (fragment !== '') return;
     window.scrollTo({ top: 0 });
-  }, [route.section]);
+    // `lastSection` is updated BEFORE the fragment test on purpose: the section has changed
+    // either way, and leaving it stale would fire this on the next same-section render.
+  }, [route.section, fragment]);
 
   return route;
 }

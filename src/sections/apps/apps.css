@@ -30,7 +30,7 @@
 }
 .apps-rail {
   position: sticky;
-  top: 90px;
+  top: var(--nav-h);
   display: flex;
   flex-direction: column;
   gap: 26px;
