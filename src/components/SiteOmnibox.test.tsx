@@ -9,6 +9,20 @@ import { RUN_LABEL } from '../vendor/omnibox';
 
 afterEach(cleanup);
 
+// The §4 runtime-discovery transport, so a routed send has a receiver and completes
+// instead of surfacing an unhandled throw. Removed in afterEach, not at the end of the
+// case, so a failing assertion cannot leave it installed for the cases after it.
+const installHostTransport = () => {
+  const sendMessage = vi.fn();
+  (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__ = {
+    transport: { sendMessage, onMessage: () => () => {} },
+  };
+  return sendMessage;
+};
+afterEach(() => {
+  delete (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__;
+});
+
 // The site's omnibox, rendered the way the host renders it: inside a context that
 // carries a real outer href. This is the seam test the review gate asked for — the
 // rows' hrefs are the composition of the site's data (directory records, generated
@@ -62,8 +76,28 @@ describe('SiteOmnibox against the host location', () => {
     expect(rows[0].getAttribute('href')).toBe(
       `${outerHref}/present/github/immediately-run/whiteboard/main/files/src/App.tsx`,
     );
-    // The app row is a platform route: it must escape the frame.
+    // `_top` is a same-context target, which is what PlatformLink's click handling keys on
+    // (and the anchor's own behaviour when there is no host). On a plain click inside the
+    // frame the sandbox refuses it — the next case asserts what escapes instead.
     expect(rows[0].getAttribute('target')).toBe('_top');
+  });
+
+  it('a plain left click on the app row asks the host to navigate to the outer href (R3-568)', () => {
+    // The escape is PlatformLink's click handler: it cancels the frame navigation the
+    // sandbox would refuse, and sends the host a urlchange for the same href the anchor
+    // advertises. An sdk pin from before R3-568 (0.60.0) leaves the click to `_top`,
+    // so neither assertion holds.
+    renderSiteOmnibox();
+    type('whiteboard');
+    const appRow = screen.getAllByRole('option')[0];
+    const sendMessage = installHostTransport();
+    const evt = createEvent.click(appRow, { button: 0 });
+    fireEvent(appRow, evt);
+    expect(evt.defaultPrevented).toBe(true);
+    expect(sendMessage).toHaveBeenCalledWith(
+      'urlchange',
+      expect.objectContaining({ url: appRow.getAttribute('href') }),
+    );
   });
 
   it('doc rows render as in-app links whose href is real and absolute on the host origin', () => {
@@ -90,8 +124,6 @@ describe('SiteOmnibox against the host location', () => {
     // The assertion that discriminates the renderDoc seam: SiteLink prevents the
     // default and asks the host to push the route; the package's fallback anchor
     // would let the click navigate the sandboxed frame (defaultPrevented false).
-    // Install the §4 runtime-discovery transport first, so the routed send has a
-    // receiver and navigateTo completes instead of surfacing an unhandled throw.
     const entry = entryWithLongFirstWord();
     renderSiteOmnibox();
     type(String(entry!.frontmatter.title).split(/\s+/)[0].toLowerCase());
@@ -99,16 +131,12 @@ describe('SiteOmnibox against the host location', () => {
       .getAllByRole('option')
       .find((el) => el.textContent?.includes(String(entry!.frontmatter.title)));
     expect(docRow).toBeTruthy();
-    const sendMessage = vi.fn();
-    (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__ = {
-      transport: { sendMessage, onMessage: () => () => {} },
-    };
+    const sendMessage = installHostTransport();
     const evt = createEvent.click(docRow!);
     fireEvent(docRow!, evt);
     expect(evt.defaultPrevented).toBe(true);
     // The interception routed the click through the host, not a frame navigation.
     expect(sendMessage).toHaveBeenCalled();
-    delete (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__;
   });
 });
 
