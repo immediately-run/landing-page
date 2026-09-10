@@ -9,6 +9,11 @@
    beside the radii. */
 :root {
   --section-gap: 132px;
+  /* The sticky nav's height. Nav.tsx measures the real bar and overwrites this (R3-571);
+     the value here is the desktop measurement, used before that runs and if scripting
+     never does. Anything that has to clear the nav reads it — never a re-typed number,
+     which was wrong at BOTH breakpoints (98px desktop, 84px mobile, spelled 90px). */
+  --nav-h: 98px;
 }
 
 /* ============================ SHELL ======================================== */

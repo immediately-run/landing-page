@@ -15,19 +15,20 @@
     "check:unused": "node scripts/check-unused.mjs",
     "check:untested": "node scripts/check-untested.mjs",
     "check:dead-css": "node scripts/check-dead-css.mjs",
-    "verify": "npm run check:corpora && git diff --exit-code src/data/corpusIndex.ts public/llms.txt && npm run check:templates && npm run lint && npm run check:clones && npm run check:unused && npm run check:untested && npm run check:dead-css && npm run build && npm run test",
-    "test": "vitest run"
+    "verify": "npm run check:corpora && git diff --exit-code src/data/corpusIndex.ts public/llms.txt && npm run check:templates && npm run lint && npm run check:clones && npm run check:unused && npm run check:untested && npm run check:dead-css && npm run check:nav-token && npm run build && npm run test",
+    "test": "vitest run",
+    "check:nav-token": "node scripts/check-nav-token.mjs"
   },
   "dependencies": {
     "@immediately-run/mdx-plugins": "^0.3.0",
-    "@immediately-run/sdk": "0.60.0",
+    "@immediately-run/sdk": "0.64.0",
     "lucide-react": "^1.39.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@immediately-run/verify-checks": "0.1.1",
+    "@immediately-run/verify-checks": "0.2.0",
     "@mdx-js/rollup": "^3.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.3",

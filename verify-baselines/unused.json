@@ -1,1 +1,7 @@
-[]
+[
+  "src/components/AppCard.tsx:AppCardVariant",
+  "src/sections/docs/data.ts:DocApi",
+  "src/sections/docs/data.ts:DocParam",
+  "src/sections/docs/data.ts:DocRejection",
+  "src/sections/tutorials/data.ts:TutorialStep"
+]
