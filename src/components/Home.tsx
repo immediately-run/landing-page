@@ -1,27 +1,25 @@
 import Hero from './Hero';
-import RunSection from './RunSection';
-import PublishSection from './PublishSection';
-import RemixSection from './RemixSection';
+import HowItWorks from './HowItWorks';
 import DirectoryTeaser from './DirectoryTeaser';
 import WhatsNew from './WhatsNew';
-import ClosingCta from './ClosingCta';
 
-// The landing/home route (R3-514): the three product messages in weight order —
-// instant safe launch (Run), free controlled publishing (Publish), everything
-// remixable (Remix) — then the directory teaser, what's new, and the closing
-// doors. The consumer message leads; the author message is the second section,
-// not a second hero (product_bet §5, FRONT_DOOR_IA §1.1).
+// The landing/home route, as the 1a quiet-column redesign draws it: four
+// sections down one measure — the hero, the product in three steps, the shelf,
+// and the latest change.
+//
+// It was seven. Run / Publish / Remix were three section-length statements of
+// the same three ideas HowItWorks now makes once, and the closing band restated
+// the hero's call one screen above a footer that already says "Go build." The
+// ordering FRONT_DOOR_IA §1.1 asks for is unchanged: the consumer message leads
+// and the author message follows inside the steps, rather than as a second hero.
 
 function Home() {
   return (
     <div className="home-fade">
       <Hero />
-      <RunSection />
-      <PublishSection />
-      <RemixSection />
+      <HowItWorks />
       <DirectoryTeaser />
       <WhatsNew />
-      <ClosingCta />
     </div>
   );
 }

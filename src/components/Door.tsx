@@ -3,8 +3,7 @@ import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import { HOME_PATH } from '../lib/routes';
 
 // The door (R3-513; FRONT_DOOR_IA §6) — ONE element in the same position
-// everywhere it appears: nav right cluster, mobile top bar, mobile sheet,
-// closing band.
+// everywhere it appears: nav right cluster, mobile top bar, mobile sheet.
 //
 // The gate is `status === 'signed-in'`, NEVER `user`: the landing's capability
 // ceiling carries `auth:status` but not `auth:identity`, so the SDK redacts
@@ -19,11 +18,11 @@ import { HOME_PATH } from '../lib/routes';
 // screen calls it Home, and "Your stuff" would promise recents that do not
 // exist yet (R-OSO-20/21).
 
-function Door({ className = 'door' }: { className?: string }) {
+function Door() {
   const { status } = useAuth();
   const signedIn = status === 'signed-in';
   return (
-    <PlatformLink className={className} path={HOME_PATH}>
+    <PlatformLink className="door" path={HOME_PATH}>
       {signedIn ? 'Home' : 'Sign in'}
     </PlatformLink>
   );

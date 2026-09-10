@@ -1,26 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { APPS, appsByRepo, RUN_TILE_REPOS, TEASER_REPOS } from './apps';
+import { APPS, appsByRepo, TEASER_REPOS } from './apps';
 
-// The two curated lists on `/` are hand-typed repo keys. They used to be resolved
-// with `find(...).filter(Boolean)`, which turns a typo into three tiles where four
-// were meant — a silent failure the page cannot report. These cases run the REAL
-// lists through the resolver, so a mistyped key fails here.
+// The curated list on `/` is hand-typed repo keys. It used to be resolved with
+// `find(...).filter(Boolean)`, which turns a typo into two tiles where three were
+// meant — a silent failure the page cannot report. These cases run the REAL list
+// through the resolver, so a mistyped key fails here.
 
 describe('appsByRepo', () => {
-  it('resolves the Run section\'s four tiles from the real list', () => {
-    const apps = appsByRepo(RUN_TILE_REPOS);
-    expect(apps).toHaveLength(RUN_TILE_REPOS.length);
-    expect(apps.map((a) => a.repo)).toEqual(RUN_TILE_REPOS);
-  });
-
-  it('resolves the directory teaser\'s four tiles from the real list', () => {
+  it('resolves the shelf\'s tiles from the real list', () => {
     const apps = appsByRepo(TEASER_REPOS);
     expect(apps).toHaveLength(TEASER_REPOS.length);
     expect(apps.map((a) => a.repo)).toEqual(TEASER_REPOS);
   });
 
-  it('keeps the two selections disjoint — `/` must not show the same app twice', () => {
-    expect(RUN_TILE_REPOS.filter((r) => TEASER_REPOS.includes(r))).toEqual([]);
+  it('names each app once — `/` must not show the same app twice', () => {
+    expect(new Set(TEASER_REPOS).size).toBe(TEASER_REPOS.length);
   });
 
   it('THROWS on a repo no record carries, naming the key', () => {
