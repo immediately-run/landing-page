@@ -62,8 +62,31 @@ describe('SiteOmnibox against the host location', () => {
     expect(rows[0].getAttribute('href')).toBe(
       `${outerHref}/present/github/immediately-run/whiteboard/main/files/src/App.tsx`,
     );
-    // The app row is a platform route: it must escape the frame.
+    // `_top` is what copy-link and open-in-new-tab read; it does not escape the frame on a
+    // plain click (the sandbox refuses it) — the next case asserts what does.
     expect(rows[0].getAttribute('target')).toBe('_top');
+  });
+
+  it('a plain left click on the app row asks the host to navigate to the outer href (R3-568)', () => {
+    // The escape is PlatformLink's click handler: it cancels the frame navigation the
+    // sandbox would refuse, and sends the host a urlchange for the SAME href the anchor
+    // advertises. An sdk pin from before R3-568 (0.60.0) leaves the click to `_top`,
+    // so neither assertion holds.
+    renderSiteOmnibox();
+    type('whiteboard');
+    const appRow = screen.getAllByRole('option')[0];
+    const sendMessage = vi.fn();
+    (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__ = {
+      transport: { sendMessage, onMessage: () => () => {} },
+    };
+    const evt = createEvent.click(appRow, { button: 0 });
+    fireEvent(appRow, evt);
+    expect(evt.defaultPrevented).toBe(true);
+    expect(sendMessage).toHaveBeenCalledWith(
+      'urlchange',
+      expect.objectContaining({ url: appRow.getAttribute('href') }),
+    );
+    delete (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__;
   });
 
   it('doc rows render as in-app links whose href is real and absolute on the host origin', () => {
