@@ -46,8 +46,8 @@
    each of which carries its own rule; a generic pair kept for a future caller is
    what `check:dead-css` exists to catch. */
 
-/* mono micro-label: plain tracked mono, no pill. Section markers (/RUN …) in
-   --accent-3; plain labels (files · GITHUB APP) take .tag--label in --ink-3. */
+/* mono micro-label: plain tracked mono, no pill. Section markers (/APPS, /NEWS …)
+   in --accent-3; a quieter label (/HOW IT WORKS) takes .tag--label in --ink-3. */
 .tag{font:400 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent-3)}
 .tag--label{color:var(--ink-3)}
 

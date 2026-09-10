@@ -1,13 +1,12 @@
 import { APPS } from '../data/apps';
 import SiteOmnibox from './SiteOmnibox';
 
-// The hero (FRONT_DOOR_IA §4.2, restyled to the 1a quiet column): eyebrow,
-// headline, one deck, the omnibox, the proof line. Centred at every width.
+// The hero (FRONT_DOOR_IA §4.10, the adopted 1a page): eyebrow, headline, one
+// deck, the omnibox, the proof line. Centred at every width.
 //
-// The door row and the desktop still are gone. The doors duplicated navigation
-// the nav already carries at every scroll position, and the still was decoration
-// under the one control the section exists to deliver you to — both were height
-// between the headline and the omnibox, which is the only thing here that acts.
+// No door row and no still. The doors duplicated links the nav carries (on a
+// phone, inside its sheet), and the still was decoration below the one control
+// the section exists to deliver you to.
 //
 // The app count is COMPUTED, never typed: a hero that claims a number the
 // directory disagrees with is worse than a hero with no number.

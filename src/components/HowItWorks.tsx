@@ -32,8 +32,8 @@ const STEPS = [
 // the product's voice, in these two sentences, exactly once on the page (owner-
 // confirmed 2026-09-02). It lived in the Run section this component replaces; the
 // section went, the obligation did not, so it lands here rather than nowhere.
-export const TAB_SENTENCE = 'The pull-down tab means you are looking at an app someone published.';
-export const PLATFORM_SENTENCE =
+const TAB_SENTENCE = 'The pull-down tab means you are looking at an app someone published.';
+const PLATFORM_SENTENCE =
   'Platform surfaces carry the immediately.run name and open the platform menu.';
 
 function HowItWorks() {

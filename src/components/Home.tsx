@@ -9,7 +9,7 @@ import WhatsNew from './WhatsNew';
 //
 // It was seven. Run / Publish / Remix were three section-length statements of
 // the same three ideas HowItWorks now makes once, and the closing band restated
-// the hero's call one screen after the footer already carried "Go build." The
+// the hero's call one screen above a footer that already says "Go build." The
 // ordering FRONT_DOOR_IA §1.1 asks for is unchanged: the consumer message leads
 // and the author message follows inside the steps, rather than as a second hero.
 

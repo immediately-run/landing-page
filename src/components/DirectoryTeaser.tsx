@@ -2,7 +2,7 @@ import { APPS, appsByRepo, TEASER_REPOS } from '../data/apps';
 import SiteLink from './SiteLink';
 import AppTile from './AppTile';
 
-// The directory teaser (FRONT_DOOR_IA §4.6): the one directory's shop window on
+// The directory teaser (FRONT_DOOR_IA §4.10): the one directory's shop window on
 // `/`. The count is COMPUTED from APPS.length — never typed — and the heading
 // names what the shelf is rather than what it is built on, because by this point
 // in the page the reader has been told what it is built on twice.

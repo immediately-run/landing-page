@@ -1,13 +1,19 @@
 // @vitest-environment jsdom
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import HowItWorks, { PLATFORM_SENTENCE, TAB_SENTENCE } from './HowItWorks';
+import HowItWorks from './HowItWorks';
 
 // The cue these two tests guard is the reason this file exists rather than the
 // section being deleted outright. WORKBENCH_MODES_SPEC §4 puts the two sentences
 // on the front door, once, in the product's voice; the 1a redesign removed the
 // Run section that carried them. The obligation survived the section, and only a
 // test keeps that true through the next redesign.
+//
+// The sentences are typed here from the spec, not imported from the component:
+// an expectation read from the code under test passes whatever that code says.
+// The spec runs the first one on after a colon, so its capital is the page's.
+const TAB_SENTENCE = 'The pull-down tab means you are looking at an app someone published.';
+const PLATFORM_SENTENCE = 'Platform surfaces carry the immediately.run name and open the platform menu.';
 
 afterEach(cleanup);
 
