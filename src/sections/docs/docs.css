@@ -45,6 +45,10 @@
   font:600 25px var(--disp);letter-spacing:-.02em;color:var(--ink);
   margin:34px 0 10px;scroll-margin-top:90px;
 }
+/* MDX headings render as bare h2/h3 (the remark plugin sets only the id, no
+   class), so the TOC and permalink scroll targets need the same 90px clear-zone
+   below the sticky chrome that .docs-h2/.docs-api already have (WCAG 2.4.11). */
+.docs-article :is(h2,h3){scroll-margin-top:90px}
 .docs-p{font:400 16px/1.65 var(--sans);color:var(--ink-2);margin:12px 0;max-width:62ch}
 
 /* code block */
@@ -57,8 +61,13 @@
   border-bottom:1px solid var(--line);background:var(--panel);
 }
 .docs-codebar-route{font:400 11.5px var(--mono);color:var(--ink-3)}
+/* The role="status" wrapper around every .docs-copy button: owns the bar's
+   right-push (the button is no longer the flex item) and keeps the button's
+   24px target (WCAG 2.5.8) off the font metrics. */
+.docs-copy-slot{margin-left:auto;display:inline-flex}
 .docs-copy{
-  margin-left:auto;font:600 11.5px var(--mono);background:transparent;
+  display:inline-flex;align-items:center;min-height:24px;
+  font:600 11.5px var(--mono);background:transparent;
   border:1px solid var(--line-2);color:var(--ink-2);border-radius:var(--r-sm);
   padding:3px 10px;cursor:pointer;transition:color .14s,border-color .14s;
 }

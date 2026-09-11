@@ -285,7 +285,7 @@ export default function Apps() {
                   type="button"
                   className="apps-pill apps-pill--view"
                   aria-pressed={view === 'rows'}
-                  aria-label="List view"
+                  aria-label="Rows view"
                   onClick={() => setView('rows')}
                 >
                   Rows

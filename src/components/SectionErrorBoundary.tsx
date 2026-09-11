@@ -32,7 +32,7 @@ class SectionErrorBoundary extends Component<Props, State> {
     return (
       <div className="section-error" role="alert">
         <h2 className="section-error__title">This section didn't load.</h2>
-        <p className="section-error__body">Reload it, or head to the showcase.</p>
+        <p className="section-error__body">Reload it, or head to the apps.</p>
         <div className="section-error__actions">
           <button
             type="button"
@@ -41,8 +41,8 @@ class SectionErrorBoundary extends Component<Props, State> {
           >
             Reload
           </button>
-          <SiteLink className="section-error__btn" to="/showcase">
-            Go to showcase
+          <SiteLink className="section-error__btn" to="/apps">
+            Go to apps
           </SiteLink>
           <SiteLink className="section-error__btn" to="/">
             Back home

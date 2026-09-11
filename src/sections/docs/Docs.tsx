@@ -35,15 +35,20 @@ import { SDK_REFERENCE_URL, sdkReferenceUrl } from '../../lib/urls';
 // One default export per file (lint enforces the Fast Refresh rule); the small
 // child components below export nothing.
 export default function Docs({ rest }: { rest: string[] }) {
-  const [copied, setCopied] = useState<string>('');
+  // The settle (success OR failure) is the status the user needs announced — a
+  // rejected copy shows "Copy failed" in the same slot instead of silence.
+  const [copied, setCopied] = useState<{ key: string; ok: boolean } | null>(null);
 
   const copy = useCallback((text: string, key: string) => {
     navigator.clipboard?.writeText(text).then(
       () => {
-        setCopied(key);
-        window.setTimeout(() => setCopied((c) => (c === key ? '' : c)), 1600);
+        setCopied({ key, ok: true });
+        window.setTimeout(() => setCopied((c) => (c?.key === key ? null : c)), 1600);
       },
-      () => undefined,
+      () => {
+        setCopied({ key, ok: false });
+        window.setTimeout(() => setCopied((c) => (c?.key === key ? null : c)), 1600);
+      },
     );
   }, []);
 
@@ -227,7 +232,7 @@ function MachineSurface({
   copied,
   copy,
 }: {
-  copied: string;
+  copied: { key: string; ok: boolean } | null;
   copy: (text: string, key: string) => void;
 }) {
   const groups = llmsGroups();
@@ -280,14 +285,21 @@ function MachineSurface({
       <div className="docs-llms">
         <div className="docs-llms-bar">
           <span className="docs-llms-name">llms.txt</span>
-          <button
-            type="button"
-            className="docs-copy"
-            onClick={() => copy(raw, 'llms')}
-            aria-label="Copy llms.txt"
-          >
-            {copied === 'llms' ? 'Copied' : 'Copy'}
-          </button>
+          {/* No static aria-label: the visible text is the accessible name (WCAG 2.5.3).
+              The role="status" wrapper announces the settle without stealing focus. */}
+          <span className="docs-copy-slot" role="status">
+            <button
+              type="button"
+              className="docs-copy"
+              onClick={() => copy(raw, 'llms')}
+            >
+              {copied?.key === 'llms'
+                ? copied.ok
+                  ? 'Copied'
+                  : 'Copy failed'
+                : 'Copy'}
+            </button>
+          </span>
           <span className="docs-llms-mime">text/plain</span>
         </div>
         <div className="docs-llms-body">
