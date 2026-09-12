@@ -6,7 +6,12 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // `src/vendor/**` is a verbatim copy of a published package (see its README):
+  // linting it would enforce THIS repo's house rules on someone else's file, and
+  // the whole value of the copy is that it is byte-identical to what npm ships —
+  // `diff` answers "has it drifted?" only while nothing here has been adapted.
+  // It passes its own repo's lint; it is not ours to restyle.
+  globalIgnores(['dist', 'src/vendor']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

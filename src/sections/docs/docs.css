@@ -13,7 +13,7 @@
 
 /* ---- left sidebar --------------------------------------------------------- */
 .docs-aside{
-  position:sticky;top:90px;
+  position:sticky;top:var(--nav-h);
   display:flex;flex-direction:column;gap:22px;
   max-height:calc(100vh - 110px);overflow-y:auto;
 }
@@ -43,12 +43,17 @@
 }
 .docs-h2{
   font:600 25px var(--disp);letter-spacing:-.02em;color:var(--ink);
-  margin:34px 0 10px;scroll-margin-top:90px;
+  margin:34px 0 10px;
 }
-/* MDX headings render as bare h2/h3 (the remark plugin sets only the id, no
-   class), so the TOC and permalink scroll targets need the same 90px clear-zone
-   below the sticky chrome that .docs-h2/.docs-api already have (WCAG 2.4.11). */
-.docs-article :is(h2,h3){scroll-margin-top:90px}
+
+/* R3-571 — a deep link must land ON its heading, not behind the sticky nav.
+   `remarkHeadingAnchors` gives every corpus heading its `id`, but the rendered element
+   carries NO class, so `.docs-h2` above never matched it and its scroll-margin computed
+   to 0: `scrollIntoView` put the heading at the viewport top, where the 98px nav covers
+   it, and the reader landed mid-paragraph. Selected by element inside the article so it
+   holds for every heading level the corpus can emit, present and future — a class list
+   would have to be extended by whoever adds an h4. */
+.docs-article :is(h1,h2,h3,h4,h5,h6){scroll-margin-top:var(--nav-h)}
 .docs-p{font:400 16px/1.65 var(--sans);color:var(--ink-2);margin:12px 0;max-width:62ch}
 
 /* code block */
@@ -109,7 +114,7 @@
 /* api signature block */
 .docs-api{
   margin:20px 0;border:1px solid var(--line);border-radius:var(--r-lg);
-  background:var(--panel);overflow:hidden;scroll-margin-top:90px;
+  background:var(--panel);overflow:hidden;scroll-margin-top:var(--nav-h);
 }
 .docs-api-head{padding:16px 20px;border-bottom:1px solid var(--line)}
 .docs-api-sig{font:700 14.5px var(--mono);color:var(--ink)}
@@ -197,7 +202,7 @@
 .docs-md-note .docs-md-suffix{color:var(--accent-3)}
 
 /* ---- right TOC ------------------------------------------------------------ */
-.docs-toc{position:sticky;top:90px}
+.docs-toc{position:sticky;top:var(--nav-h)}
 .docs-toc-label{
   font:700 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;
   color:var(--ink-3);margin-bottom:10px;

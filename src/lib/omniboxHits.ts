@@ -8,7 +8,7 @@
 // resolved against the host (the package renders a plain anchor, so the href must
 // be real — an app-space path would resolve against the sandbox origin on-host).
 
-import type { AppHit, OmniboxHitSources } from '@immediately-run/omnibox';
+import type { AppHit, OmniboxHitSources } from '../vendor/omnibox';
 import { APPS } from '../data/apps';
 import { CORPUS_INDEX } from '../data/corpusIndex';
 import { hrefFor } from './navigation';

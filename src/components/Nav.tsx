@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import type { Section } from '../hooks/useRoute';
@@ -6,6 +6,7 @@ import logoMark from '../assets/logo-mark.png';
 import SiteLink from './SiteLink';
 import SiteOmnibox from './SiteOmnibox';
 import Door from './Door';
+import { NAV_HEIGHT_VAR, navHeightValue } from '../lib/navHeight';
 
 // The nav (R3-513; FRONT_DOOR_IA §4.1): four items — Apps · Docs · Tutorials ·
 // What's new. Showcase is gone (one directory: /showcase redirects to /apps);
@@ -37,9 +38,31 @@ function Nav({ active }: NavProps) {
 
   const closeMenu = () => setMenuOpen(false);
 
+  // Publish the nav's real height as `--nav-h` (R3-571). Anything that has to clear the
+  // sticky bar reads the token instead of re-typing a number that was wrong at both
+  // breakpoints — see lib/navHeight.ts for why this is measured rather than declared.
+  // A ResizeObserver rather than a one-shot measure: the bar reflows at the mobile
+  // breakpoint and when the fonts land, and a value captured before either is stale.
+  const navRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const publish = () => {
+      const value = navHeightValue(el.getBoundingClientRect().height);
+      if (value !== null) document.documentElement.style.setProperty(NAV_HEIGHT_VAR, value);
+    };
+    publish();
+    const ro = new ResizeObserver(publish);
+    ro.observe(el);
+    // The property deliberately OUTLIVES this effect: the stylesheet's fallback is the
+    // desktop measurement, so clearing it on unmount would swap a correct value for a
+    // guess. Only the observer is torn down.
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <>
-      <nav className="nav" aria-label="Primary">
+      <nav className="nav" aria-label="Primary" ref={navRef}>
         <div className="nav-inner">
           <SiteLink className="logo" to="/">
             <img className="logo-mark" src={logoMark} alt="" width={27} height={27} />

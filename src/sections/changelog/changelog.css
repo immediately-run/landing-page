@@ -90,7 +90,7 @@
 .cl-entry {
   position: relative;
   padding: 0 0 26px;
-  scroll-margin-top: 90px;
+  scroll-margin-top: var(--nav-h);
 }
 
 .cl-entry::before {

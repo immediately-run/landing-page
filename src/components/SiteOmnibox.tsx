@@ -5,8 +5,8 @@
 // the package). One wrapper, so the four call sites cannot drift in what they
 // feed it.
 
-import { Omnibox, type AppHit } from '@immediately-run/omnibox';
-import type { OmniboxProps } from '@immediately-run/omnibox';
+import { Omnibox, type AppHit } from '../vendor/omnibox';
+import type { OmniboxProps } from '../vendor/omnibox';
 import ProvenanceChip from './ProvenanceChip';
 import SiteLink from './SiteLink';
 import type { Provenance } from '../data/apps';

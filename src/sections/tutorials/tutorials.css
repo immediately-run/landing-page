@@ -302,7 +302,7 @@
 /* ---- sticky steps aside ---- */
 .tut-aside {
   position: sticky;
-  top: 90px;
+  top: var(--nav-h);
 }
 .tut-aside-label {
   font: 700 11px var(--mono);
@@ -364,3 +364,9 @@
     transition: none;
   }
 }
+
+/* R3-571 — the same rule the docs corpus needs, for the same reason. `remarkHeadingAnchors`
+   runs over every `.mdx` (vite.config.ts), so tutorial headings carry ids and a copyable
+   permalink too, and `goStep` scrollIntoViews those same ids for the Steps rail. Without
+   this both land behind the sticky nav. */
+.tut-body :is(h1,h2,h3,h4,h5,h6){scroll-margin-top:var(--nav-h)}
