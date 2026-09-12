@@ -147,10 +147,11 @@
   margin: 14px 0 0;
 }
 /* Step headings are bare MDX h3s (the remark plugin sets only the id, no class);
-   the step rail and permalinks scroll to them, so they need the same 90px
-   clear-zone the sticky aside already sits at (WCAG 2.4.11). */
+   the step rail and permalinks scroll to them, so they need the same clear-zone
+   the sticky aside already sits at — the --nav-h token, not a hardcoded value
+   (WCAG 2.4.11; R3-571's nav-token gate). */
 .tut-body :is(h2, h3) {
-  scroll-margin-top: 90px;
+  scroll-margin-top: var(--nav-h);
 }
 
 /* ---- outcome-first meta card ---- */
