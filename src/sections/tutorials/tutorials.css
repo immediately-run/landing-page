@@ -146,6 +146,13 @@
   color: var(--ink);
   margin: 14px 0 0;
 }
+/* Step headings are bare MDX h3s (the remark plugin sets only the id, no class);
+   the step rail and permalinks scroll to them, so they need the same clear-zone
+   the sticky aside already sits at — the --nav-h token, not a hardcoded value
+   (WCAG 2.4.11; R3-571's nav-token gate). */
+.tut-body :is(h2, h3) {
+  scroll-margin-top: var(--nav-h);
+}
 
 /* ---- outcome-first meta card ---- */
 .tut-meta-card {
@@ -241,6 +248,10 @@
   box-shadow: var(--glow);
 }
 .tut-deep-copy {
+  /* 24px target floor (WCAG 2.5.8), not the 12px font's line box. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   font: 400 12px var(--mono);
   color: var(--ink-3);
   background: transparent;

@@ -4,15 +4,20 @@
 import { useCallback, useState } from 'react';
 
 export default function DeepLink({ label, href }: { label?: string; href?: string }) {
-  const [copied, setCopied] = useState(false);
+  // Tri-state settle, announced from the role="status" wrapper: "Link copied" on
+  // success, "Copy failed" in the same slot on a rejected clipboard write.
+  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const copy = useCallback(() => {
     if (!href) return;
     navigator.clipboard?.writeText(href).then(
       () => {
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 1600);
+        setState('copied');
+        window.setTimeout(() => setState('idle'), 1600);
       },
-      () => undefined,
+      () => {
+        setState('failed');
+        window.setTimeout(() => setState('idle'), 1600);
+      },
     );
   }, [href]);
 
@@ -21,9 +26,15 @@ export default function DeepLink({ label, href }: { label?: string; href?: strin
       <a className="tut-deep-pill" href={href} target="_blank" rel="noreferrer">
         {label}
       </a>
-      <button type="button" className="tut-deep-copy" onClick={copy}>
-        {copied ? 'Link copied' : 'Popup blocked? Copy the link'}
-      </button>
+      <span role="status">
+        <button type="button" className="tut-deep-copy" onClick={copy}>
+          {state === 'copied'
+            ? 'Link copied'
+            : state === 'failed'
+              ? 'Copy failed'
+              : 'Popup blocked? Copy the link'}
+        </button>
+      </span>
     </div>
   );
 }

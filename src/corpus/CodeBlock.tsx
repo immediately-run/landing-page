@@ -6,7 +6,10 @@ import { useCallback, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 export default function CodeBlock({ route, children }: { route?: string; children?: ReactNode }) {
-  const [copied, setCopied] = useState(false);
+  // Tri-state, because a rejected copy is a status too (WCAG 4.1.3 + 3.3.1): the
+  // settle — success OR failure — is announced from the role="status" wrapper and
+  // rendered in the same text slot.
+  const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const bodyRef = useRef<HTMLDivElement>(null);
 
   const copy = useCallback(() => {
@@ -15,10 +18,13 @@ export default function CodeBlock({ route, children }: { route?: string; childre
     const text = bodyRef.current?.innerText ?? '';
     navigator.clipboard?.writeText(text).then(
       () => {
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 1600);
+        setState('copied');
+        window.setTimeout(() => setState('idle'), 1600);
       },
-      () => undefined,
+      () => {
+        setState('failed');
+        window.setTimeout(() => setState('idle'), 1600);
+      },
     );
   }, []);
 
@@ -26,9 +32,13 @@ export default function CodeBlock({ route, children }: { route?: string; childre
     <div className="docs-codeblock">
       <div className="docs-codebar">
         <span className="docs-codebar-route">{route}</span>
-        <button type="button" className="docs-copy" aria-label="Copy code" onClick={copy}>
-          {copied ? 'Copied' : 'Copy'}
-        </button>
+        {/* No static aria-label: the visible text is the accessible name (WCAG 2.5.3).
+            The role="status" wrapper announces the settle without stealing focus. */}
+        <span className="docs-copy-slot" role="status">
+          <button type="button" className="docs-copy" onClick={copy}>
+            {state === 'copied' ? 'Copied' : state === 'failed' ? 'Copy failed' : 'Copy'}
+          </button>
+        </span>
       </div>
       <div ref={bodyRef}>{children}</div>
     </div>
