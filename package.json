@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@immediately-run/mdx-plugins": "^0.3.0",
-    "@immediately-run/omnibox": "github:immediately-run/omnibox#e8382e20cfc6348881ab39ced1d82ad85f763111",
+    "@immediately-run/omnibox": "github:immediately-run/omnibox#b7a795a0800abc6837fb66153b62b745175787dc",
     "@immediately-run/sdk": "0.64.0",
     "lucide-react": "^1.39.0",
     "react": "^19.2.5",
