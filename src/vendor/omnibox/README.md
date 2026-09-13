@@ -1,4 +1,4 @@
-# `src/vendor/omnibox` — a TEMPORARY copy of `@immediately-run/omnibox@0.4.0`
+# `src/vendor/omnibox` — a TEMPORARY copy of `@immediately-run/omnibox@0.4.1`
 
 **Delete this directory the moment the package resolves again.** It exists to end a
 production outage, not to un-do R3-530.
@@ -29,7 +29,7 @@ tidied, not merged into `src/components/`. Byte-identical to the package makes t
 un-vendoring a `git rm -r` plus reverting one commit, and makes "has it drifted?"
 answerable with `diff`.
 
-**Tracking `0.4.0`, not `0.3.0` (2026-09-09, R3-570).** Two changes landed here and
+**Tracking `0.4.1` (2026-09-13, R3-622); previously `0.4.0`, not `0.3.0` (2026-09-09, R3-570).** Two changes landed here and
 upstream as the same edit, in the same shape, so `diff -rq omnibox/src
 landing-page/src/vendor/omnibox` reports only the upstream test files and this README:
 
