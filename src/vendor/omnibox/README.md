@@ -1,4 +1,4 @@
-# `src/vendor/omnibox` — a TEMPORARY copy of `@immediately-run/omnibox@0.4.0`
+# `src/vendor/omnibox` — a TEMPORARY copy of `@immediately-run/omnibox@0.4.1`
 
 **Delete this directory the moment the package resolves again.** It exists to end a
 production outage, not to un-do R3-530.
@@ -29,7 +29,7 @@ tidied, not merged into `src/components/`. Byte-identical to the package makes t
 un-vendoring a `git rm -r` plus reverting one commit, and makes "has it drifted?"
 answerable with `diff`.
 
-**Tracking `0.4.0`, not `0.3.0` (2026-09-09, R3-570).** Two changes landed here and
+**Tracking `0.4.1` (2026-09-13, R3-622); previously `0.4.0`, not `0.3.0` (2026-09-09, R3-570).** Two changes landed here and
 upstream as the same edit, in the same shape, so `diff -rq omnibox/src
 landing-page/src/vendor/omnibox` reports only the upstream test files and this README:
 
@@ -50,7 +50,7 @@ this app already depends on and both of which the CDN resolves.
    `@immediately-run/omnibox@<version>` (see R3-566 for the exact probe), and that the
    version is **≥ 0.4.0** — see the note above.
 2. Restore `"@immediately-run/omnibox"` in `package.json`.
-3. `git rm -r src/vendor/omnibox`, and point the **six** import sites back at the package.
+3. `git rm -r src/vendor/omnibox`, and point the **five** import sites back at the package.
    Five were changed in one commit, so `git revert` does those; the sixth,
    `src/components/SiteOmnibox.test.tsx`, arrived later (R3-570) and the revert does not
    reach it. It imports from this barrel like the other five, so it is a one-line edit —
