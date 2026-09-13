@@ -50,7 +50,7 @@ this app already depends on and both of which the CDN resolves.
    `@immediately-run/omnibox@<version>` (see R3-566 for the exact probe), and that the
    version is **≥ 0.4.0** — see the note above.
 2. Restore `"@immediately-run/omnibox"` in `package.json`.
-3. `git rm -r src/vendor/omnibox`, and point the **six** import sites back at the package.
+3. `git rm -r src/vendor/omnibox`, and point the **five** import sites back at the package.
    Five were changed in one commit, so `git revert` does those; the sixth,
    `src/components/SiteOmnibox.test.tsx`, arrived later (R3-570) and the revert does not
    reach it. It imports from this barrel like the other five, so it is a one-line edit —
