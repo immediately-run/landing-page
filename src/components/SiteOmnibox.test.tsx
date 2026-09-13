@@ -5,7 +5,7 @@ import { TinkerableContext } from '@immediately-run/sdk/TinkerableContext';
 import { CORPUS_INDEX } from '../data/corpusIndex';
 import SiteOmnibox from './SiteOmnibox';
 import Nav from './Nav';
-import { RUN_LABEL } from '../vendor/omnibox';
+import { RUN_LABEL } from '@immediately-run/omnibox';
 
 afterEach(cleanup);
 
