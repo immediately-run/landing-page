@@ -78,6 +78,11 @@
   color: var(--ink);
 }
 
+.new-card-pitch {
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
 .new-card-gives {
   margin: 4px 0 8px;
   padding-left: 18px;
@@ -90,6 +95,11 @@
   font: 400 12px var(--mono);
   color: var(--ink-3);
   margin-top: 10px;
+}
+
+.new-sec-h2 {
+  font: 800 26px var(--disp);
+  color: var(--ink);
 }
 
 .new-run-step {

@@ -44,7 +44,7 @@ function TemplateCard({ record }: { record: TemplateRecord }) {
     <article className="new-card">
       <span className="new-card-kind">{record.kind === 'blank' ? 'blank' : 'app'}</span>
       <h3 className="new-card-name">{record.name}</h3>
-      <p style={{ color: 'var(--ink-2)', fontSize: '14.5px' }}>{record.pitch}</p>
+      <p className="new-card-pitch">{record.pitch}</p>
       <ul className="new-card-gives">
         {record.gives.map((g) => (
           <li key={g}>{g}</li>
@@ -84,7 +84,7 @@ export default function New() {
       </div>
 
       <section aria-labelledby="new-starting">
-        <h2 id="new-starting" style={{ font: '800 26px var(--disp)', color: 'var(--ink)' }}>
+        <h2 id="new-starting" className="new-sec-h2">
           Pick a starting point.
         </h2>
         <div className="new-template-cards">
@@ -95,7 +95,7 @@ export default function New() {
       </section>
 
       <section className="new-run-step" aria-labelledby="new-run">
-        <h2 id="new-run" style={{ font: '800 26px var(--disp)', color: 'var(--ink)' }}>
+        <h2 id="new-run" className="new-sec-h2">
           Then run it.
         </h2>
         <p className="apps-deck">

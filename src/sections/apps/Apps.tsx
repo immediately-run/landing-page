@@ -26,11 +26,6 @@ const PROVENANCES: { key: ProvKey; label: string }[] = [
   { key: 'community', label: 'Community' },
 ];
 
-// Dot color per facet group — derived from brand tokens, not hard-coded hex.
-const CAT_DOT = 'var(--accent)';
-const PROV_DOT = 'var(--accent-2)';
-const CAP_DOT = 'var(--accent-3)';
-
 function provKey(app: AppRecord): ProvKey {
   return app.provenance === 'official' ? 'official' : 'community';
 }
@@ -186,10 +181,7 @@ export default function Apps() {
                   aria-pressed={filters.cats.has(c.slug)}
                   onClick={() => toggleCat(c.slug)}
                 >
-                  <span
-                    className="apps-facet-dot"
-                    style={{ background: CAT_DOT }}
-                  />
+                  <span className="apps-facet-dot apps-facet-dot--cat" />
                   <span className="apps-facet-label">{c.label}</span>
                   <span className="apps-facet-count">
                     {catCounts.get(c.slug) ?? 0}
@@ -217,10 +209,7 @@ export default function Apps() {
                       aria-pressed={filters.provs.has(p.key)}
                       onClick={() => toggleProv(p.key)}
                     >
-                      <span
-                        className="apps-facet-dot"
-                        style={{ background: PROV_DOT }}
-                      />
+                      <span className="apps-facet-dot apps-facet-dot--prov" />
                       <span className="apps-facet-label">{p.label}</span>
                       <span className="apps-facet-count">{n}</span>
                     </button>
@@ -242,10 +231,7 @@ export default function Apps() {
                   aria-pressed={filters.caps.has(c.slug)}
                   onClick={() => toggleCap(c.slug)}
                 >
-                  <span
-                    className="apps-facet-dot"
-                    style={{ background: CAP_DOT }}
-                  />
+                  <span className="apps-facet-dot apps-facet-dot--cap" />
                   <span className="apps-facet-label">{c.label}</span>
                   <span className="apps-facet-count">
                     {capCounts.get(c.slug) ?? 0}
