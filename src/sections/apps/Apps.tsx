@@ -26,8 +26,6 @@ const PROVENANCES: { key: ProvKey; label: string }[] = [
   { key: 'community', label: 'Community' },
 ];
 
-// Dot color per facet group — derived from brand tokens, not hard-coded hex.
-
 function provKey(app: AppRecord): ProvKey {
   return app.provenance === 'official' ? 'official' : 'community';
 }

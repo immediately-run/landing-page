@@ -90,6 +90,7 @@
   border-radius: 50%;
   flex: none;
 }
+/* Dot color per facet group — derived from brand tokens, not hard-coded hex. */
 .apps-facet-dot--cat { background: var(--accent); }
 .apps-facet-dot--prov { background: var(--accent-2); }
 .apps-facet-dot--cap { background: var(--accent-3); }
