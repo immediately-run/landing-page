@@ -78,7 +78,18 @@ export function useSheetDialog({
       }
     };
     const onEscape = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') dismissRef.current();
+      if (e.key !== 'Escape') return;
+      // Layered dismissal (R-IX-1, the R3-592 stack-awareness rule): when the
+      // Escape target sits inside an EXPANDED combobox — the nav sheet's
+      // omnibox row, whose input carries aria-expanded — that combobox's own
+      // Escape handling (closing its results) is this press's business, not
+      // the sheet's. The sheet closes on the NEXT Escape, once the combobox
+      // has collapsed.
+      const target = e.target as HTMLElement | null;
+      if (target && typeof target.closest === 'function' && target.closest('[aria-expanded="true"]')) {
+        return;
+      }
+      dismissRef.current();
     };
     node.addEventListener('keydown', onKey);
     document.addEventListener('keydown', onEscape);

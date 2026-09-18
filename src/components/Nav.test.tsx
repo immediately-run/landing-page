@@ -84,4 +84,22 @@ describe('Nav — the mobile sheet is a real dialog (R3-611)', () => {
     }
     expect(inSheet.getByRole('link', { name: 'Make an app' })).toBeTruthy();
   });
+
+  it('Escape is LAYERED with the omnibox row — the first press closes its results, the second closes the sheet', () => {
+    const { sheet } = openSheet();
+    const inSheet = within(sheet);
+    const omniboxInput = inSheet.getByRole('combobox');
+    // A typed query expands the vendored omnibox's own results panel.
+    fireEvent.change(omniboxInput, { target: { value: 'app' } });
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');
+    // First Escape: the omnibox's own handler closes its results — the sheet
+    // stays (the hook skips dismissal while a combobox is expanded).
+    fireEvent.keyDown(omniboxInput, { key: 'Escape' });
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('false');
+    expect(screen.getByRole('dialog', { name: 'Menu' })).toBeTruthy();
+    // Second Escape: nothing expanded between the target and the sheet — the
+    // sheet itself dismisses.
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
 });

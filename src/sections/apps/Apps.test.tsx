@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 // R3-611 (R-IX-1) — the apps filters sheet now behaves as the dialog it always
-// claimed to be: the attributes stay (they come from the hook now), Escape
-// joins the backdrop click as a dismissal, and focus returns to the Filters
-// button. Rendered over the REAL apps data the section ships. Plain expects,
-// per this repo's harness (SiteOmnibox.test.tsx).
+// claimed to be: the attributes stay literal (as they were), Escape joins the
+// backdrop click as a dismissal, and focus returns to the Filters button.
+// Rendered over the REAL apps data the section ships. Plain expects, per this
+// repo's harness (SiteOmnibox.test.tsx).
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import Apps from './Apps';
