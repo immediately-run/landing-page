@@ -102,4 +102,30 @@ describe('Nav — the mobile sheet is a real dialog (R3-611)', () => {
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).toBeNull();
   });
+
+  it('Escape focused on an omnibox RESULT ROW also leaves the sheet standing (round 2)', () => {
+    // The results rows are a sibling subtree of the aria-expanded input, out of
+    // the input's closest() reach — the guard must see them through the
+    // input's aria-controls, or one press closes the open panel and the sheet.
+    const { sheet } = openSheet();
+    const inSheet = within(sheet);
+    const omniboxInput = inSheet.getByRole('combobox');
+    fireEvent.change(omniboxInput, { target: { value: 'app' } });
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');
+    // Focus a result row directly (jsdom does not implement Tab's sequential
+    // focus navigation) — the keyboard user lands there by tabbing in a real
+    // browser; the rows are tabbable anchors.
+    const panel = document.getElementById(omniboxInput.getAttribute('aria-controls')!)!;
+    const row = panel.querySelector<HTMLElement>('a')!;
+    row.focus();
+    fireEvent.keyDown(row, { key: 'Escape' });
+    // The sheet stands; the expanded panel is the omnibox's own business.
+    expect(screen.getByRole('dialog', { name: 'Menu' })).toBeTruthy();
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');
+    // And the sheet still dismisses once nothing expanded is involved.
+    fireEvent.keyDown(omniboxInput, { key: 'Escape' });
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('false');
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
 });
