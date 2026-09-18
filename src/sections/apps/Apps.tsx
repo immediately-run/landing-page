@@ -1,7 +1,8 @@
 import './apps.css';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { APPS, CATEGORIES, CAPABILITIES, type AppRecord } from '../../data/apps';
 import { presentRoute, editRoute } from '../../lib/routes';
+import { useSheetDialog } from '../../lib/useSheetDialog';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import AppCard from '../../components/AppCard';
 
@@ -107,6 +108,14 @@ export default function Apps() {
   const [sort, setSort] = useState<SortKey>('featured');
   const [view, setView] = useState<View>('rows');
   const [sheetOpen, setSheetOpen] = useState(false);
+
+  // R3-611 (R-IX-1): the filters sheet asserted role=dialog aria-modal and
+  // implemented none of the behaviour — the behaviour now ships with the
+  // assertion: focus in on open, back to the Filters button on close, Tab wraps
+  // within, Escape dismisses (the backdrop click stays). The effect keys on the
+  // open state, so its lifetime IS the sheet's; the attributes stay literal.
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  useSheetDialog({ ref: sheetRef, open: sheetOpen, onDismiss: () => setSheetOpen(false) });
 
   // Counts are computed from the FULL dataset per facet (independent of state).
   const catCounts = useMemo(() => {
@@ -332,6 +341,7 @@ export default function Apps() {
       {sheetOpen && (
         <div
           className="apps-sheet-backdrop"
+          ref={sheetRef}
           role="dialog"
           aria-modal="true"
           aria-label="Filters"
