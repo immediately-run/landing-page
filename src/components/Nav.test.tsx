@@ -7,9 +7,15 @@
 //
 // Plain expects, per this repo's harness (SiteOmnibox.test.tsx) — no jest-dom
 // matcher package is installed here, and none is being added for this item.
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import Nav from './Nav';
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import Nav from "./Nav";
 
 afterEach(cleanup);
 
@@ -28,78 +34,82 @@ afterEach(() => {
   delete (globalThis as { __immediatelyRun__?: unknown }).__immediatelyRun__;
 });
 
-const REAL_LINK_LABELS = ['Apps', 'Docs', 'Tutorials', "What's new"];
+const REAL_LINK_LABELS = ["Apps", "Docs", "Tutorials", "What's new"];
 
 const openSheet = () => {
   installHostTransport();
   render(<Nav active="apps" />);
-  const burger = screen.getByRole('button', { name: 'Open menu' });
+  const burger = screen.getByRole("button", { name: "Open menu" });
   burger.focus();
   fireEvent.click(burger);
-  const sheet = screen.getByRole('dialog', { name: 'Menu' });
+  const sheet = screen.getByRole("dialog", { name: "Menu" });
   return { burger, sheet };
 };
 
-describe('Nav — the mobile sheet is a real dialog (R3-611)', () => {
-  it('the sheet carries the dialog semantics it now behaves as', () => {
+describe("Nav — the mobile sheet is a real dialog (R3-611)", () => {
+  it("the sheet carries the dialog semantics it now behaves as", () => {
     const { sheet } = openSheet();
-    expect(sheet.getAttribute('aria-modal')).toBe('true');
-    expect(sheet.getAttribute('aria-label')).toBe('Menu');
+    expect(sheet.getAttribute("aria-modal")).toBe("true");
+    expect(sheet.getAttribute("aria-label")).toBe("Menu");
   });
 
-  it('opening moves focus to the sheet own Close button', () => {
+  it("opening moves focus to the sheet own Close button", () => {
     openSheet();
-    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Close menu' }));
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: "Close menu" }),
+    );
   });
 
-  it('Escape unmounts the sheet and focus returns to the burger', () => {
+  it("Escape unmounts the sheet and focus returns to the burger", () => {
     const { burger } = openSheet();
-    fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.queryByRole('dialog')).toBeNull();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).toBeNull();
     expect(document.activeElement).toBe(burger);
   });
 
-  it('Tab wraps within the sheet — the last focusable returns to Close, and Close shifts to it', () => {
+  it("Tab wraps within the sheet — the last focusable returns to Close, and Close shifts to it", () => {
     const { sheet } = openSheet();
     const inSheet = within(sheet);
-    const close = inSheet.getByRole('button', { name: 'Close menu' });
+    const close = inSheet.getByRole("button", { name: "Close menu" });
     // The sheet's theme button is the last focusable in its DOM order
     // (top row → omnibox → links → door → theme); scoped to the sheet because
     // the desktop bar carries a theme button of its own.
-    const theme = inSheet.getByRole('button', { name: /Switch to (dark|light) theme/ });
+    const theme = inSheet.getByRole("button", {
+      name: /Switch to (dark|light) theme/,
+    });
     theme.focus();
-    fireEvent.keyDown(theme, { key: 'Tab' });
+    fireEvent.keyDown(theme, { key: "Tab" });
     expect(document.activeElement).toBe(close);
-    fireEvent.keyDown(close, { key: 'Tab', shiftKey: true });
+    fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
     expect(document.activeElement).toBe(theme);
   });
 
-  it('the sheet renders the REAL NAV_ITEMS rows plus Make an app', () => {
+  it("the sheet renders the REAL NAV_ITEMS rows plus Make an app", () => {
     const { sheet } = openSheet();
     // Scoped to the sheet: the desktop nav renders the same items, and the
     // assertion is about the SHEET's rows.
     const inSheet = within(sheet);
     for (const label of REAL_LINK_LABELS) {
-      expect(inSheet.getByRole('link', { name: label })).toBeTruthy();
+      expect(inSheet.getByRole("link", { name: label })).toBeTruthy();
     }
-    expect(inSheet.getByRole('link', { name: 'Make an app' })).toBeTruthy();
+    expect(inSheet.getByRole("link", { name: "Make an app" })).toBeTruthy();
   });
 
-  it('Escape is LAYERED with the omnibox row — the first press closes its results, the second closes the sheet', () => {
+  it("Escape is LAYERED with the omnibox row — the first press closes its results, the second closes the sheet", () => {
     const { sheet } = openSheet();
     const inSheet = within(sheet);
-    const omniboxInput = inSheet.getByRole('combobox');
+    const omniboxInput = inSheet.getByRole("combobox");
     // A typed query expands the vendored omnibox's own results panel.
-    fireEvent.change(omniboxInput, { target: { value: 'app' } });
-    expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');
+    fireEvent.change(omniboxInput, { target: { value: "app" } });
+    expect(omniboxInput.getAttribute("aria-expanded")).toBe("true");
     // First Escape: the omnibox's own handler closes its results — the sheet
     // stays (the hook skips dismissal while a combobox is expanded).
-    fireEvent.keyDown(omniboxInput, { key: 'Escape' });
-    expect(omniboxInput.getAttribute('aria-expanded')).toBe('false');
-    expect(screen.getByRole('dialog', { name: 'Menu' })).toBeTruthy();
+    fireEvent.keyDown(omniboxInput, { key: "Escape" });
+    expect(omniboxInput.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeTruthy();
     // Second Escape: nothing expanded between the target and the sheet — the
     // sheet itself dismisses.
-    fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.queryByRole('dialog')).toBeNull();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 });

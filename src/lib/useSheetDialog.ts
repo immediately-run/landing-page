@@ -14,8 +14,8 @@
 // while the BEHAVIOUR is the shared half. The effect keys on `open`, so its
 // lifetime is the sheet's — the hook itself is called in an always-mounted
 // parent, and the open state is what carries the sheet's lifetime.
-import { useEffect, useRef } from 'react';
-import type { RefObject } from 'react';
+import { useEffect, useRef } from "react";
+import type { RefObject } from "react";
 
 /** Read at keydown time, never cached: a sheet's focusable set changes while it
  * is open (the omnibox's own rows, a revealed group). */
@@ -65,7 +65,7 @@ export function useSheetDialog({
     first.focus();
 
     const onKey = (e: KeyboardEvent): void => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
       const list = Array.from(node.querySelectorAll<HTMLElement>(FOCUSABLE));
       if (list.length === 0) return;
       const active = document.activeElement;
@@ -78,7 +78,7 @@ export function useSheetDialog({
       }
     };
     const onEscape = (e: KeyboardEvent): void => {
-      if (e.key !== 'Escape') return;
+      if (e.key !== "Escape") return;
       // Layered dismissal (R-IX-1, the R3-592 stack-awareness rule): when the
       // Escape target sits inside an EXPANDED combobox — the nav sheet's
       // omnibox row, whose input carries aria-expanded — that combobox's own
@@ -86,17 +86,21 @@ export function useSheetDialog({
       // the sheet's. The sheet closes on the NEXT Escape, once the combobox
       // has collapsed.
       const target = e.target as HTMLElement | null;
-      if (target && typeof target.closest === 'function' && target.closest('[aria-expanded="true"]')) {
+      if (
+        target &&
+        typeof target.closest === "function" &&
+        target.closest('[aria-expanded="true"]')
+      ) {
         return;
       }
       dismissRef.current();
     };
-    node.addEventListener('keydown', onKey);
-    document.addEventListener('keydown', onEscape);
+    node.addEventListener("keydown", onKey);
+    document.addEventListener("keydown", onEscape);
 
     return () => {
-      node.removeEventListener('keydown', onKey);
-      document.removeEventListener('keydown', onEscape);
+      node.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onEscape);
       // The invoker may itself have unmounted by the time the sheet closes; the
       // optional chain is the whole guard.
       invoker?.focus();
