@@ -10,6 +10,7 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Nav from './Nav';
+import { RUN_LABEL } from '@immediately-run/omnibox';
 
 afterEach(cleanup);
 
@@ -119,6 +120,31 @@ describe('Nav — the mobile sheet is a real dialog (R3-611)', () => {
     const row = panel.querySelector<HTMLElement>('a')!;
     row.focus();
     fireEvent.keyDown(row, { key: 'Escape' });
+    // The sheet stands; the expanded panel is the omnibox's own business.
+    expect(screen.getByRole('dialog', { name: 'Menu' })).toBeTruthy();
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');
+    // And the sheet still dismisses once nothing expanded is involved.
+    fireEvent.keyDown(omniboxInput, { key: 'Escape' });
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('false');
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('Escape focused on the omnibox RUN CONTROL also leaves the sheet standing (round 3)', () => {
+    // The run control is the third sibling path: a focusable beside the
+    // combobox input, inside the owning widget (the nearest ancestor that also
+    // contains the results panel) — neither the input's subtree nor the
+    // panel's. One Tab from the input reaches it in a real browser.
+    const { sheet } = openSheet();
+    const inSheet = within(sheet);
+    const omniboxInput = inSheet.getByRole('combobox');
+    fireEvent.change(omniboxInput, { target: { value: 'app' } });
+    expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');
+    const run =
+      (inSheet.queryByRole('link', { name: RUN_LABEL }) as HTMLElement | null) ??
+      inSheet.getByRole('button', { name: RUN_LABEL });
+    run.focus();
+    fireEvent.keyDown(run, { key: 'Escape' });
     // The sheet stands; the expanded panel is the omnibox's own business.
     expect(screen.getByRole('dialog', { name: 'Menu' })).toBeTruthy();
     expect(omniboxInput.getAttribute('aria-expanded')).toBe('true');

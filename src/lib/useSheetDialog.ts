@@ -81,21 +81,28 @@ export function useSheetDialog({
       if (e.key !== 'Escape') return;
       // Layered dismissal (R-IX-1, the R3-592 stack-awareness rule): while a
       // combobox inside the sheet is expanded, this press is that combobox's
-      // own business, not the sheet's. Two target shapes reach it: the
-      // combobox input itself (which carries aria-expanded), and the option
-      // rows of its results panel — a sibling subtree of the input, out of the
-      // input's closest() reach, named by the input's aria-controls.
-      const target = e.target as HTMLElement | null;
-      if (target && typeof target.closest === 'function' && node.contains(target)) {
+      // own business, not the sheet's. Three target shapes reach it: the
+      // combobox input itself (which carries aria-expanded), the option rows
+      // of its results panel (a sibling subtree of the input, named by the
+      // input's aria-controls), and the other controls of the combobox's
+      // owning widget — the omnibox row's run control is a sibling of both
+      // the input and the panel, inside their nearest common ancestor.
+      const target = e.target;
+      if (target instanceof Element && node.contains(target)) {
         for (const combobox of node.querySelectorAll('[aria-expanded="true"]')) {
-          const panelId = combobox.getAttribute('aria-controls');
-          const panel = panelId ? document.getElementById(panelId) : null;
-          if (
-            combobox === target ||
-            combobox.contains(target) ||
-            (panel && panel.contains(target))
-          ) {
-            return;
+          if (combobox === target || combobox.contains(target)) return;
+          const panelId: string | null = combobox.getAttribute('aria-controls');
+          const panel: HTMLElement | null = panelId ? document.getElementById(panelId) : null;
+          if (panel && panel.contains(target)) return;
+          // The owning widget: the nearest ancestor of the combobox that also
+          // contains the controlled panel.
+          let anc: Element | null = combobox.parentElement;
+          while (anc && node.contains(anc)) {
+            if (panel && anc.contains(panel)) {
+              if (anc.contains(target)) return;
+              break;
+            }
+            anc = anc.parentElement;
           }
         }
       }
