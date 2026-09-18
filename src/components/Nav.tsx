@@ -7,6 +7,7 @@ import SiteLink from './SiteLink';
 import SiteOmnibox from './SiteOmnibox';
 import Door from './Door';
 import { NAV_HEIGHT_VAR, navHeightValue } from '../lib/navHeight';
+import { useSheetDialog } from '../lib/useSheetDialog';
 
 // The nav (R3-513; FRONT_DOOR_IA §4.1): four items — Apps · Docs · Tutorials ·
 // What's new. Showcase is gone (one directory: /showcase redirects to /apps);
@@ -37,6 +38,16 @@ function Nav({ active }: NavProps) {
   const isLight = theme === 'light';
 
   const closeMenu = () => setMenuOpen(false);
+
+  // R3-611 (R-IX-1): the mobile nav sheet's dialog contract — focus in on open,
+  // back to the burger on close, Tab wraps within, Escape dismisses. The effect
+  // keys on the open state, so its lifetime IS the sheet's; the attributes stay
+  // literal here (one line of markup the templates can lint and grep) while the
+  // behaviour is the shared half. The omnibox row manages its own focus and
+  // needs no special case — the wrap is document-order and the omnibox is
+  // inside it.
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  useSheetDialog({ ref: sheetRef, open: menuOpen, onDismiss: closeMenu });
 
   // Publish the nav's real height as `--nav-h` (R3-571). Anything that has to clear the
   // sticky bar reads the token instead of re-typing a number that was wrong at both
@@ -128,7 +139,13 @@ function Nav({ active }: NavProps) {
       </nav>
 
       {menuOpen && (
-        <div className="nav-sheet">
+        <div
+          className="nav-sheet"
+          ref={sheetRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
           <div className="nav-sheet-top">
             <span>immediately.run</span>
             <button
