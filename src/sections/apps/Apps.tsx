@@ -1,19 +1,14 @@
-import "./apps.css";
-import { useMemo, useRef, useState } from "react";
-import {
-  APPS,
-  CATEGORIES,
-  CAPABILITIES,
-  type AppRecord,
-} from "../../data/apps";
-import { presentRoute, editRoute } from "../../lib/routes";
-import { useSheetDialog } from "../../lib/useSheetDialog";
-import { PlatformLink } from "@immediately-run/sdk/platformLink";
-import AppCard from "../../components/AppCard";
+import './apps.css';
+import { useMemo, useRef, useState } from 'react';
+import { APPS, CATEGORIES, CAPABILITIES, type AppRecord } from '../../data/apps';
+import { presentRoute, editRoute } from '../../lib/routes';
+import { useSheetDialog } from '../../lib/useSheetDialog';
+import { PlatformLink } from '@immediately-run/sdk/platformLink';
+import AppCard from '../../components/AppCard';
 
-type ProvKey = "official" | "community";
-type SortKey = "featured" | "name" | "category";
-type View = "rows" | "grid";
+type ProvKey = 'official' | 'community';
+type SortKey = 'featured' | 'name' | 'category';
+type View = 'rows' | 'grid';
 
 interface Filters {
   cats: Set<string>;
@@ -22,18 +17,18 @@ interface Filters {
 }
 
 const SORTS: { key: SortKey; label: string }[] = [
-  { key: "featured", label: "Featured" },
-  { key: "name", label: "Name" },
-  { key: "category", label: "Category" },
+  { key: 'featured', label: 'Featured' },
+  { key: 'name', label: 'Name' },
+  { key: 'category', label: 'Category' },
 ];
 
 const PROVENANCES: { key: ProvKey; label: string }[] = [
-  { key: "official", label: "Official" },
-  { key: "community", label: "Community" },
+  { key: 'official', label: 'Official' },
+  { key: 'community', label: 'Community' },
 ];
 
 function provKey(app: AppRecord): ProvKey {
-  return app.provenance === "official" ? "official" : "community";
+  return app.provenance === 'official' ? 'official' : 'community';
 }
 
 function matches(app: AppRecord, f: Filters): boolean {
@@ -54,12 +49,11 @@ function toggle<T>(set: Set<T>, value: T): Set<T> {
 
 function sortApps(apps: AppRecord[], sort: SortKey): AppRecord[] {
   const out = [...apps];
-  if (sort === "name") out.sort((a, b) => a.name.localeCompare(b.name));
-  else if (sort === "category")
+  if (sort === 'name') out.sort((a, b) => a.name.localeCompare(b.name));
+  else if (sort === 'category')
     out.sort(
       (a, b) =>
-        a.categoryLabel.localeCompare(b.categoryLabel) ||
-        a.name.localeCompare(b.name),
+        a.categoryLabel.localeCompare(b.categoryLabel) || a.name.localeCompare(b.name),
     );
   else
     out.sort(
@@ -69,11 +63,11 @@ function sortApps(apps: AppRecord[], sort: SortKey): AppRecord[] {
 }
 
 function ProvChip({ app, className }: { app: AppRecord; className?: string }) {
-  if (app.provenance === "official") {
-    return <span className={`apps-prov ${className ?? ""}`}>official</span>;
+  if (app.provenance === 'official') {
+    return <span className={`apps-prov ${className ?? ''}`}>official</span>;
   }
   return (
-    <span className={`apps-prov apps-prov--community ${className ?? ""}`}>
+    <span className={`apps-prov apps-prov--community ${className ?? ''}`}>
       {`@github:${app.provenance.github}`}
     </span>
   );
@@ -82,10 +76,7 @@ function ProvChip({ app, className }: { app: AppRecord; className?: string }) {
 function Cta({ app }: { app: AppRecord }) {
   return (
     <>
-      <PlatformLink
-        className="apps-open"
-        path={presentRoute(app.repo, app.entry)}
-      >
+      <PlatformLink className="apps-open" path={presentRoute(app.repo, app.entry)}>
         Open
       </PlatformLink>
       <PlatformLink className="apps-fork" path={editRoute(app.repo, app.entry)}>
@@ -114,8 +105,8 @@ export default function Apps() {
     provs: new Set(),
     caps: new Set(),
   });
-  const [sort, setSort] = useState<SortKey>("featured");
-  const [view, setView] = useState<View>("rows");
+  const [sort, setSort] = useState<SortKey>('featured');
+  const [view, setView] = useState<View>('rows');
   const [sheetOpen, setSheetOpen] = useState(false);
 
   // R3-611 (R-IX-1): the filters sheet asserted role=dialog aria-modal and
@@ -124,11 +115,7 @@ export default function Apps() {
   // within, Escape dismisses (the backdrop click stays). The effect keys on the
   // open state, so its lifetime IS the sheet's; the attributes stay literal.
   const sheetRef = useRef<HTMLDivElement | null>(null);
-  useSheetDialog({
-    ref: sheetRef,
-    open: sheetOpen,
-    onDismiss: () => setSheetOpen(false),
-  });
+  useSheetDialog({ ref: sheetRef, open: sheetOpen, onDismiss: () => setSheetOpen(false) });
 
   // Counts are computed from the FULL dataset per facet (independent of state).
   const catCounts = useMemo(() => {
@@ -146,22 +133,16 @@ export default function Apps() {
   }, []);
   const capCounts = useMemo(() => {
     const m = new Map<string, number>();
-    for (const a of APPS)
-      for (const c of a.caps ?? []) m.set(c, (m.get(c) ?? 0) + 1);
+    for (const a of APPS) for (const c of a.caps ?? []) m.set(c, (m.get(c) ?? 0) + 1);
     return m;
   }, []);
 
   const results = useMemo(
-    () =>
-      sortApps(
-        APPS.filter((a) => matches(a, filters)),
-        sort,
-      ),
+    () => sortApps(APPS.filter((a) => matches(a, filters)), sort),
     [filters, sort],
   );
 
-  const activeCount =
-    filters.cats.size + filters.provs.size + filters.caps.size;
+  const activeCount = filters.cats.size + filters.provs.size + filters.caps.size;
   const empty = results.length === 0;
 
   const clear = () =>
@@ -222,8 +203,8 @@ export default function Apps() {
           <div>
             <div className="apps-facet-head">Provenance</div>
             <div className="apps-facet-list">
-              {PROVENANCES.filter((p) => (provCounts.get(p.key) ?? 0) > 0)
-                .length === 0 ? (
+              {PROVENANCES.filter((p) => (provCounts.get(p.key) ?? 0) > 0).length ===
+              0 ? (
                 <span className="apps-facet-empty">No authors yet.</span>
               ) : (
                 PROVENANCES.map((p) => {
@@ -248,9 +229,7 @@ export default function Apps() {
           </div>
 
           <div>
-            <div className="apps-facet-head apps-facet-head--tight">
-              Capability
-            </div>
+            <div className="apps-facet-head apps-facet-head--tight">Capability</div>
             <p className="apps-facet-help">Filter by what an app requests.</p>
             <div className="apps-facet-list">
               {CAPABILITIES.map((c) => (
@@ -300,18 +279,18 @@ export default function Apps() {
                 <button
                   type="button"
                   className="apps-pill apps-pill--view"
-                  aria-pressed={view === "rows"}
+                  aria-pressed={view === 'rows'}
                   aria-label="Rows view"
-                  onClick={() => setView("rows")}
+                  onClick={() => setView('rows')}
                 >
                   Rows
                 </button>
                 <button
                   type="button"
                   className="apps-pill apps-pill--view"
-                  aria-pressed={view === "grid"}
+                  aria-pressed={view === 'grid'}
                   aria-label="Grid view"
-                  onClick={() => setView("grid")}
+                  onClick={() => setView('grid')}
                 >
                   Grid
                 </button>
@@ -321,14 +300,12 @@ export default function Apps() {
 
           {empty ? (
             <div className="apps-empty">
-              <div className="apps-empty-title">
-                No apps match these filters.
-              </div>
+              <div className="apps-empty-title">No apps match these filters.</div>
               <button type="button" className="apps-empty-btn" onClick={clear}>
                 Clear filters →
               </button>
             </div>
-          ) : view === "rows" ? (
+          ) : view === 'rows' ? (
             <ul className="apps-rows" aria-label="Apps">
               {results.map((a) => (
                 <li className="apps-row" key={a.repo}>
@@ -342,10 +319,7 @@ export default function Apps() {
                   <div className="apps-row-tags">
                     <span className="apps-tag-chip">{a.categoryLabel}</span>
                     {(a.caps ?? []).map((c) => (
-                      <span
-                        className="apps-tag-chip apps-tag-chip--cap"
-                        key={c}
-                      >
+                      <span className="apps-tag-chip apps-tag-chip--cap" key={c}>
                         {c}
                       </span>
                     ))}
@@ -417,8 +391,8 @@ export default function Apps() {
             </div>
 
             <div className="apps-sheet-group">Provenance</div>
-            {PROVENANCES.filter((p) => (provCounts.get(p.key) ?? 0) > 0)
-              .length === 0 ? (
+            {PROVENANCES.filter((p) => (provCounts.get(p.key) ?? 0) > 0).length ===
+            0 ? (
               <div className="apps-sheet-empty">No authors yet.</div>
             ) : (
               <div className="apps-sheet-chips">
