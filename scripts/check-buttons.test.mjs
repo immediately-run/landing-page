@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { ALLOWLIST, checkButtons, cssFiles, cssRules, HOME, staleAllowlistEntries } from './check-buttons.mjs';
+import { ALLOWLIST, checkButtons, HOME, staleAllowlistEntries } from './check-buttons.mjs';
+import { cssFiles, cssRules } from './css-source.mjs';
 
 // R3-749. These rules exist because the pill button had eight gradient-primary copies and
 // four hairline-secondary ones, each hand-typed in its own section — and `.new-start`, the
@@ -43,6 +44,29 @@ describe('checkButtons', () => {
     const r = checkButtons([home(), clean, ['sneaky.css', '.x{background-image:var(--grad-btn)}']]);
     expect(r.ok).toBe(false);
     expect(r.errors.join(' ')).toContain('sneaky.css');
+  });
+
+  it('fails on a modifier-named gradient copy — .btn-primary--xl is not .btn-primary', () => {
+    const r = checkButtons([home(), clean, ['sneaky.css', '.btn-primary--xl{background:var(--grad-btn);padding:2px 4px}']]);
+    expect(r.ok).toBe(false);
+    expect(r.errors.join(' ')).toContain('sneaky.css');
+  });
+
+  it('fails on a descendant gradient copy — .btn-primary .child is not .btn-primary', () => {
+    const r = checkButtons([home(), clean, ['sneaky.css', '.btn-primary .child{background:var(--grad-btn)}']]);
+    expect(r.ok).toBe(false);
+    expect(r.errors.join(' ')).toContain('sneaky.css');
+  });
+
+  it('fails on copies planted inside @media — the parser sees through the wrapper', () => {
+    const r = checkButtons([
+      home(),
+      clean,
+      ['media.css', '@media (max-width:720px){.g{background:var(--grad-btn)}.h{border:1px solid var(--line-2);border-radius:var(--r-pill)}}'],
+    ]);
+    expect(r.ok).toBe(false);
+    expect(r.errors.join(' ')).toContain('.g');
+    expect(r.errors.join(' ')).toContain('.h');
   });
 
   it('fails on a planted hairline-secondary copy', () => {

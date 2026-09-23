@@ -9,8 +9,7 @@
 //
 // The decision is `checkButtons`, a pure function over `[name, text]` pairs; `main` supplies
 // the real `src/` tree — see `check-buttons.test.mjs`.
-import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { cssFiles, cssRules } from './css-source.mjs';
 
 /** The stylesheet that owns the shared classes. */
 export const HOME = 'App.css';
@@ -34,19 +33,6 @@ export const ALLOWLIST = [
   { file: 'tutorials.css', selector: '.tut-pill', rule: 'hairline', reason: 'difficulty/category chip — a badge, not a button' },
 ];
 
-/** CSS comments are prose, not rules (the `check-nav-token` precedent). */
-const stripComments = (text) => text.replace(/\/\*[\s\S]*?\*\//g, ' ');
-
-/** Flat `[selector, declarations]` rules. A block nested in `@media` matches as its own
- *  rule (the wrapper's braces do not nest in this repo's stylesheets, and the media context
- *  is irrelevant to these two rules — a copy is a copy at any width). */
-export function cssRules(text) {
-  return [...stripComments(text).matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => [
-    m[1].trim().replace(/\s+/g, ' '),
-    m[2],
-  ]);
-}
-
 // `background-image` is included because the gradient fill can be spelled either way; a
 // copy that switches properties is still a copy.
 const setsGradientFill = (decls) => /background(?:-image)?\s*:[^;]*var\(--grad-btn\)/.test(decls);
@@ -55,6 +41,12 @@ const isHairlinePill = (decls) =>
 
 const allowlisted = (file, selector, rule) =>
   ALLOWLIST.some((e) => e.file === file && e.selector === selector && e.rule === rule);
+
+const sharedClassSelector = (selector, cls) => {
+  const escaped = cls.replace(/\./g, '\\.');
+  const part = new RegExp(`^${escaped}(?![\\w-])(?:::[\\w-]+|:[\\w-]+(?:\\([^)]*\\))?)*$`);
+  return selector.split(',').some((candidate) => part.test(candidate.trim()));
+};
 
 /**
  * The rules, over `[basename, text]` pairs. Returns every failure rather than the first.
@@ -74,7 +66,7 @@ export function checkButtons(files) {
   } else {
     const homeSelectors = cssRules(home[1]).map(([selector]) => selector);
     for (const cls of ['.btn-primary', '.btn-secondary']) {
-      if (!homeSelectors.some((selector) => selector.includes(cls))) {
+      if (!homeSelectors.some((selector) => sharedClassSelector(selector, cls))) {
         errors.push(`${HOME} does not define ${cls} — the shared class the sections must use is missing.`);
       }
     }
@@ -83,7 +75,7 @@ export function checkButtons(files) {
   for (const [name, text] of files) {
     if (name === HOME) continue;
     for (const [selector, decls] of cssRules(text)) {
-      if (setsGradientFill(decls) && !selector.includes('.btn-primary') && !allowlisted(name, selector, 'gradient')) {
+      if (setsGradientFill(decls) && !sharedClassSelector(selector, '.btn-primary') && !allowlisted(name, selector, 'gradient')) {
         errors.push(
           `${name}: ${selector} sets the gradient button fill — .btn-primary in ${HOME} is the one gradient primary; allowlist it with a reason only if it is a state/badge, not a CTA.`,
         );
@@ -104,16 +96,6 @@ export function checkButtons(files) {
 export function staleAllowlistEntries(files) {
   const rules = new Map(files.map(([name, text]) => [name, cssRules(text).map(([selector]) => selector)]));
   return ALLOWLIST.filter((e) => !(rules.get(e.file) ?? []).includes(e.selector));
-}
-
-/** Every stylesheet under `dir`, as `[basename, text]` (the `check-nav-token` shape). */
-export function cssFiles(dir, out = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) cssFiles(full, out);
-    else if (entry.name.endsWith('.css')) out.push([entry.name, readFileSync(full, 'utf8')]);
-  }
-  return out;
 }
 
 const invokedDirectly = process.argv[1] && process.argv[1].endsWith('check-buttons.mjs');

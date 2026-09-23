@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { checkNavToken, cssFiles, MUST_CONSUME, VAR } from './check-nav-token.mjs';
+import { checkNavToken, MUST_CONSUME, VAR } from './check-nav-token.mjs';
+import { cssFiles } from './css-source.mjs';
 
 // R3-571. These rules exist because the token has two sides — a declaration in one
 // stylesheet and `var()` references in four others — and nothing else in the build notices

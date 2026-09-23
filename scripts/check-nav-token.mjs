@@ -11,8 +11,7 @@
 // The decision is `checkNavToken`, a pure function over `[name, text]` pairs; `main` supplies
 // the real `src/` tree. That split is what makes the rules testable without a fixture
 // directory — see `check-nav-token.test.mjs`.
-import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { cssFiles, stripComments } from './css-source.mjs';
 
 export const VAR = '--nav-h';
 
@@ -23,10 +22,6 @@ export const MUST_CONSUME = ['docs.css', 'tutorials.css', 'apps.css', 'changelog
 
 const declarationRe = () => new RegExp(`${VAR}\\s*:\\s*(\\d+)px`);
 const stalePxRe = /(?:^|[^-\w])(?:top|scroll-margin-top)\s*:\s*90(?:\.0+)?px/i;
-
-/** CSS comments are prose, not rules: `App.css` documents the old `90px` by name, and a
- *  check that flagged its own explanation would be unusable. */
-const stripComments = (text) => text.replace(/\/\*[\s\S]*?\*\//g, ' ');
 
 /**
  * The rules, over `[basename, text]` pairs. Returns every failure rather than the first, so
@@ -72,16 +67,6 @@ export function checkNavToken(files, { mustConsume = MUST_CONSUME } = {}) {
     px,
     consuming: files.filter(([, text]) => text.includes(`var(${VAR})`)).length,
   };
-}
-
-/** Every stylesheet under `dir`, as `[basename, text]`. */
-export function cssFiles(dir, out = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) cssFiles(full, out);
-    else if (entry.name.endsWith('.css')) out.push([entry.name, readFileSync(full, 'utf8')]);
-  }
-  return out;
 }
 
 const invokedDirectly = process.argv[1] && process.argv[1].endsWith('check-nav-token.mjs');
