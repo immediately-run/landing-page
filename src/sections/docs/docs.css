@@ -99,17 +99,6 @@
 .docs-example-name{font:700 15px var(--disp);letter-spacing:-.01em;color:var(--ink)}
 .docs-example-desc{font:400 13px var(--sans);color:var(--ink-2);margin-top:2px}
 .docs-example-actions{margin-left:auto;display:flex;gap:8px}
-.docs-btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  font:600 13px var(--sans);padding:8px 18px;border-radius:var(--r-pill);
-  border:1px solid transparent;cursor:pointer;text-decoration:none;
-  transition:box-shadow .14s,border-color .14s,filter .14s;
-}
-.docs-btn:focus-visible{outline:none;box-shadow:var(--glow)}
-.docs-btn--open{background:var(--grad-btn);color:#fff}
-.docs-btn--open:hover{filter:brightness(1.05);box-shadow:var(--glow)}
-.docs-btn--fork{background:transparent;border-color:var(--line-2);color:var(--ink)}
-.docs-btn--fork:hover{border-color:var(--accent-2)}
 
 /* api signature block */
 .docs-api{
@@ -166,10 +155,10 @@
 .docs-machine-lead{
   font:500 18px/1.4 var(--sans);color:var(--ink-2);margin:14px 0 0;max-width:60ch;
 }
-.docs-pills{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0}
+.docs-pills{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0;align-items:center}
+/* The machine surface's one non-CTA pill (the API reference link renders as a
+   quiet label); the two CTAs beside it are .btn-primary (App.css). */
 .docs-pill{font:600 13px var(--mono);padding:9px 16px;border-radius:var(--r-pill);text-decoration:none}
-.docs-pill--primary{background:var(--grad-btn);color:#fff}
-.docs-pill--primary:hover{filter:brightness(1.05)}
 
 .docs-llms{
   margin-top:26px;border:1px solid var(--line);border-radius:var(--r-md);

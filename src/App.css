@@ -31,20 +31,25 @@
 .section-error__title{font:800 26px var(--disp);letter-spacing:-.02em;color:var(--ink)}
 .section-error__body{margin:10px 0 22px;font:400 15px/1.5 var(--sans);color:var(--ink-2)}
 .section-error__actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.section-error__btn{display:inline-flex;align-items:center;justify-content:center;
-  font:600 14px var(--sans);padding:10px 20px;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;
-  border:1px solid var(--line-2);background:var(--panel);color:var(--ink);
-  transition:border-color .14s,box-shadow .14s}
-.section-error__btn:hover{border-color:var(--accent-2)}
-.section-error__btn--primary{border-color:transparent;background:var(--grad-btn);color:#fff}
-.section-error__btn--primary:hover{box-shadow:var(--glow)}
 
 /* ============================ SHARED CONTROLS ============================== */
-/* `.btn` / `.btn-ghost` went with the sections that were their only callers (the
-   hero door row, the Remix CTAs, the closing band). The page's remaining pill
-   buttons are the omnibox's Run, the tiles' Open/Fork and the nav's `.door`,
-   each of which carries its own rule; a generic pair kept for a future caller is
-   what `check:dead-css` exists to catch. */
+/* The pill buttons (R3-749): one gradient primary, one hairline secondary, one
+   home. A pill button is one of these; a section rule may position it (margin,
+   alignment, width) but not restyle it — a section that needs a different pill
+   is a design-system conversation, not a local rule. `check:buttons` enforces
+   it; its ALLOWLIST names the pill-shaped non-CTAs outside this file (chips,
+   toggles, the icon close). The omnibox's Run is the one pill outside these
+   stylesheets — it ships in the omnibox package's own CSS (R3-622 owns it). */
+.btn-primary,.btn-secondary{display:inline-flex;align-items:center;justify-content:center;
+  white-space:nowrap;border:1px solid transparent;border-radius:var(--r-pill);cursor:pointer;
+  font:600 14px var(--sans);padding:10px 20px;text-decoration:none;
+  transition:border-color .14s,box-shadow .14s}
+.btn-primary:focus-visible,.btn-secondary:focus-visible{outline:none;box-shadow:var(--glow)}
+.btn-primary{background:var(--grad-btn);color:var(--on-grad)}
+.btn-primary:hover{box-shadow:var(--glow)}
+.btn-secondary{border-color:var(--line-2);background:var(--panel);color:var(--ink)}
+.btn-secondary:hover{border-color:var(--accent-2)}
+.btn--sm{font:600 13px var(--sans);padding:8px 16px}
 
 /* mono micro-label: plain tracked mono, no pill. Section markers (/APPS, /NEWS …)
    in --accent-3; a quieter label (/HOW IT WORKS) takes .tag--label in --ink-3. */
@@ -72,11 +77,9 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
 .burger{display:none;align-items:center;justify-content:center;width:40px;height:40px;
   border:1px solid var(--line-2);background:var(--panel);color:var(--ink);
   border-radius:var(--r-pill);cursor:pointer;font-size:18px}
-/* the door cluster (R3-513): a hairline secondary in the nav and its mobile sheet */
-.door{display:inline-flex;align-items:center;justify-content:center;min-height:38px;
-  padding:8px 16px;border:1px solid var(--line-2);border-radius:var(--r-pill);
-  color:var(--ink);font:600 14px var(--sans);text-decoration:none;transition:border-color .14s}
-.door:hover{border-color:var(--accent-2)}
+/* the door cluster (R3-513): a .btn-secondary in the nav and its mobile sheet —
+   the local rules carry size only */
+.door{min-height:38px}
 .nav-omnibox{display:inline-flex}
 .nav-make{color:var(--ink)}
 .nav-door{display:inline-flex}
@@ -94,7 +97,7 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
   padding:15px 2px;border-bottom:1px solid var(--line)}
 .nav-sheet-omnibox{padding:10px 14px;border-bottom:1px solid var(--line)}
 .nav-sheet-door{padding:6px 14px}
-.nav-sheet-door .door{width:100%;min-height:44px;justify-content:center}
+.nav-sheet-door .door{width:100%;min-height:44px}
 .nav-sheet-theme{display:block;width:100%;min-height:44px;text-align:left;
   border:0;background:transparent;color:var(--ink-2);font:400 15px var(--sans);
   padding:10px 14px;cursor:pointer}
@@ -143,10 +146,7 @@ nav.nav{position:sticky;top:0;z-index:80;backdrop-filter:blur(14px);
 .app-foot h3{font:800 19px/1 var(--disp);letter-spacing:-.02em;color:var(--ink)}
 .app-foot p{font:400 13px/1.45 var(--sans);color:var(--ink-2);margin-top:9px}
 .app-actions{display:flex;gap:7px;margin-top:13px}
-.app-actions a{flex:1;text-align:center;font:600 13px var(--sans);padding:8px;border-radius:var(--r-pill)}
-.app-actions .open{background:var(--grad-btn);color:#fff}
-.app-actions .fork{background:transparent;border:1px solid var(--line-2);color:var(--ink);transition:border-color .14s}
-.app-actions .fork:hover{border-color:var(--accent-2)}
+.app-actions a{flex:1}
 
 /* provenance chip */
 .prov{display:inline-block;margin-top:7px;font:400 10.5px var(--mono);border-radius:var(--r-pill);padding:2px 9px}
@@ -183,7 +183,7 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
   .nav-omnibox,.nav-make{display:none}
   .burger{display:inline-flex}
   .nav-search-btn{display:inline-flex}
-  .nav-door .door{min-height:44px;padding:10px 16px}
+  .nav-door .door{min-height:44px}
   .hero{padding:40px 0 8px}
   /* the column stacks left, so the eyebrow and the cue stop being centred over it */
   .how-tag{margin-bottom:30px;text-align:left}

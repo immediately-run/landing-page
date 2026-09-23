@@ -20,7 +20,7 @@ function StartButton({ record }: { record: TemplateRecord }) {
   if (record.start.kind === 'generate') {
     return (
       <a
-        className="new-cta new-start"
+        className="new-cta btn-primary"
         href={githubGenerateUrl(record.repo)}
         target="_blank"
         rel="noopener noreferrer"
@@ -31,7 +31,7 @@ function StartButton({ record }: { record: TemplateRecord }) {
   }
   if (record.start.kind === 'run') {
     return (
-      <PlatformLink className="new-cta new-start" path={record.start.route}>
+      <PlatformLink className="new-cta btn-primary" path={record.start.route}>
         Start →
       </PlatformLink>
     );
@@ -51,7 +51,7 @@ function TemplateCard({ record }: { record: TemplateRecord }) {
         ))}
       </ul>
       {record.example && (
-        <PlatformLink className="new-cta" path={examplePresentPath(record.example)}>
+        <PlatformLink className="new-cta btn-secondary" path={examplePresentPath(record.example)}>
           Try it live →
         </PlatformLink>
       )}
@@ -78,13 +78,13 @@ export default function New() {
           repos and open pull requests. Running public apps does not need it; for a private app,
           install it on that repo so the people you allow can run it.
         </p>
-        <a className="new-cta" href={GITHUB_APP_INSTALL_URL} target="_blank" rel="noopener noreferrer">
+        <a className="new-cta btn-secondary" href={GITHUB_APP_INSTALL_URL} target="_blank" rel="noopener noreferrer">
           Install the app →
         </a>
       </div>
 
-      <section aria-labelledby="new-starting">
-        <h2 id="new-starting" className="new-sec-h2">
+      <section aria-labelledby="new-pick">
+        <h2 id="new-pick" className="new-sec-h2">
           Pick a starting point.
         </h2>
         <div className="new-template-cards">

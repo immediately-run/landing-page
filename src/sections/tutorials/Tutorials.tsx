@@ -68,7 +68,7 @@ function NotFound() {
       <div className="tut-404">
         <div className="tut-404-title">No such tutorial.</div>
         <p className="tut-404-text">It may have moved. Head back to the index.</p>
-        <SiteLink className="tut-404-cta" to="/tutorials">
+        <SiteLink className="btn-primary" to="/tutorials">
           All tutorials →
         </SiteLink>
       </div>

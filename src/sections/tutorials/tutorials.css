@@ -112,15 +112,6 @@
   color: var(--ink-2);
   margin: 8px 0 18px;
 }
-.tut-404-cta {
-  display: inline-block;
-  background: var(--grad-btn);
-  color: #fff;
-  font: 600 14px var(--sans);
-  padding: 11px 22px;
-  border-radius: var(--r-pill);
-  text-decoration: none;
-}
 
 /* ---- tutorial page layout ---- */
 .tut-layout {

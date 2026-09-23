@@ -221,7 +221,7 @@ function NotFound() {
     <div className="docs-404">
       <div className="docs-404-title">This page didn't load.</div>
       <p className="docs-404-body">Try another topic from the sidebar, or head back to the docs index.</p>
-      <SiteLink className="docs-btn docs-btn--open" to="/docs">
+      <SiteLink className="btn-primary" to="/docs">
         All docs →
       </SiteLink>
     </div>
@@ -258,7 +258,7 @@ function MachineSurface({
             a `requestFolder()` that never existed survived in the reference for months.
             Point at the generated artifact; do not restate it here. */}
         <a
-          className="docs-pill docs-pill--primary"
+          className="btn-primary"
           href={sdkReferenceUrl('llms.txt')}
           target="_blank"
           rel="noopener"
@@ -277,7 +277,7 @@ function MachineSurface({
             generated in neither environment — and inside the sandboxed iframe a root-relative
             href resolves against `sandbox.<host>` on top of that. It is now a repo file,
             served from the platform's files space. */}
-        <a className="docs-pill docs-pill--primary" href={rawUrl('public/llms.txt')}>
+        <a className="btn-primary" href={rawUrl('public/llms.txt')}>
           llms.txt
         </a>
       </div>

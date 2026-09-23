@@ -22,7 +22,7 @@ function Door() {
   const { status } = useAuth();
   const signedIn = status === 'signed-in';
   return (
-    <PlatformLink className="door" path={HOME_PATH}>
+    <PlatformLink className="door btn-secondary btn--sm" path={HOME_PATH}>
       {signedIn ? 'Home' : 'Sign in'}
     </PlatformLink>
   );
