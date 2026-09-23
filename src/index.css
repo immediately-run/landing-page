@@ -22,6 +22,7 @@
   --grad:linear-gradient(96deg,#f6f1fb 0%,#f49ad4 46%,#b285f2 100%);
   --grad-btn:linear-gradient(135deg,oklch(0.74 0.17 350),oklch(0.62 0.18 295));
   --glow:0 0 0 1px rgba(150,110,240,.5), 0 0 34px rgba(150,110,240,.32);
+  --on-grad:#fff;                      /* text on a gradient fill */
   /* type families */
   --disp:"Gabarito",system-ui,sans-serif;
   --sans:"Public Sans",system-ui,sans-serif;
@@ -55,6 +56,7 @@ html[data-theme="light"]{
   --grad:linear-gradient(96deg,#c43d96 0%,#9a45e6 100%);
   --grad-btn:linear-gradient(135deg,#c43d96,#9a45e6);
   --glow:0 0 0 1px rgba(150,90,235,.4), 0 8px 26px rgba(150,90,235,.22);
+  --on-grad:#fff;
   --shadow-pop:0 18px 50px rgba(40,24,70,.16);
   --wash:
     radial-gradient(60% 50% at 80% -5%, rgba(154,69,230,.10), transparent 60%),

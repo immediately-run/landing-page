@@ -21,10 +21,10 @@ function AppTile({ app }: AppTileProps) {
       chip={<ProvenanceChip provenance={app.provenance} />}
       actions={
         <>
-          <PlatformLink className="open" path={presentRoute(app.repo, app.entry)}>
+          <PlatformLink className="btn-primary btn--sm" path={presentRoute(app.repo, app.entry)}>
             Open
           </PlatformLink>
-          <PlatformLink className="fork" path={editRoute(app.repo, app.entry)}>
+          <PlatformLink className="btn-secondary btn--sm" path={editRoute(app.repo, app.entry)}>
             Fork
           </PlatformLink>
         </>

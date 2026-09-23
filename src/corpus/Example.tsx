@@ -26,18 +26,18 @@ export default function Example({
       </div>
       <div className="docs-example-actions">
         {presentHref ? (
-          <PlatformLink className="docs-btn docs-btn--open" path={presentHref}>
+          <PlatformLink className="btn-primary btn--sm" path={presentHref}>
             Open
           </PlatformLink>
         ) : (
-          <a className="docs-btn docs-btn--open">Open</a>
+          <a className="btn-primary btn--sm">Open</a>
         )}
         {editHref ? (
-          <PlatformLink className="docs-btn docs-btn--fork" path={editHref}>
+          <PlatformLink className="btn-secondary btn--sm" path={editHref}>
             Fork
           </PlatformLink>
         ) : (
-          <a className="docs-btn docs-btn--fork">Fork</a>
+          <a className="btn-secondary btn--sm">Fork</a>
         )}
       </div>
     </div>

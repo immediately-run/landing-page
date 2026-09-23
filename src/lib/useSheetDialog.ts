@@ -119,6 +119,5 @@ export function useSheetDialog({
       invoker?.focus();
     };
     // `open` is the sheet's lifetime; the ref object is stable.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, ref]);
 }

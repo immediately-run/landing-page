@@ -36,15 +36,15 @@ class SectionErrorBoundary extends Component<Props, State> {
         <div className="section-error__actions">
           <button
             type="button"
-            className="section-error__btn section-error__btn--primary"
+            className="btn-primary"
             onClick={() => window.location.reload()}
           >
             Reload
           </button>
-          <SiteLink className="section-error__btn" to="/apps">
+          <SiteLink className="btn-secondary" to="/apps">
             Go to apps
           </SiteLink>
-          <SiteLink className="section-error__btn" to="/">
+          <SiteLink className="btn-secondary" to="/">
             Back home
           </SiteLink>
         </div>

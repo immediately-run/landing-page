@@ -28,25 +28,11 @@
   font-size: 14.5px;
 }
 
+/* Positioning for the /new CTAs — the pill itself is .btn-primary/.btn-secondary
+   (App.css); this carries only where it sits. */
 .new-cta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
   margin-top: 12px;
   align-self: flex-start;
-  cursor: pointer;
-  font: 600 15px var(--sans);
-}
-
-.new-start {
-  border: 0;
-  background: var(--grad-btn);
-  color: #fff;
-}
-
-.new-start:hover {
-  filter: brightness(1.05);
-  box-shadow: var(--glow);
 }
 
 .new-template-cards {

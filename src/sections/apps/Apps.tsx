@@ -76,10 +76,10 @@ function ProvChip({ app, className }: { app: AppRecord; className?: string }) {
 function Cta({ app }: { app: AppRecord }) {
   return (
     <>
-      <PlatformLink className="apps-open" path={presentRoute(app.repo, app.entry)}>
+      <PlatformLink className="apps-open btn-primary btn--sm" path={presentRoute(app.repo, app.entry)}>
         Open
       </PlatformLink>
-      <PlatformLink className="apps-fork" path={editRoute(app.repo, app.entry)}>
+      <PlatformLink className="apps-fork btn-secondary btn--sm" path={editRoute(app.repo, app.entry)}>
         Fork
       </PlatformLink>
     </>
@@ -256,7 +256,7 @@ export default function Apps() {
             <span className="apps-count">{results.length} apps</span>
             <button
               type="button"
-              className="apps-filters-btn"
+              className="apps-filters-btn btn-secondary btn--sm"
               onClick={() => setSheetOpen(true)}
             >
               Filters {activeCount}
@@ -301,7 +301,7 @@ export default function Apps() {
           {empty ? (
             <div className="apps-empty">
               <div className="apps-empty-title">No apps match these filters.</div>
-              <button type="button" className="apps-empty-btn" onClick={clear}>
+              <button type="button" className="apps-empty-btn btn-primary" onClick={clear}>
                 Clear filters →
               </button>
             </div>
@@ -431,7 +431,7 @@ export default function Apps() {
 
             <button
               type="button"
-              className="apps-sheet-show"
+              className="apps-sheet-show btn-primary"
               onClick={() => setSheetOpen(false)}
             >
               Show {results.length} apps
