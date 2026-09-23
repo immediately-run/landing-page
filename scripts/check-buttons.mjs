@@ -42,10 +42,13 @@ const isHairlinePill = (decls) =>
 const allowlisted = (file, selector, rule) =>
   ALLOWLIST.some((e) => e.file === file && e.selector === selector && e.rule === rule);
 
-const sharedClassSelector = (selector, cls) => {
-  const escaped = cls.replace(/\./g, '\\.');
-  const part = new RegExp(`^${escaped}(?![\\w-])(?:::[\\w-]+|:[\\w-]+(?:\\([^)]*\\))?)*$`);
-  return selector.split(',').some((candidate) => part.test(candidate.trim()));
+const selectorParts = (selector) => selector.split(',').map((part) => part.trim()).filter(Boolean);
+
+export const definesSharedClass = (selector, cls) => selectorParts(selector).some((part) => part === cls);
+
+export const isOnlySharedClass = (selector, cls) => {
+  const parts = selectorParts(selector);
+  return parts.length > 0 && parts.every((part) => part === cls);
 };
 
 /**
@@ -66,7 +69,7 @@ export function checkButtons(files) {
   } else {
     const homeSelectors = cssRules(home[1]).map(([selector]) => selector);
     for (const cls of ['.btn-primary', '.btn-secondary']) {
-      if (!homeSelectors.some((selector) => sharedClassSelector(selector, cls))) {
+      if (!homeSelectors.some((selector) => definesSharedClass(selector, cls))) {
         errors.push(`${HOME} does not define ${cls} — the shared class the sections must use is missing.`);
       }
     }
@@ -75,7 +78,7 @@ export function checkButtons(files) {
   for (const [name, text] of files) {
     if (name === HOME) continue;
     for (const [selector, decls] of cssRules(text)) {
-      if (setsGradientFill(decls) && !sharedClassSelector(selector, '.btn-primary') && !allowlisted(name, selector, 'gradient')) {
+      if (setsGradientFill(decls) && !isOnlySharedClass(selector, '.btn-primary') && !allowlisted(name, selector, 'gradient')) {
         errors.push(
           `${name}: ${selector} sets the gradient button fill — .btn-primary in ${HOME} is the one gradient primary; allowlist it with a reason only if it is a state/badge, not a CTA.`,
         );

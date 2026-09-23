@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ALLOWLIST, checkButtons, HOME, staleAllowlistEntries } from './check-buttons.mjs';
+import { ALLOWLIST, checkButtons, HOME, isOnlySharedClass, staleAllowlistEntries } from './check-buttons.mjs';
 import { cssFiles, cssRules } from './css-source.mjs';
 
 // R3-749. These rules exist because the pill button had eight gradient-primary copies and
@@ -54,6 +54,18 @@ describe('checkButtons', () => {
 
   it('fails on a descendant gradient copy — .btn-primary .child is not .btn-primary', () => {
     const r = checkButtons([home(), clean, ['sneaky.css', '.btn-primary .child{background:var(--grad-btn)}']]);
+    expect(r.ok).toBe(false);
+    expect(r.errors.join(' ')).toContain('sneaky.css');
+  });
+
+  it('fails on a pseudo-qualified gradient copy — a section may not restyle the primary pill', () => {
+    const r = checkButtons([home(), clean, ['sneaky.css', '.btn-primary:hover{background:var(--grad-btn)}']]);
+    expect(r.ok).toBe(false);
+    expect(r.errors.join(' ')).toContain('sneaky.css');
+  });
+
+  it('fails on a mixed selector — .btn-primary does not launder another selector part', () => {
+    const r = checkButtons([home(), clean, ['sneaky.css', '.btn-primary,.sneaky{background:var(--grad-btn)}']]);
     expect(r.ok).toBe(false);
     expect(r.errors.join(' ')).toContain('sneaky.css');
   });
@@ -122,6 +134,6 @@ describe('checkButtons', () => {
       .filter(([, decls]) => /background(?:-image)?\s*:[^;]*var\(--grad-btn\)/.test(decls))
       .map(([selector]) => selector);
     expect(setters.length).toBeGreaterThan(0);
-    for (const selector of setters) expect(selector).toContain('.btn-primary');
+    for (const selector of setters) expect(isOnlySharedClass(selector, '.btn-primary')).toBe(true);
   });
 });
