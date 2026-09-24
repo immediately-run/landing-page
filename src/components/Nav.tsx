@@ -118,7 +118,7 @@ function Nav({ active }: NavProps) {
             {/* Make an app: a hairline secondary — /new is an app-owned route
                 (R3-515 builds the page; the route resolves to the site root
                 until then). NEVER the gradient primary (FRONT_DOOR_IA §1.1). */}
-            <SiteLink className="nav-link nav-make desk-only" to="/new">
+            <SiteLink className="btn-secondary btn--sm nav-make desk-only" to="/new">
               Make an app
             </SiteLink>
             {/* The door stays in the top bar at every width — it is one of the
