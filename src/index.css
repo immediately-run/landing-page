@@ -32,6 +32,11 @@
   /* layout measure + gutter (R3-532, the quiet column — one measure everywhere) */
   --measure:1004px;
   --gutter:88px;
+  /* the nav's own layout rule (design-system README "Layout rules"): the bar spans
+     the page in a centred 1280px column with 32px side padding, wider than the
+     reading column's measure — the nav is chrome, not content (R3-750) */
+  --nav-measure:1280px;
+  --nav-gutter:32px;
   /* elevation */
   --shadow-card:6px 6px 0 var(--accent-2);   /* hard offset on tile hover */
   --shadow-pop:0 18px 50px rgba(0,0,0,.5);
