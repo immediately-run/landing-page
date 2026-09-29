@@ -3,13 +3,13 @@ import { editRoute, examplePresentPath, presentRoute, WIKI_PRESENT_PATH, HOME_PA
 
 describe('routes', () => {
   it('presentRoute and editRoute build host paths for an org repo', () => {
-    expect(presentRoute('whiteboard')).toBe('/present/github/immediately-run/whiteboard/main/files/src/App.tsx');
-    expect(editRoute('whiteboard', 'src/other.tsx', 'feat')).toBe('/edit/github/immediately-run/whiteboard/feat/files/src/other.tsx');
+    expect(presentRoute('lodestar')).toBe('/present/github/immediately-run/lodestar/main/files/src/App.tsx');
+    expect(editRoute('lodestar', 'src/other.tsx', 'feat')).toBe('/edit/github/immediately-run/lodestar/feat/files/src/other.tsx');
   });
 
   it('examplePresentPath has no files/ segment — the entry resolves from package.json', () => {
     expect(examplePresentPath('grove')).toBe('/present/github/immediately-run/grove/main');
-    expect(examplePresentPath('whiteboard', 'v2')).toBe('/present/github/immediately-run/whiteboard/v2');
+    expect(examplePresentPath('lodestar', 'v2')).toBe('/present/github/immediately-run/lodestar/v2');
   });
 
   it('the wiki runs as an org app and the door hands to /home in both auth states', () => {

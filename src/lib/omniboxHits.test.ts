@@ -11,10 +11,10 @@ describe('appHits (the app-directory source)', () => {
   it('returns every directory record as a candidate carrying its provenance', () => {
     const hits = appHits();
     expect(hits.length).toBeGreaterThan(0);
-    const whiteboard = hits.find((h) => h.repo === 'whiteboard');
-    expect(whiteboard).toBeTruthy();
-    expect(whiteboard!.name).toBe('Whiteboard');
-    expect(whiteboard!.provenance).toBeTruthy();
+    const lodestar = hits.find((h) => h.repo === 'lodestar');
+    expect(lodestar).toBeTruthy();
+    expect(lodestar!.name).toBe('Lodestar');
+    expect(lodestar!.provenance).toBeTruthy();
   });
 });
 
