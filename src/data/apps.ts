@@ -69,7 +69,7 @@ export const APPS: AppRecord[] = [
   {
     name: 'Lodestar',
     repo: 'lodestar',
-    blurb: 'An infinite canvas for notes and sketches. Open the source while it runs.',
+    blurb: 'An infinite whiteboard for notes and sketches. Open the source while it runs.',
     category: 'creative',
     categoryLabel: 'Creative',
     provenance: 'official',

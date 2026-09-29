@@ -82,6 +82,17 @@ describe('SiteOmnibox against the host location', () => {
     expect(rows[0].getAttribute('target')).toBe('_top');
   });
 
+  it('the generic noun still finds the board app after the rename to Lodestar', () => {
+    // Visitors who knew the app as `whiteboard` search for that word; the blurb carries it.
+    renderSiteOmnibox();
+    type('whiteboard');
+    const rows = screen.getAllByRole('option');
+    expect(rows[0].textContent).toContain('Lodestar');
+    expect(rows[0].getAttribute('href')).toBe(
+      `${outerHref}/present/github/immediately-run/lodestar/main/files/src/App.tsx`,
+    );
+  });
+
   it('a plain left click on the app row asks the host to navigate to the outer href (R3-568)', () => {
     // The escape is PlatformLink's click handler: it cancels the frame navigation the
     // sandbox would refuse, and sends the host a urlchange for the same href the anchor
