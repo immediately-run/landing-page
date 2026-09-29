@@ -67,8 +67,8 @@ export const CAPABILITIES: { slug: string; label: string }[] = [
 
 export const APPS: AppRecord[] = [
   {
-    name: 'Whiteboard',
-    repo: 'whiteboard',
+    name: 'Lodestar',
+    repo: 'lodestar',
     blurb: 'An infinite canvas for notes and sketches. Open the source while it runs.',
     category: 'creative',
     categoryLabel: 'Creative',
@@ -366,4 +366,4 @@ export function appsByRepo(repos: string[]): AppRecord[] {
 // the teaser was a shop window for four others. The 1a redesign leaves one shelf, so
 // there is one selection and nothing for it to be disjoint from — three apps that
 // each answer "what is this for?" differently: a canvas, a database, a wiki.
-export const TEASER_REPOS = ['whiteboard', 'sqlite-studio', 'grove'];
+export const TEASER_REPOS = ['lodestar', 'sqlite-studio', 'grove'];

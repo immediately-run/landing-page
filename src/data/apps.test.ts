@@ -13,12 +13,20 @@ describe('appsByRepo', () => {
     expect(apps.map((a) => a.repo)).toEqual(TEASER_REPOS);
   });
 
+  it('resolves the board app under its repository name, lodestar, as Lodestar', () => {
+    // The repository was renamed from `whiteboard`; the record carries the new name so
+    // the tile, the omnibox row and the launch URL agree with the repository.
+    const [lodestar] = appsByRepo(['lodestar']);
+    expect(lodestar.name).toBe('Lodestar');
+    expect(TEASER_REPOS).toContain('lodestar');
+  });
+
   it('names each app once — `/` must not show the same app twice', () => {
     expect(new Set(TEASER_REPOS).size).toBe(TEASER_REPOS.length);
   });
 
   it('THROWS on a repo no record carries, naming the key', () => {
-    expect(() => appsByRepo(['whiteboard', 'white-board'])).toThrowError(/white-board/);
+    expect(() => appsByRepo(['lodestar', 'lode-star'])).toThrowError(/lode-star/);
   });
 
   it('preserves the order asked for, not the order of APPS', () => {

@@ -70,11 +70,11 @@ const entryWithLongFirstWord = () =>
 describe('SiteOmnibox against the host location', () => {
   it("typing an app name resolves the app row through the site's own route builder", () => {
     renderSiteOmnibox();
-    type('whiteboard');
+    type('lodestar');
     const rows = screen.getAllByRole('option');
-    expect(rows[0].textContent).toContain('Whiteboard');
+    expect(rows[0].textContent).toContain('Lodestar');
     expect(rows[0].getAttribute('href')).toBe(
-      `${outerHref}/present/github/immediately-run/whiteboard/main/files/src/App.tsx`,
+      `${outerHref}/present/github/immediately-run/lodestar/main/files/src/App.tsx`,
     );
     // `_top` is a same-context target, which is what PlatformLink's click handling keys on
     // (and the anchor's own behaviour when there is no host). On a plain click inside the
@@ -88,7 +88,7 @@ describe('SiteOmnibox against the host location', () => {
     // advertises. An sdk pin from before R3-568 (0.60.0) leaves the click to `_top`,
     // so neither assertion holds.
     renderSiteOmnibox();
-    type('whiteboard');
+    type('lodestar');
     const appRow = screen.getAllByRole('option')[0];
     const sendMessage = installHostTransport();
     const evt = createEvent.click(appRow, { button: 0 });
@@ -163,7 +163,7 @@ describe('the omnibox submit is nameable (R3-570)', () => {
 
   it('is still named once a repo is typed and it becomes the run link', () => {
     renderSiteOmnibox();
-    type('github:immediately-run/whiteboard');
+    type('github:immediately-run/lodestar');
     const run = screen.getByRole('link', { name: RUN_LABEL });
     expect(run.getAttribute('aria-label')).toBe(RUN_LABEL);
   });

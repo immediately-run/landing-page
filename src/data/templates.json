@@ -6,7 +6,7 @@
     "pitch": "A minimal React and TypeScript repo with nothing to delete first.",
     "gives": ["A src/App.tsx that renders", "A manifest declaring no capabilities", "A push-to-publish repo"],
     "repo": "immediately-run/new-project-template",
-    "example": "whiteboard",
+    "example": "lodestar",
     "start": { "kind": "generate" }
   },
   {
