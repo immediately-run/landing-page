@@ -1,21 +1,13 @@
 // Playwright config for the landing-page mobile route sweep (R3-747).
 // Runs against `vite preview` on 127.0.0.1:4174.
 
-import { defineConfig } from '@playwright/test';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-if (require.extensions) {
-  require.extensions['.mdx'] = (module) => {
-    module.exports = () => null;
-  };
-}
+import { defineConfig } from "@playwright/test";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, '..');
+const rootDir = path.resolve(__dirname, "..");
 const defaultPort = Number(process.env.SWEEP_PORT || 4174);
 
 export default defineConfig({
@@ -23,7 +15,7 @@ export default defineConfig({
   testMatch: /.*\.spec\.ts$/,
   fullyParallel: false,
   workers: 1,
-  reporter: [['list']],
+  reporter: [["list"]],
   timeout: 5 * 60_000,
   webServer: process.env.SWEEP_BASE_URL
     ? undefined
