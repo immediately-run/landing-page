@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 // The docs heading permalink used to read `var(--muted)`, a token nothing
-// declared — so it rendered the browser default (R3-744). The pin: the element
+// declared — invalid at computed-value time, so `color` behaved as `unset` and
+// the anchor inherited its heading's ink (and the rule's own `opacity: 0` hid
+// it until hover regardless) (R3-744). The pin: the element
 // still carries its class, and the class's rule resolves to the declared
 // `--muted` token. jsdom cannot resolve var() to a computed colour, so the
 // token wiring is pinned by reading the real stylesheets as data (the
