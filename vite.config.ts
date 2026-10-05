@@ -29,6 +29,7 @@ export default defineConfig({
     react(),
   ],
   test: {
+    exclude: ['**/node_modules/**', '**/dist/**', 'sweep/**'],
     // The @immediately-run/* dists ship extensionless relative ESM imports
     // (`./sandboxUtils`), which Vite's resolver accepts but Node's — used for
     // externalized deps in vitest — rejects. Inlining routes them through Vite's

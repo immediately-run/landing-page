@@ -51,6 +51,15 @@ jobs:
 
       - run: npm ci
 
+      - name: Cache Playwright browsers (R3-747)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package.json') }}
+
+      - name: Install Playwright browsers (R3-747)
+        run: npx playwright install --with-deps chromium
+
       # The whole gate. Fails on a corpora violation, on a generated file that was
       # not committed alongside its source, on a lint error, on a type error, on a
       # build failure, or on a red test.
@@ -62,3 +71,11 @@ jobs:
       - run: npm run verify
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload sweep screenshots (R3-747)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sweep
+          path: sweep/.out/
+          include-hidden-files: true
