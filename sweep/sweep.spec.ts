@@ -126,7 +126,9 @@ for (const vp of VIEWPORTS) {
       allFindings.push(...layoutFindings);
 
       // Open overlays by their triggers
-      const triggers = await page.$$(".burger, .apps-filters-btn");
+      const triggers = await page.$$(
+        ".burger, .nav-search-btn, .apps-filters-btn",
+      );
 
       for (const trigger of triggers) {
         if (!(await trigger.isVisible().catch(() => false))) continue;
@@ -156,11 +158,16 @@ for (const vp of VIEWPORTS) {
           .replace(/[/\\?%*:|"<>]/g, "_")
           .slice(0, 32);
 
-        // Open trigger with real click (fall back to force: true if intercepted by R3-569's overlap)
+        // Open trigger with real click (discriminating mobile layout pointer interception)
         try {
           await trigger.click({ timeout: 1000 });
-        } catch {
-          await trigger.click({ force: true, timeout: 5000 });
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : String(err);
+          if (msg.includes("intercepts pointer events")) {
+            await trigger.click({ force: true, timeout: 5000 });
+          } else {
+            throw err;
+          }
         }
         await page.waitForTimeout(200);
 

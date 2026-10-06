@@ -35,9 +35,15 @@ interface NavProps {
 function Nav({ active }: NavProps) {
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuTrigger, setMenuTrigger] = useState<"burger" | "search" | null>(
+    null,
+  );
   const isLight = theme === "light";
 
-  const closeMenu = () => setMenuOpen(false);
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setMenuTrigger(null);
+  };
 
   // R3-611 (R-IX-1): the mobile nav sheet's dialog contract — focus in on open,
   // back to the burger on close, Tab wraps within, Escape dismisses. The effect
@@ -108,8 +114,13 @@ function Nav({ active }: NavProps) {
             <button
               type="button"
               className="icon-btn nav-search-btn"
-              onClick={() => setMenuOpen(true)}
+              onClick={() => {
+                setMenuTrigger("search");
+                setMenuOpen(true);
+              }}
               aria-label="Search apps and docs, or paste a repo"
+              aria-controls="nav-sheet"
+              aria-expanded={menuOpen && menuTrigger === "search"}
             >
               <Search size={18} aria-hidden="true" />
             </button>
@@ -141,10 +152,13 @@ function Nav({ active }: NavProps) {
             <button
               type="button"
               className="burger"
-              onClick={() => setMenuOpen(true)}
+              onClick={() => {
+                setMenuTrigger("burger");
+                setMenuOpen(true);
+              }}
               aria-label="Open menu"
               aria-controls="nav-sheet"
-              aria-expanded={menuOpen}
+              aria-expanded={menuOpen && menuTrigger === "burger"}
             >
               ≡
             </button>
