@@ -1,2 +1,4 @@
 node_modules
 dist
+sweep/.out/
+test-results/
