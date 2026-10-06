@@ -3,21 +3,12 @@
 // scripts/check-corpora.mjs) through routePath. Covers every section root and
 // the first entry of each corpus group.
 
-import { SECTIONS, routePath } from "./routeSpace";
-import corpusIndexJson from "../data/corpusIndex.json" with { type: "json" };
+import { SECTIONS, routePath } from './routeSpace';
+import corpusIndexJson from '../data/corpusIndex.json' with { type: 'json' };
 
 export interface SweepRoute {
   path: string;
   label: string;
-}
-
-function corpusEntries(dir: string) {
-  return corpusIndexJson
-    .filter((e) => e.path.startsWith(`${dir}/`))
-    .sort(
-      (a, b) =>
-        Number(a.frontmatter.order ?? 0) - Number(b.frontmatter.order ?? 0),
-    );
 }
 
 export function sweepRoutes(): SweepRoute[] {
@@ -36,32 +27,32 @@ export function sweepRoutes(): SweepRoute[] {
     addRoute(routePath({ section: s, rest: [] }), s);
   }
 
-  // First entry of each group in docs
-  const docsEntries = corpusEntries("docs");
+  // First entry of each group in docs (corpusIndexJson is already order-sorted by check-corpora)
   const seenDocsGroups = new Set<string>();
-  for (const e of docsEntries) {
+  for (const e of corpusIndexJson) {
+    if (!e.path.startsWith('docs/')) continue;
     const group =
       (e.frontmatter.group as string) ||
-      (e.slug.includes("--") ? e.slug.split("--")[0] : "default");
+      (e.slug.includes('--') ? e.slug.split('--')[0] : 'default');
     if (!seenDocsGroups.has(group)) {
       seenDocsGroups.add(group);
-      const rest = e.slug.includes("--") ? e.slug.split("--") : [e.slug];
-      addRoute(routePath({ section: "docs", rest }), `docs:${group}`);
+      const rest = e.slug.includes('--') ? e.slug.split('--') : [e.slug];
+      addRoute(routePath({ section: 'docs', rest }), `docs:${group}`);
     }
   }
 
   // First entry of each group in tutorials
-  const tutEntries = corpusEntries("tutorials");
   const seenTutGroups = new Set<string>();
-  for (const e of tutEntries) {
+  for (const e of corpusIndexJson) {
+    if (!e.path.startsWith('tutorials/')) continue;
     const group =
       (e.frontmatter.pillar as string) ||
       (e.frontmatter.group as string) ||
-      "default";
+      'default';
     if (!seenTutGroups.has(group)) {
       seenTutGroups.add(group);
-      const rest = e.slug.includes("--") ? e.slug.split("--") : [e.slug];
-      addRoute(routePath({ section: "tutorials", rest }), `tutorials:${group}`);
+      const rest = e.slug.includes('--') ? e.slug.split('--') : [e.slug];
+      addRoute(routePath({ section: 'tutorials', rest }), `tutorials:${group}`);
     }
   }
 
