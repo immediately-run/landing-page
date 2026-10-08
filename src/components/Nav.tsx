@@ -90,7 +90,7 @@ function Nav({ active }: NavProps) {
               width={27}
               height={27}
             />
-            immediately.run
+            <span className="logo-word">immediately.run</span>
           </SiteLink>
           <div className="nav-links">
             {NAV_ITEMS.map((item) => (
@@ -133,7 +133,7 @@ function Nav({ active }: NavProps) {
               }
             >
               <span className="ic">{isLight ? "☾" : "☀"}</span>
-              <span className="desk-only">{isLight ? "Dark" : "Light"}</span>
+              <span>{isLight ? "Dark" : "Light"}</span>
             </button>
             {/* Make an app: a hairline secondary — /new is an app-owned route
                 (R3-515 builds the page; the route resolves to the site root
