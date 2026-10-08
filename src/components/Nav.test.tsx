@@ -157,7 +157,7 @@ describe('Nav — the mobile sheet is a real dialog (R3-611)', () => {
 });
 
 describe('the logo link', () => {
-  it('is named by the wordmark, which sits in the element the narrow bar clips', () => {
+  it('keeps its accessible name in the wordmark element (the layout is the sweep\'s to assert)', () => {
     installHostTransport();
     render(<Nav active="home" />);
     const home = screen.getByRole('link', { name: 'immediately.run' });
