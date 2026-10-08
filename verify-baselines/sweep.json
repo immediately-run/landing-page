@@ -1,10 +1,12 @@
 [
+  "occluded|/docs|1024x768|a \"Identity and sign-in\"",
   "occluded|/docs|1024x768|a \"Run any app from its sou\"",
   "occluded|/docs|1024x768|a \"The SDK entry point\"",
   "occluded|/docs|1024x768|a \"The consent model\"",
   "occluded|/docs|1280x800|a \"Publish an app by pushin\"",
   "occluded|/docs|1280x800|a \"Run any app from its sou\"",
   "occluded|/docs|1280x800|a \"The SDK entry point\"",
+  "occluded|/docs|1280x800|a \"The consent model\"",
   "overlay-offscreen|/apps|1024x768|Open menu",
   "overlay-offscreen|/apps|1024x768|Search apps and docs, or paste a repo",
   "overlay-offscreen|/apps|320x568|Open menu",
