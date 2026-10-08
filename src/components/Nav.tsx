@@ -90,7 +90,7 @@ function Nav({ active }: NavProps) {
               width={27}
               height={27}
             />
-            immediately.run
+            <span className="logo-word">immediately.run</span>
           </SiteLink>
           <div className="nav-links">
             {NAV_ITEMS.map((item) => (

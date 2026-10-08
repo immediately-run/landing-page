@@ -155,3 +155,15 @@ describe('Nav — the mobile sheet is a real dialog (R3-611)', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 });
+
+describe('the logo link', () => {
+  it('is named by the wordmark, which sits in the element the narrow bar clips', () => {
+    installHostTransport();
+    render(<Nav active="home" />);
+    const home = screen.getByRole('link', { name: 'immediately.run' });
+    const word = home.querySelector('.logo-word');
+    expect(word?.textContent).toBe('immediately.run');
+    // The mark is decorative: without the wordmark's text the link has no name.
+    expect(home.querySelector('img')?.getAttribute('alt')).toBe('');
+  });
+});

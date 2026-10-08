@@ -193,6 +193,9 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
   .desk-only{display:none!important}
   .nav-links{display:none}
   .nav-omnibox,.nav-make{display:none}
+  /* FRONT_DOOR_IA §4.1: the collapsed bar is logo, search, the door, burger. The
+     theme toggle is not in it; the sheet carries one. */
+  .theme-btn{display:none}
   .burger{display:inline-flex}
   .nav-search-btn{display:inline-flex}
   .nav-door .door{min-height:44px}
@@ -207,4 +210,13 @@ footer.foot{border-top:1px solid var(--line);margin-top:80px}
 }
 @media(max-width:560px){
   .show-grid{grid-template-columns:1fr}
+}
+/* The collapsed bar with the wordmark needs 401px of content in the signed-out
+   state, the wide one ("Sign in" is wider than "Home"): logo 201, gap 20, then
+   search, door and burger with their gaps, 180. With the 32px gutters that fits
+   from 465px up. Below it the logo is the mark alone, which keeps every target at
+   its full size. The wordmark is clipped, not removed: it is the home link's only
+   name, since the mark's alt is empty. */
+@media(max-width:480px){
+  .logo-word{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
