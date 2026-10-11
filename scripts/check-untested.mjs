@@ -12,7 +12,13 @@
 //
 // The ratchet is verify-baselines/untested.json: seeded once with
 // `--write-baseline` (which refuses to overwrite), then shrunk by hand as gaps
-// close. A file coverage is the wrong instrument for is declared with an
+// close. Its entries are absolute line numbers. An edit that moves the lines
+// of a file with recorded gaps (an added import, a comment) therefore reports
+// those entries as STALE although no gap closed: renumber every entry of that
+// file by the shift. Deleting the flagged entries instead fails the growth
+// guard, because the gaps they recorded are still there.
+//
+// A file coverage is the wrong instrument for is declared with an
 // `Untested: <path> — <reason>` commit trailer.
 
 import { execFileSync } from 'node:child_process';
