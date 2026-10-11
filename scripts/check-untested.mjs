@@ -19,6 +19,11 @@
 // price is that lines inside one file can trade: a newly uncovered line passes
 // when another line of the same file became covered in the same branch.
 //
+// Entries are keyed by path. A renamed file therefore reports NEW at its new
+// path and STALE at the old one: move the entry to the new path by hand.
+// Deleting it and adding a trailer, as the two messages suggest, also goes
+// green, but drops the file out of the ratchet.
+//
 // A file coverage is the wrong instrument for is declared with an
 // `Untested: <path> — <reason>` commit trailer.
 
