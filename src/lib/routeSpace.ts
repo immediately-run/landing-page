@@ -22,7 +22,7 @@ export interface Route {
   rest: string[];
 }
 
-const SECTIONS: Section[] = ['home', 'apps', 'new', 'docs', 'tutorials', 'changelog'];
+export const SECTIONS: Section[] = ['home', 'apps', 'new', 'docs', 'tutorials', 'changelog'];
 
 /** Split a path into clean segments, tolerating leading/trailing/duplicate slashes. */
 const segmentsOf = (path: string): string[] => path.split('/').filter(Boolean);

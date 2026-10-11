@@ -14,6 +14,7 @@
   --ink:#ecebf4;
   --ink-2:#9b97b3;
   --ink-3:#6a677f;
+  --muted:var(--ink-2);              /* the quiet text tier, by its prose name */
   /* accents */
   --accent:oklch(0.74 0.17 350);       /* pink-magenta */
   --accent-2:oklch(0.66 0.18 295);     /* violet */
@@ -55,6 +56,7 @@ html[data-theme="light"]{
   --ink:#1c1726;
   --ink-2:#5d5670;
   --ink-3:#938aa6;
+  --muted:var(--ink-2);
   --accent:oklch(0.55 0.22 1);
   --accent-2:oklch(0.50 0.21 295);
   --accent-3:oklch(0.48 0.20 350);

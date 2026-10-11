@@ -1,4 +1,4 @@
-import { useAuth } from '@immediately-run/sdk';
+import { useAuth } from '@immediately-run/sdk/auth';
 import { PlatformLink } from '@immediately-run/sdk/platformLink';
 import { HOME_PATH } from '../lib/routes';
 

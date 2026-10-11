@@ -254,6 +254,12 @@ h3:hover > .docs-heading-anchor,
 .docs-index-grid--recut{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
 .docs-index-dest{display:flex;flex-direction:column}
 .docs-index-list{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
-.docs-index-list a{color:var(--ink);font-size:14px;text-decoration:none}
+/* block + padding (R3-1062): an inline anchor whose label wraps two lines has
+   a bounding rect whose centre can fall in the gap between line boxes, so a
+   hit test there returns the parent li — the sweep's occluded finding, and a
+   real dead spot in the click target. A block box is solid (wrap or not, the
+   centre is the anchor on every platform's font metrics) and the padding
+   keeps a one-line label at or over the 24px desktop target floor. */
+.docs-index-list a{color:var(--ink);font-size:14px;text-decoration:none;display:block;padding-block:4px}
 .docs-index-list a:hover{color:var(--accent-3)}
 @media(max-width:900px){.docs-index-grid--recut{grid-template-columns:1fr}}

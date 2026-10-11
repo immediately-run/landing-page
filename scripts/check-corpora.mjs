@@ -19,44 +19,53 @@
 // what was checked. `npm run verify` runs it and then `git diff --exit-code`s the output, the
 // same shape site-main uses for its generated config schema.
 
-import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import {
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+  existsSync,
+  mkdirSync,
+} from "node:fs";
+import { join, dirname, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 // The SAME id function `remarkHeadingAnchors` uses, from the same package. A TOC built with
 // a second implementation is a TOC whose links 404 the moment the two drift, and they drift
 // silently — nothing renders differently, the anchors just stop landing.
-import { headingId } from '@immediately-run/mdx-plugins';
+import { headingId } from "@immediately-run/mdx-plugins";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const MARKER = 'immediately.run.json';
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const MARKER = "immediately.run.json";
 
 /** The declared corpus table (`immediately.run.content`) — the same field the host reads. */
 function declaredCorpora() {
-  const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
-  const raw = pkg['immediately.run']?.content;
+  const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  const raw = pkg["immediately.run"]?.content;
   if (raw === undefined) return [];
-  return (Array.isArray(raw) ? raw : [raw]).map((d) => String(d).replace(/^\.\//, '').replace(/\/+$/, ''));
+  return (Array.isArray(raw) ? raw : [raw]).map((d) =>
+    String(d).replace(/^\.\//, "").replace(/\/+$/, ""),
+  );
 }
 
 /** Minimal, dependency-free YAML frontmatter reader. Deliberately narrow: it handles the
  *  scalar/list forms this repo's corpora use and REFUSES anything else rather than guessing,
  *  because a checker that quietly mis-parses is worse than no checker. */
 function parseFrontmatter(src, file) {
-  if (!src.startsWith('---\n')) return { error: 'no frontmatter block' };
-  const end = src.indexOf('\n---', 3);
-  if (end === -1) return { error: 'unterminated frontmatter block' };
+  if (!src.startsWith("---\n")) return { error: "no frontmatter block" };
+  const end = src.indexOf("\n---", 3);
+  if (end === -1) return { error: "unterminated frontmatter block" };
   const data = {};
-  for (const line of src.slice(4, end).split('\n')) {
-    if (line.trim() === '' || line.trimStart().startsWith('#')) continue;
+  for (const line of src.slice(4, end).split("\n")) {
+    if (line.trim() === "" || line.trimStart().startsWith("#")) continue;
     const m = line.match(/^([A-Za-z_][\w-]*):\s*(.*)$/);
     if (!m) return { error: `cannot parse frontmatter line: ${line.trim()}` };
     const [, key, rawValue] = m;
     const value = rawValue.trim();
-    if (value.startsWith('[') && value.endsWith(']')) {
+    if (value.startsWith("[") && value.endsWith("]")) {
       const inner = value.slice(1, -1).trim();
-      data[key] = inner === '' ? [] : inner.split(',').map((v) => unquote(v.trim()));
-    } else if (value === 'true' || value === 'false') {
-      data[key] = value === 'true';
+      data[key] =
+        inner === "" ? [] : inner.split(",").map((v) => unquote(v.trim()));
+    } else if (value === "true" || value === "false") {
+      data[key] = value === "true";
     } else if (/^-?\d+(\.\d+)?$/.test(value)) {
       data[key] = Number(value);
     } else {
@@ -68,26 +77,37 @@ function parseFrontmatter(src, file) {
 }
 
 const unquote = (v) =>
-  (v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))
-    ? JSON.parse(v.startsWith("'") ? `"${v.slice(1, -1).replace(/"/g, '\\"')}"` : v)
+  (v.startsWith('"') && v.endsWith('"')) ||
+  (v.startsWith("'") && v.endsWith("'"))
+    ? JSON.parse(
+        v.startsWith("'") ? `"${v.slice(1, -1).replace(/"/g, '\\"')}"` : v,
+      )
     : v;
 
 /** Check one value against a declared type string (`string`, `number`, `string[]`,
  *  `boolean`, `enum:a|b|c`). Returns an error string, or null when it conforms. */
 function typeError(value, type) {
-  if (type.startsWith('enum:')) {
-    const allowed = type.slice(5).split('|');
-    return allowed.includes(value) ? null : `expected one of ${allowed.join(' | ')}, got ${JSON.stringify(value)}`;
+  if (type.startsWith("enum:")) {
+    const allowed = type.slice(5).split("|");
+    return allowed.includes(value)
+      ? null
+      : `expected one of ${allowed.join(" | ")}, got ${JSON.stringify(value)}`;
   }
   switch (type) {
-    case 'string':
-      return typeof value === 'string' && value !== '' ? null : `expected a non-empty string, got ${JSON.stringify(value)}`;
-    case 'number':
-      return typeof value === 'number' && Number.isFinite(value) ? null : `expected a number, got ${JSON.stringify(value)}`;
-    case 'boolean':
-      return typeof value === 'boolean' ? null : `expected a boolean, got ${JSON.stringify(value)}`;
-    case 'string[]':
-      return Array.isArray(value) && value.every((v) => typeof v === 'string')
+    case "string":
+      return typeof value === "string" && value !== ""
+        ? null
+        : `expected a non-empty string, got ${JSON.stringify(value)}`;
+    case "number":
+      return typeof value === "number" && Number.isFinite(value)
+        ? null
+        : `expected a number, got ${JSON.stringify(value)}`;
+    case "boolean":
+      return typeof value === "boolean"
+        ? null
+        : `expected a boolean, got ${JSON.stringify(value)}`;
+    case "string[]":
+      return Array.isArray(value) && value.every((v) => typeof v === "string")
         ? null
         : `expected a list of strings, got ${JSON.stringify(value)}`;
     default:
@@ -100,7 +120,7 @@ function typeError(value, type) {
 function headingsOf(src) {
   const out = [];
   let inFence = false;
-  for (const line of src.split('\n')) {
+  for (const line of src.split("\n")) {
     if (/^\s*(```|~~~)/.test(line)) {
       inFence = !inFence;
       continue;
@@ -118,8 +138,8 @@ function proseLines(src) {
   const out = [];
   let inFence = false;
   let jsxDepth = 0;
-  const lines = src.split('\n');
-  const fmEnd = src.startsWith('---\n') ? lines.indexOf('---', 1) : -1;
+  const lines = src.split("\n");
+  const fmEnd = src.startsWith("---\n") ? lines.indexOf("---", 1) : -1;
   for (let i = fmEnd + 1; i < lines.length; i++) {
     const line = lines[i];
     if (/^\s*(```|~~~)/.test(line)) {
@@ -130,12 +150,17 @@ function proseLines(src) {
     // A JSX block opens on a line starting with `<` and closes when its tags balance.
     if (jsxDepth === 0 && /^\s*<[A-Za-z/]/.test(line)) jsxDepth = 1;
     if (jsxDepth > 0) {
-      if (/\/>\s*$/.test(line) || /^\s*<\/[A-Za-z]/.test(line) || /^\s*\/>/.test(line)) jsxDepth = 0;
+      if (
+        /\/>\s*$/.test(line) ||
+        /^\s*<\/[A-Za-z]/.test(line) ||
+        /^\s*\/>/.test(line)
+      )
+        jsxDepth = 0;
       continue;
     }
     // Strip inline-code spans: a brace inside backticks is already safe.
-    const stripped = line.replace(/`[^`]*`/g, '');
-    if (stripped.trim() === '') continue;
+    const stripped = line.replace(/`[^`]*`/g, "");
+    if (stripped.trim() === "") continue;
     out.push({ line: stripped, n: i + 1 });
   }
   return out;
@@ -148,20 +173,28 @@ for (const dir of declaredCorpora()) {
   const abs = join(root, dir);
   const markerPath = join(abs, MARKER);
   if (!existsSync(markerPath)) {
-    errors.push(`${dir}/ — declared in immediately.run.content but has no ${MARKER}. A declared dir that carries no marker is not a corpus; the host will not open it.`);
+    errors.push(
+      `${dir}/ — declared in immediately.run.content but has no ${MARKER}. A declared dir that carries no marker is not a corpus; the host will not open it.`,
+    );
     continue;
   }
-  const marker = JSON.parse(readFileSync(markerPath, 'utf8'));
-  const schema = marker.frontmatter ?? { required: {}, optional: {}, passThrough: true };
+  const marker = JSON.parse(readFileSync(markerPath, "utf8"));
+  const schema = marker.frontmatter ?? {
+    required: {},
+    optional: {},
+    passThrough: true,
+  };
   const required = schema.required ?? {};
   const optional = schema.optional ?? {};
 
-  const entries = readdirSync(abs).filter((f) => f.endsWith('.mdx')).sort();
+  const entries = readdirSync(abs)
+    .filter((f) => f.endsWith(".mdx"))
+    .sort();
   if (entries.length === 0) errors.push(`${dir}/ — a corpus with no entries.`);
 
   for (const file of entries) {
     const rel = `${dir}/${file}`;
-    const src = readFileSync(join(abs, file), 'utf8');
+    const src = readFileSync(join(abs, file), "utf8");
     const parsed = parseFrontmatter(src, rel);
     if (parsed.error) {
       errors.push(`${rel} — ${parsed.error}`);
@@ -170,7 +203,9 @@ for (const dir of declaredCorpora()) {
     const { data } = parsed;
     for (const [key, type] of Object.entries(required)) {
       if (!(key in data)) {
-        errors.push(`${rel} — missing required frontmatter key "${key}" (${type}).`);
+        errors.push(
+          `${rel} — missing required frontmatter key "${key}" (${type}).`,
+        );
         continue;
       }
       const err = typeError(data[key], type);
@@ -187,7 +222,9 @@ for (const dir of declaredCorpora()) {
         if (!(key in required) && !(key in optional)) {
           // The typo case this whole script exists for. A closed vocabulary is what turns
           // `catgory:` from a blank card into a build failure.
-          errors.push(`${rel} — unknown frontmatter key "${key}". This corpus declares a CLOSED vocabulary (passThrough: false); add it to the marker's schema or fix the spelling.`);
+          errors.push(
+            `${rel} — unknown frontmatter key "${key}". This corpus declares a CLOSED vocabulary (passThrough: false); add it to the marker's schema or fix the spelling.`,
+          );
         }
       }
     }
@@ -205,7 +242,7 @@ for (const dir of declaredCorpora()) {
     }
     index.push({
       path: rel,
-      slug: file.replace(/\.mdx$/, ''),
+      slug: file.replace(/\.mdx$/, ""),
       frontmatter: data,
       headings: headingsOf(src),
     });
@@ -229,8 +266,10 @@ if (errors.length) {
 // immediately.run transpiles to CommonJS where `import.meta` is a PARSE-time SyntaxError.
 const importLines = index
   .map((e, i) => `import Entry${i} from '../../${e.path}';`)
-  .join('\n');
-const mapLines = index.map((e, i) => `  ${JSON.stringify(e.path)}: Entry${i},`).join('\n');
+  .join("\n");
+const mapLines = index
+  .map((e, i) => `  ${JSON.stringify(e.path)}: Entry${i},`)
+  .join("\n");
 
 const generated = `// GENERATED by scripts/check-corpora.mjs — do not edit.
 //
@@ -296,13 +335,20 @@ export function corpusEntries(dir: string): CorpusEntry[] {
 // Declared `order`, the same sort `corpusEntries()` applies — the machine surface must
 // list pages in the order the site does, not in readdir order.
 const docEntries = index
-  .filter((e) => e.path.startsWith('docs/'))
-  .sort((a, b) => Number(a.frontmatter.order ?? 0) - Number(b.frontmatter.order ?? 0));
+  .filter((e) => e.path.startsWith("docs/"))
+  .sort(
+    (a, b) =>
+      Number(a.frontmatter.order ?? 0) - Number(b.frontmatter.order ?? 0),
+  );
 const groupsInOrder = [];
 for (const e of docEntries) {
   const key = String(e.frontmatter.group);
   if (!groupsInOrder.some((g) => g.key === key)) {
-    groupsInOrder.push({ key, label: String(e.frontmatter.groupLabel ?? key), items: [] });
+    groupsInOrder.push({
+      key,
+      label: String(e.frontmatter.groupLabel ?? key),
+      items: [],
+    });
   }
   groupsInOrder.find((g) => g.key === key).items.push(e);
 }
@@ -338,16 +384,16 @@ const llmsTxt =
         `## ${g.label}\n` +
         g.items
           .map((e) => {
-            const [group, slug] = e.slug.split('--');
-            const title = String(e.frontmatter.title).replace(/\.$/, '');
+            const [group, slug] = e.slug.split("--");
+            const title = String(e.frontmatter.title).replace(/\.$/, "");
             return `- [${title}](https://immediately.run/s/docs/${group}/${slug}): ${e.frontmatter.lead} (source: ${e.path})`;
           })
-          .join('\n'),
+          .join("\n"),
     )
-    .join('\n\n') +
-  '\n';
+    .join("\n\n") +
+  "\n";
 writeFileSync(
-  join(root, 'src/data/corpusIndex.ts'),
+  join(root, "src/data/corpusIndex.ts"),
   generated +
     `
 /** The machine surface, byte-identical to \`public/llms.txt\`. Exported so the page's
@@ -355,15 +401,21 @@ writeFileSync(
 export const LLMS_TXT = ${JSON.stringify(llmsTxt)};
 `,
 );
-mkdirSync(join(root, 'public'), { recursive: true });
-writeFileSync(join(root, 'public/llms.txt'), llmsTxt);
+writeFileSync(
+  join(root, "src/data/corpusIndex.json"),
+  JSON.stringify(index, null, 2) + "\n",
+);
+mkdirSync(join(root, "public"), { recursive: true });
+writeFileSync(join(root, "public/llms.txt"), llmsTxt);
 
 const byCorpus = {};
 for (const e of index) {
-  const dir = e.path.slice(0, e.path.indexOf('/'));
+  const dir = e.path.slice(0, e.path.indexOf("/"));
   byCorpus[dir] = (byCorpus[dir] ?? 0) + 1;
 }
 console.log(
-  `OK corpora: ${Object.entries(byCorpus).map(([d, n]) => `${d}/ (${n} entries)`).join(', ')} — ` +
-    `frontmatter conformant; wrote ${relative(root, join(root, 'src/data/corpusIndex.ts'))}`,
+  `OK corpora: ${Object.entries(byCorpus)
+    .map(([d, n]) => `${d}/ (${n} entries)`)
+    .join(", ")} — ` +
+    `frontmatter conformant; wrote ${relative(root, join(root, "src/data/corpusIndex.ts"))}`,
 );
