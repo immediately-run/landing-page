@@ -10,13 +10,14 @@
 // the report, with zero hits, so its changed lines are findings rather than
 // absent.
 //
-// The ratchet is verify-baselines/untested.json: seeded once with
-// `--write-baseline` (which refuses to overwrite), then shrunk by hand as gaps
-// close. Its entries are absolute line numbers. An edit that moves the lines
-// of a file with recorded gaps (an added import, a comment) therefore reports
-// those entries as STALE although no gap closed: renumber every entry of that
-// file by the shift. Deleting the flagged entries instead fails the growth
-// guard, because the gaps they recorded are still there.
+// The ratchet is verify-baselines/untested.json: one uncovered-executable-line
+// count per logic file (verify-checks 0.10.0), seeded once with
+// `--write-baseline` (which refuses to overwrite). A changed file whose count
+// exceeds its entry is NEW; an entry whose count dropped is STALE, and the
+// message names the number to write. It stores no line numbers, so an edit
+// that only moves lines (an added import, a comment) changes nothing. The
+// price is that lines inside one file can trade: a newly uncovered line passes
+// when another line of the same file became covered in the same branch.
 //
 // A file coverage is the wrong instrument for is declared with an
 // `Untested: <path> — <reason>` commit trailer.
