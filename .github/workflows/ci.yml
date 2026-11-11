@@ -79,3 +79,6 @@ jobs:
           name: sweep
           path: sweep/.out/
           include-hidden-files: true
+          # The sweep's screenshots are for reading a run's failure, not an archive: at the
+          # default 90 days they held most of the org's Actions storage (2026-11-11).
+          retention-days: 7
