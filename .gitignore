@@ -1,4 +1,7 @@
 node_modules
 dist
+
+# Coverage reports (check:untested coverage mode writes coverage/coverage-final.json)
+coverage/
 sweep/.out/
 test-results/

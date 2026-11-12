@@ -1,0 +1,17 @@
+{
+  "format": "uncovered-lines-per-file/1",
+  "files": {
+    "scripts/check-buttons.mjs": 9,
+    "scripts/check-clones.mjs": 1,
+    "scripts/check-corpora.mjs": 143,
+    "scripts/check-dead-css.mjs": 1,
+    "scripts/check-nav-token.mjs": 5,
+    "scripts/check-templates.mjs": 13,
+    "scripts/check-tokens.mjs": 1,
+    "scripts/check-untested.mjs": 4,
+    "scripts/check-unused.mjs": 1,
+    "src/lib/navigation.ts": 8,
+    "src/lib/routes.ts": 2,
+    "src/lib/useSheetDialog.ts": 1
+  }
+}
